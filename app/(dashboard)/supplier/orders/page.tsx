@@ -81,11 +81,13 @@ export default function SupplierOrdersPage() {
     try {
       await updateOrderStatus(orderId, status);
     } catch (error) {
-      setFeedback(
-        error instanceof Error
-          ? error.message
-          : 'Unable to update order. Please retry.',
-      );
+      setFeedback({
+        type: 'error',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Unable to update order. Please retry.',
+      });
     } finally {
       setUpdatingIds((prev) => prev.filter((id) => id !== orderId));
     }
