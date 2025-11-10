@@ -1,0 +1,97 @@
+import type { ReactNode } from "react";
+
+import { createMetadata } from "../../lib/seo/metadata";
+
+export const metadata = createMetadata({
+  title: "Account Settings",
+  description:
+    "Control notification preferences, marketplace alerts, and privacy options for your MarketHub profile.",
+  path: "/settings",
+});
+
+export default function SettingsPage() {
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <main className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12">
+        <header className="space-y-2">
+          <h1 className="text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">
+            Personal preferences
+          </h1>
+          <p className="text-md text-slate-400">
+            Update communication channels, marketplace alerts, and privacy
+            controls. More advanced settings unlock with a paid subscription.
+          </p>
+        </header>
+
+        <section className="space-y-6">
+          <PreferenceCard
+            title="Communication"
+            description="Choose how MarketHub keeps you in the loop about RFQ activity and supplier responses."
+          >
+            <ToggleRow label="Email alerts" defaultChecked />
+            <ToggleRow label="Weekly marketplace digest" />
+            <ToggleRow label="SMS notifications" />
+          </PreferenceCard>
+
+          <PreferenceCard
+            title="Privacy"
+            description="Control who can view your sourcing activity and saved lists."
+          >
+            <ToggleRow label="Display profile to suppliers" defaultChecked />
+            <ToggleRow label="Allow message requests" defaultChecked />
+            <ToggleRow label="Share anonymous demand signals" />
+          </PreferenceCard>
+        </section>
+
+        <section className="rounded-3xl border border-blue-500/20 bg-blue-500/10 px-6 py-8 text-sm text-blue-200">
+          <h2 className="text-lg font-semibold text-white">
+            Need more control?
+          </h2>
+          <p className="mt-2">
+            Advanced analytics, team roles, and single sign-on settings become
+            available once you upgrade to a paid plan.
+          </p>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+function PreferenceCard({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
+  return (
+    <article className="space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-blue-950/20">
+      <div>
+        <h2 className="text-lg font-semibold text-white">{title}</h2>
+        <p className="mt-2 text-md text-slate-400">{description}</p>
+      </div>
+      <div className="space-y-3 text-md text-slate-300">{children}</div>
+    </article>
+  );
+}
+
+function ToggleRow({
+  label,
+  defaultChecked,
+}: {
+  label: string;
+  defaultChecked?: boolean;
+}) {
+  return (
+    <label className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/60 p-3">
+      <span>{label}</span>
+      <input
+        type="checkbox"
+        defaultChecked={defaultChecked}
+        className="h-4 w-4"
+      />
+    </label>
+  );
+}
