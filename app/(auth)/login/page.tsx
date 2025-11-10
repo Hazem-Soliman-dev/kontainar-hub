@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useAuthStore, type AuthUser } from "../../../lib/store/auth-store";
@@ -10,12 +10,33 @@ type FormState = {
   password: string;
 };
 
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+function LoginFallback() {
+  return (
+    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-4">
+      <div className="h-12 w-1/2 animate-pulse rounded bg-slate-200" />
+      <div className="mt-6 space-y-4">
+        <div className="h-20 rounded bg-slate-200" />
+        <div className="h-20 rounded bg-slate-200" />
+        <div className="h-10 rounded bg-slate-200" />
+      </div>
+    </div>
+  );
+}
+
 const initialState: FormState = {
   identifier: "",
   password: "",
 };
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);

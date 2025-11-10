@@ -77,14 +77,14 @@ export default function TraderInventoryPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setInventory((prev) => {
-        const updates = prev.map((item) => {
+        const updates = prev.map<InventoryItem>((item) => {
           if (Math.random() > 0.35) {
             return item;
           }
 
-          const delta = Math.random() > 0.5 ? 15 : -12;
+          const delta: number = Math.random() > 0.5 ? 15 : -12;
           const nextStock = Math.max(0, item.stock + delta);
-          const nextStatus =
+          const nextStatus: InventoryStatus =
             nextStock <= item.reorderPoint * 0.6
               ? 'critical'
               : nextStock <= item.reorderPoint

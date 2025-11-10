@@ -1,37 +1,37 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-import { useRealtimeOrders } from '../../../../hooks/use-realtime-orders';
-import { ordersBus } from '../../../../lib/realtime/orders-bus';
-import type { OrderStatus } from '../../../../lib/mock/orders';
+import { useRealtimeOrders } from "../../../../hooks/use-realtime-orders";
+import { ordersBus } from "../../../../lib/realtime/orders-bus";
+import type { OrderStatus } from "../../../../lib/mock/orders";
 
 export default function SupplierOrdersPage() {
   const { orders, isLoading, isError, updateOrderStatus } = useRealtimeOrders();
-  const [statusFilter, setStatusFilter] = useState<OrderStatus | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all");
   const [updatingIds, setUpdatingIds] = useState<string[]>([]);
-  const [feedback, setFeedback] = useState<
-    | {
-        type: 'success' | 'error';
-        message: string;
-      }
-    | null
-  >(null);
+  const [feedback, setFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
-    const unsubSuccess = ordersBus.on('orderUpdated', (order) => {
+    const unsubSuccess = ordersBus.on("orderUpdated", (order) => {
       setFeedback({
-        type: 'success',
+        type: "success",
         message: `Order ${order.id} synced successfully.`,
       });
     });
 
-    const unsubError = ordersBus.on('orderStatusFailed', ({ message, orderId }) => {
-      setFeedback({
-        type: 'error',
-        message: message ?? `Unable to update order ${orderId}.`,
-      });
-    });
+    const unsubError = ordersBus.on(
+      "orderStatusFailed",
+      ({ message, orderId }) => {
+        setFeedback({
+          type: "error",
+          message: message ?? `Unable to update order ${orderId}.`,
+        });
+      }
+    );
 
     return () => {
       unsubSuccess();
@@ -52,7 +52,7 @@ export default function SupplierOrdersPage() {
   }, [feedback]);
 
   const filteredOrders = useMemo(() => {
-    if (statusFilter === 'all') {
+    if (statusFilter === "all") {
       return orders;
     }
     return orders.filter((order) => order.status === statusFilter);
@@ -62,15 +62,15 @@ export default function SupplierOrdersPage() {
     return orders.reduce(
       (acc, order) => {
         acc.totalOrders += 1;
-        if (order.status === 'pending') acc.pending += 1;
-        if (order.status === 'processing') acc.processing += 1;
-        if (order.status === 'fulfilled') {
+        if (order.status === "pending") acc.pending += 1;
+        if (order.status === "processing") acc.processing += 1;
+        if (order.status === "fulfilled") {
           acc.fulfilled += 1;
           acc.revenue += order.total;
         }
         return acc;
       },
-      { totalOrders: 0, pending: 0, processing: 0, fulfilled: 0, revenue: 0 },
+      { totalOrders: 0, pending: 0, processing: 0, fulfilled: 0, revenue: 0 }
     );
   }, [orders]);
 
@@ -82,11 +82,11 @@ export default function SupplierOrdersPage() {
       await updateOrderStatus(orderId, status);
     } catch (error) {
       setFeedback({
-        type: 'error',
+        type: "error",
         message:
           error instanceof Error
             ? error.message
-            : 'Unable to update order. Please retry.',
+            : "Unable to update order. Please retry.",
       });
     } finally {
       setUpdatingIds((prev) => prev.filter((id) => id !== orderId));
@@ -104,7 +104,8 @@ export default function SupplierOrdersPage() {
             Manage fulfillment workflow
           </h1>
           <p className="mt-1 text-sm text-slate-600">
-            Track order status, confirm shipments, and maintain buyer communication.
+            Track order status, confirm shipments, and maintain buyer
+            communication.
           </p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4">
@@ -112,9 +113,9 @@ export default function SupplierOrdersPage() {
             30-day revenue
           </p>
           <p className="text-2xl font-semibold text-slate-900">
-            {stats.revenue.toLocaleString('en-US', {
-              style: 'currency',
-              currency: 'USD',
+            {stats.revenue.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
               maximumFractionDigits: 0,
             })}
           </p>
@@ -125,11 +126,11 @@ export default function SupplierOrdersPage() {
         {feedback && (
           <div
             className={[
-              'mb-4 rounded-xl px-4 py-3 text-sm',
-              feedback.type === 'success'
-                ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
-                : 'border border-red-200 bg-red-50 text-red-700',
-            ].join(' ')}
+              "mb-4 rounded-xl px-4 py-3 text-sm",
+              feedback.type === "success"
+                ? "border border-emerald-200 bg-emerald-50 text-emerald-700"
+                : "border border-red-200 bg-red-50 text-red-700",
+            ].join(" ")}
           >
             {feedback.message}
           </div>
@@ -150,7 +151,7 @@ export default function SupplierOrdersPage() {
           <select
             value={statusFilter}
             onChange={(event) =>
-              setStatusFilter(event.target.value as OrderStatus | 'all')
+              setStatusFilter(event.target.value as OrderStatus | "all")
             }
             className="rounded-md border border-slate-200 px-3 py-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           >
@@ -176,38 +177,37 @@ export default function SupplierOrdersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {(isLoading ? Array.from({ length: 6 }) : filteredOrders).map(
-                (order, index) => {
-                  if (isLoading || !order) {
-                    return (
-                      <tr key={`skeleton-${index}`} className="animate-pulse">
-                        <td className="py-4 pr-6">
-                          <div className="h-4 w-24 rounded bg-slate-200/70" />
-                        </td>
-                        <td className="py-4 pr-6">
-                          <div className="h-4 w-32 rounded bg-slate-200/70" />
-                        </td>
-                        <td className="py-4 pr-6">
-                          <div className="h-4 w-36 rounded bg-slate-200/70" />
-                        </td>
-                        <td className="py-4 pr-6">
-                          <div className="h-4 w-16 rounded bg-slate-200/70" />
-                        </td>
-                        <td className="py-4 pr-6">
-                          <div className="h-4 w-20 rounded bg-slate-200/70" />
-                        </td>
-                        <td className="py-4 pr-6">
-                          <div className="h-4 w-28 rounded bg-slate-200/70" />
-                        </td>
-                        <td className="py-4 pr-6">
-                          <div className="h-8 w-32 rounded bg-slate-200/70" />
-                        </td>
-                      </tr>
-                    );
-                  }
-
-                  return (
-                    <tr key={order.id} className="align-top text-sm text-slate-700">
+              {isLoading
+                ? Array.from({ length: 6 }).map((_, index) => (
+                    <tr key={`skeleton-${index}`} className="animate-pulse">
+                      <td className="py-4 pr-6">
+                        <div className="h-4 w-24 rounded bg-slate-200/70" />
+                      </td>
+                      <td className="py-4 pr-6">
+                        <div className="h-4 w-32 rounded bg-slate-200/70" />
+                      </td>
+                      <td className="py-4 pr-6">
+                        <div className="h-4 w-36 rounded bg-slate-200/70" />
+                      </td>
+                      <td className="py-4 pr-6">
+                        <div className="h-4 w-16 rounded bg-slate-200/70" />
+                      </td>
+                      <td className="py-4 pr-6">
+                        <div className="h-4 w-20 rounded bg-slate-200/70" />
+                      </td>
+                      <td className="py-4 pr-6">
+                        <div className="h-4 w-28 rounded bg-slate-200/70" />
+                      </td>
+                      <td className="py-4 pr-6">
+                        <div className="h-8 w-32 rounded bg-slate-200/70" />
+                      </td>
+                    </tr>
+                  ))
+                : filteredOrders.map((order) => (
+                    <tr
+                      key={order.id}
+                      className="align-top text-sm text-slate-700"
+                    >
                       <td className="py-4 pr-6 font-semibold text-slate-900">
                         {order.id}
                       </td>
@@ -215,9 +215,9 @@ export default function SupplierOrdersPage() {
                       <td className="py-4 pr-6">{order.product}</td>
                       <td className="py-4 pr-6">{order.quantity}</td>
                       <td className="py-4 pr-6">
-                        {order.total.toLocaleString('en-US', {
-                          style: 'currency',
-                          currency: 'USD',
+                        {order.total.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
                         })}
                       </td>
                       <td className="py-4 pr-6 text-xs text-slate-500">
@@ -230,7 +230,7 @@ export default function SupplierOrdersPage() {
                             onChange={(event) =>
                               handleStatusUpdate(
                                 order.id,
-                                event.target.value as OrderStatus,
+                                event.target.value as OrderStatus
                               )
                             }
                             className="rounded-md border border-slate-200 px-3 py-2 text-xs uppercase tracking-wide text-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
@@ -242,12 +242,12 @@ export default function SupplierOrdersPage() {
                             <option value="cancelled">Cancelled</option>
                           </select>
                           <div className="text-xs text-slate-400">
-                            Updated{' '}
-                            {new Date(order.updatedAt).toLocaleString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              hour: 'numeric',
-                              minute: '2-digit',
+                            Updated{" "}
+                            {new Date(order.updatedAt).toLocaleString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "2-digit",
                             })}
                           </div>
                           {updatingIds.includes(order.id) && (
@@ -258,9 +258,7 @@ export default function SupplierOrdersPage() {
                         </div>
                       </td>
                     </tr>
-                  );
-                },
-              )}
+                  ))}
             </tbody>
           </table>
         </div>
@@ -274,4 +272,3 @@ export default function SupplierOrdersPage() {
     </main>
   );
 }
-

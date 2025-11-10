@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useAuthStore, type AuthUser } from "../../../lib/store/auth-store";
@@ -17,6 +17,27 @@ type FormState = {
   businessType: string;
 };
 
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<RegisterFallback />}>
+      <RegisterPageContent />
+    </Suspense>
+  );
+}
+
+function RegisterFallback() {
+  return (
+    <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col justify-center px-4 py-12">
+      <div className="mb-6 h-10 w-2/3 animate-pulse rounded bg-slate-200" />
+      <div className="space-y-4">
+        <div className="h-40 rounded bg-slate-200" />
+        <div className="h-40 rounded bg-slate-200" />
+        <div className="h-16 rounded bg-slate-200" />
+      </div>
+    </div>
+  );
+}
+
 const initialState: FormState = {
   firstName: "",
   lastName: "",
@@ -29,7 +50,7 @@ const initialState: FormState = {
   businessType: "",
 };
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);
