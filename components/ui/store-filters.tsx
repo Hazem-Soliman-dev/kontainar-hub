@@ -1,0 +1,86 @@
+"use client";
+
+import { X, Search } from "lucide-react";
+import type { FeaturedStore } from "../../lib/mock/public";
+
+interface StoreFiltersProps {
+  stores: FeaturedStore[];
+  filters: {
+    rating: string;
+    search: string;
+  };
+  onFilterChange: (filters: { rating: string; search: string }) => void;
+}
+
+export function StoreFilters({
+  stores,
+  filters,
+  onFilterChange,
+}: StoreFiltersProps) {
+  const hasActiveFilters = filters.rating !== "all" || filters.search !== "";
+
+  const clearFilters = () => {
+    onFilterChange({
+      rating: "all",
+      search: "",
+    });
+  };
+
+  return (
+    <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900 mx-1">
+          Filters
+        </h3>
+        {hasActiveFilters && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 mx-2"
+          >
+            <X className="h-3 w-3" />
+            Clear all
+          </button>
+        )}
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+            Minimum Rating
+          </label>
+          <select
+            value={filters.rating}
+            onChange={(e) =>
+              onFilterChange({ ...filters, rating: e.target.value })
+            }
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+          >
+            <option value="all">All Ratings</option>
+            <option value="4.5">4.5+ Stars</option>
+            <option value="4.0">4.0+ Stars</option>
+            <option value="3.5">3.5+ Stars</option>
+          </select>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+            Search
+          </label>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-700 dark:text-neutral-700" />
+            <input
+              type="text"
+              value={filters.search}
+              onChange={(e) =>
+                onFilterChange({ ...filters, search: e.target.value })
+              }
+              placeholder="Search by name or domain..."
+              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-50 dark:bg-neutral-50 pl-10 pr-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 placeholder:text-neutral-700 dark:placeholder:text-neutral-700 focus:border-blue-500 focus:outline-none"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

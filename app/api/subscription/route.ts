@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { AUTH_COOKIE, verifyAuthToken } from "../../../lib/auth";
 import {
   activateSubscription,
+  cancelSubscription,
   getUserSubscription,
   listPlans,
   startTrial,
@@ -12,7 +13,7 @@ import {
 
 const DEMO_USER_ID = "demo-user";
 
-type SubscriptionAction = "startTrial" | "activate";
+type SubscriptionAction = "startTrial" | "activate" | "cancel";
 
 interface SubscriptionRequestBody {
   planId?: unknown;
@@ -55,13 +56,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: validation.error }, { status: 400 });
   }
 
-  const { planId, action } = validation.data;
+  const requestData = validation.data;
 
   try {
-    const subscription =
-      action === "startTrial"
-        ? startTrial(userId, planId)
-        : activateSubscription(userId, planId);
+    let subscription = getUserSubscription(userId);
+
+    if (requestData.action === "startTrial") {
+      subscription = startTrial(userId, requestData.planId);
+    } else if (requestData.action === "activate") {
+      subscription = activateSubscription(userId, requestData.planId);
+    } else if (requestData.action === "cancel") {
+      subscription = cancelSubscription(userId);
+    }
 
     return NextResponse.json({ subscription });
   } catch (error) {
@@ -86,13 +92,20 @@ async function resolveUserContext(token: string | null) {
   }
 }
 
+type ValidSubscriptionPayload =
+  | {
+      action: "startTrial" | "activate";
+      planId: SubscriptionPlanId;
+    }
+  | {
+      action: "cancel";
+      planId?: undefined;
+    };
+
 function validateRequestPayload(
   body: SubscriptionRequestBody
 ):
-  | {
-      success: true;
-      data: { planId: SubscriptionPlanId; action: SubscriptionAction };
-    }
+  | { success: true; data: ValidSubscriptionPayload }
   | { success: false; error: string } {
   if (typeof body !== "object" || body === null) {
     return { success: false, error: "Invalid request payload." };
@@ -100,16 +113,25 @@ function validateRequestPayload(
 
   const { planId, action } = body;
 
+  if (action !== "startTrial" && action !== "activate" && action !== "cancel") {
+    return { success: false, error: "Unsupported subscription action." };
+  }
+
+  if (action === "cancel") {
+    return {
+      success: true,
+      data: {
+        action: "cancel",
+      },
+    };
+  }
+
   if (typeof planId !== "string" || !isValidPlanId(planId)) {
     return { success: false, error: "Invalid plan selected." };
   }
 
   if (planId === "free") {
     return { success: false, error: "Free plan does not support this action." };
-  }
-
-  if (action !== "startTrial" && action !== "activate") {
-    return { success: false, error: "Unsupported subscription action." };
   }
 
   return {

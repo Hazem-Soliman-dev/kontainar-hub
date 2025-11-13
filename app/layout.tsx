@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "../components/header";
 import { Footer } from "../components/footer";
 import { JsonLd } from "../components/seo/json-ld";
+import { ThemeScript } from "../components/theme-script";
 import { createMetadata } from "../lib/seo/metadata";
 import {
   buildOrganizationLd,
@@ -60,6 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <ThemeScript />
         <JsonLd data={organizationStructuredData} id="global-structured-data" />
       </head>
       <body

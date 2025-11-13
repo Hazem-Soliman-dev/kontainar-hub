@@ -1,13 +1,8 @@
 import { NextResponse } from "next/server";
 
-import {
-  AUTH_COOKIE,
-  buildAuthUser,
-  generateAuthToken,
-  getCookieOptions,
-  verifyPassword,
-} from "../../../../lib/auth";
-import { mockDb, toPublicUser, type PublicUser } from "../../../../lib/mock/db";
+import { verifyPassword } from "../../../../lib/auth";
+import { respondWithAuthSuccess } from "../../../../lib/auth-response";
+import { mockDb, toPublicUser } from "../../../../lib/mock/db";
 
 interface LoginBody {
   email?: unknown;
@@ -49,9 +44,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const publicUser: PublicUser = toPublicUser(user);
-
-  return respondWithToken(publicUser);
+  return respondWithAuthSuccess(toPublicUser(user));
 }
 
 function validateBody(
@@ -90,17 +83,3 @@ function validateBody(
   };
 }
 
-async function respondWithToken(user: PublicUser, init?: ResponseInit) {
-  const token = await generateAuthToken(user);
-  const response = NextResponse.json(
-    {
-      user: buildAuthUser(user),
-      token,
-    },
-    init
-  );
-
-  response.cookies.set(AUTH_COOKIE, token, getCookieOptions());
-
-  return response;
-}

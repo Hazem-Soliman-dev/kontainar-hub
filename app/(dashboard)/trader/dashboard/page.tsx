@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { SalesChart } from "../../../../components/charts/sales-chart";
+import { DashboardGate } from "../../../../components/dashboard/dashboard-gate";
 
 type TraderOrderStatus = "pending" | "confirmed" | "in-transit" | "delivered";
 
@@ -160,232 +161,235 @@ export default function TraderDashboardPage() {
   }, [orders]);
 
   return (
-    <main className="flex min-h-screen flex-col gap-12 bg-slate-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-6xl flex-col gap-4">
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-              Trader Console
-            </p>
-            <h1 className="text-3xl font-semibold text-slate-900">
-              Welcome back, Northwind Traders
-            </h1>
-            <p className="mt-2 text-sm text-slate-600">
-              Orchestrate supplier relationships, inventory, and omnichannel
-              stores.
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <Link
-              href="/trader/store"
-              className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
-            >
-              Create sub-store
-            </Link>
-            <Link
-              href="/trader/orders"
-              className="inline-flex items-center rounded-lg border border-blue-600/50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50"
-            >
-              Review orders
-            </Link>
-          </div>
-        </div>
-
-        {notifications.length > 0 && (
-          <aside className="flex flex-col gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 text-sm text-emerald-900 md:flex-row md:items-center">
-            <span className="font-semibold">Real-time inventory updates:</span>
-            <div className="flex flex-wrap gap-2">
-              {notifications.map((note, index) => (
-                <span
-                  key={`${note}-${index}`}
-                  className="rounded-full bg-white/70 px-3 py-1 text-xs font-medium text-emerald-700"
-                >
-                  {note}
-                </span>
-              ))}
-            </div>
-          </aside>
-        )}
-      </header>
-
-      <section className="mx-auto grid w-full max-w-6xl gap-4 md:grid-cols-4">
-        {metrics.map((metric) => (
-          <article
-            key={metric.id}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-          >
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-              {metric.label}
-            </p>
-            <p className="mt-3 text-2xl font-semibold text-slate-900">
-              {metric.value}
-            </p>
-            <p className="mt-2 text-xs text-slate-500">{metric.description}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-[1.7fr_1fr]">
-        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <header className="flex items-center justify-between">
+    <DashboardGate requiredPlan="trader">
+      <main className="flex min-h-screen flex-col gap-8 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
+        <header className="mx-auto flex w-full max-w-7xl flex-col gap-4">
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">
-                Spend trend
-              </h2>
-              <p className="text-sm text-slate-500">
-                Month-over-month spend vs profit margins
+              <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
+                Welcome back, Northwind Traders
+              </h1>
+              <p className="mt-2 text-md text-neutral-700 dark:text-neutral-700">
+                Orchestrate supplier relationships, inventory, and omnichannel
+                stores.
               </p>
             </div>
-            <Link
-              href="/trader/inventory"
-              className="text-sm font-semibold text-blue-600 hover:underline"
-            >
-              Manage inventory →
-            </Link>
-          </header>
-          <div className="mt-6 h-72">
-            <SalesChart
-              data={SALES_TREND}
-              dataKey="value"
-              xKey="month"
-              series={[
-                { name: "value", color: "#2563eb" },
-                { name: "margin", color: "#22c55e" },
-              ]}
-              currency
-            />
-          </div>
-        </article>
-
-        <article className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <header>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Supplier contribution
-            </h2>
-            <p className="text-sm text-slate-500">
-              Share of revenue influenced by each partner
-            </p>
-          </header>
-          <ul className="space-y-3">
-            {SUPPLIER_BREAKDOWN.map((supplier) => (
-              <li
-                key={supplier.supplier}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white/70 px-4 py-3"
+            <div className="flex gap-3">
+              <Link
+                href="/trader/store"
+                className="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-neutral-50 dark:text-neutral-50 shadow-sm hover:bg-blue-800 dark:hover:bg-blue-800"
               >
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">
-                    {supplier.supplier}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    Login to view contractual terms & lead times
-                  </p>
-                </div>
-                <span className="text-sm font-semibold text-blue-600">
-                  {supplier.contribution}%
-                </span>
-              </li>
-            ))}
-          </ul>
-        </article>
-      </section>
-
-      <section className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <header className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900">
-                Latest sourcing orders
-              </h2>
-              <p className="text-sm text-slate-500">
-                Track fulfillment and communication with suppliers
-              </p>
+                Create sub-store
+              </Link>
+              <Link
+                href="/trader/orders"
+                className="inline-flex items-center rounded-lg border border-blue-700 dark:border-blue-700 bg-neutral-50 dark:bg-neutral-50 px-4 py-2 text-sm font-semibold text-blue-400 dark:text-blue-400 hover:bg-blue-950 dark:hover:bg-blue-950"
+              >
+                Review orders
+              </Link>
             </div>
-            <Link
-              href="/trader/orders"
-              className="text-sm font-semibold text-blue-600 hover:underline"
-            >
-              View all orders
-            </Link>
-          </header>
+          </div>
 
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-              <thead>
-                <tr className="text-xs uppercase tracking-wider text-slate-500">
-                  <th className="py-3 pr-6">Order</th>
-                  <th className="py-3 pr-6">Store</th>
-                  <th className="py-3 pr-6">Supplier</th>
-                  <th className="py-3 pr-6">Value</th>
-                  <th className="py-3">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {orders.slice(0, 5).map((order) => (
-                  <tr key={order.id} className="text-sm text-slate-700">
-                    <td className="py-3 pr-6 font-semibold text-slate-900">
-                      {order.id}
-                    </td>
-                    <td className="py-3 pr-6">#{order.storeId}</td>
-                    <td className="py-3 pr-6">{order.supplier}</td>
-                    <td className="py-3 pr-6">
-                      {order.value.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </td>
-                    <td className="py-3">
-                      <StatusBadge status={order.status} />
-                    </td>
-                  </tr>
+          {notifications.length > 0 && (
+            <aside className="flex flex-col gap-2 rounded-2xl border border-emerald-700 dark:border-emerald-700 bg-emerald-950 dark:bg-emerald-950 px-4 py-4 text-sm text-emerald-400 dark:text-emerald-400 md:flex-row md:items-center">
+              <span className="font-semibold">
+                Real-time inventory updates:
+              </span>
+              <div className="flex flex-wrap gap-2">
+                {notifications.map((note, index) => (
+                  <span
+                    key={`${note}-${index}`}
+                    className="rounded-full bg-emerald-950 dark:bg-emerald-950 px-3 py-1 text-xs font-medium text-emerald-400 dark:text-emerald-400"
+                  >
+                    {note}
+                  </span>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        </article>
+              </div>
+            </aside>
+          )}
+        </header>
 
-        <article className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <header>
-            <h2 className="text-lg font-semibold text-slate-900">
-              Inventory snapshot
-            </h2>
-            <p className="text-sm text-slate-500">
-              Auto-refreshing stock levels across suppliers
-            </p>
-          </header>
-          <ul className="space-y-3">
-            {inventory.map((item) => (
-              <li
-                key={item.id}
-                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white/70 px-4 py-3"
+        <section className="mx-auto grid w-full max-w-7xl gap-4 md:grid-cols-4">
+          {metrics.map((metric) => (
+            <article
+              key={metric.id}
+              className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-5 shadow-sm text-center"
+            >
+              <p className="text-sm font-semibold uppercase tracking-wide text-neutral-700 dark:text-neutral-700">
+                {metric.label}
+              </p>
+              <p className="mt-3 text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
+                {metric.value}
+              </p>
+              <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-700">
+                {metric.description}
+              </p>
+            </article>
+          ))}
+        </section>
+
+        <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1.7fr_1fr]">
+          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
+            <header className="flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
+                  Spend trend
+                </h2>
+                <p className="text-md text-neutral-700 dark:text-neutral-700">
+                  Month-over-month spend vs profit margins
+                </p>
+              </div>
+              <Link
+                href="/trader/inventory"
+                className="text-sm font-semibold text-blue-400 hover:underline"
               >
-                <div>
-                  <p className="text-sm font-semibold text-slate-900">
-                    {item.product}
-                  </p>
-                  <p className="text-xs text-slate-500">SKU {item.sku}</p>
-                </div>
-                <span
-                  className={`text-sm font-semibold ${
-                    item.stock < 100 ? "text-amber-600" : "text-emerald-600"
-                  }`}
+                Manage inventory →
+              </Link>
+            </header>
+            <div className="mt-6 h-72">
+              <SalesChart
+                data={SALES_TREND}
+                dataKey="value"
+                xKey="month"
+                series={[
+                  { name: "value", color: "#2563eb" },
+                  { name: "margin", color: "#22c55e" },
+                ]}
+                currency
+              />
+            </div>
+          </article>
+
+          <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
+            <header className="gap-1 flex flex-col">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
+                Supplier contribution
+              </h2>
+              <p className="text-md text-neutral-700 dark:text-neutral-700">
+                Share of revenue influenced by each partner
+              </p>
+            </header>
+            <ul className="space-y-3">
+              {SUPPLIER_BREAKDOWN.map((supplier) => (
+                <li
+                  key={supplier.supplier}
+                  className="flex items-center justify-between rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-4 py-3"
                 >
-                  {item.stock} units
-                </span>
-              </li>
-            ))}
-          </ul>
-        </article>
-      </section>
-    </main>
+                  <div className="gap-1 flex flex-col">
+                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-900">
+                      {supplier.supplier}
+                    </p>
+                    <p className="text-sm text-neutral-700 dark:text-neutral-700">
+                      Login to view contractual terms & lead times
+                    </p>
+                  </div>
+                  <span className="text-sm font-semibold text-blue-400 dark:text-blue-400">
+                    {supplier.contribution}%
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        </section>
+
+        <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1.5fr_1fr]">
+          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
+            <header className="flex items-center justify-between">
+              <div className="gap-1 flex flex-col">
+                <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-900">
+                  Latest sourcing orders
+                </h2>
+                <p className="text-md text-neutral-700 dark:text-neutral-700">
+                  Track fulfillment and communication with suppliers
+                </p>
+              </div>
+              <Link
+                href="/trader/orders"
+                className="text-sm font-semibold text-blue-400 hover:underline"
+              >
+                View all orders
+              </Link>
+            </header>
+
+            <div className="mt-6 overflow-x-auto">
+              <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-200 text-sm text-center">
+                <thead>
+                  <tr className="text-xs uppercase tracking-wider text-neutral-700 dark:text-neutral-700">
+                    <th className="py-3 pr-6">Order</th>
+                    <th className="py-3 pr-6">Store</th>
+                    <th className="py-3 pr-6">Supplier</th>
+                    <th className="py-3 pr-6">Value</th>
+                    <th className="py-3">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-200">
+                  {orders.slice(0, 5).map((order) => (
+                    <tr key={order.id} className="text-sm text-neutral-700 dark:text-neutral-700">
+                      <td className="py-3 pr-6 font-semibold text-neutral-900 dark:text-neutral-900">
+                        {order.id}
+                      </td>
+                      <td className="py-3 pr-6">#{order.storeId}</td>
+                      <td className="py-3 pr-6">{order.supplier}</td>
+                      <td className="py-3 pr-6">
+                        {order.value.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })}
+                      </td>
+                      <td className="py-3">
+                        <StatusBadge status={order.status} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
+            <header>
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
+                Inventory snapshot
+              </h2>
+              <p className="text-md text-neutral-700 dark:text-neutral-700">
+                Auto-refreshing stock levels across suppliers
+              </p>
+            </header>
+            <ul className="space-y-3">
+              {inventory.map((item) => (
+                <li
+                  key={item.id}
+                  className="flex items-center justify-between rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-4 py-3"
+                >
+                  <div className="gap-1 flex flex-col">
+                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-900">
+                      {item.product}
+                    </p>
+                    <p className="text-sm text-neutral-700 dark:text-neutral-700">SKU {item.sku}</p>
+                  </div>
+                  <span
+                    className={`text-sm font-semibold ${
+                      item.stock < 100 ? "text-amber-400" : "text-emerald-400"
+                    }`}
+                  >
+                    {item.stock} units
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        </section>
+      </main>
+    </DashboardGate>
   );
 }
 
 function StatusBadge({ status }: { status: TraderOrderStatus }) {
   const config: Record<TraderOrderStatus, string> = {
-    pending: "bg-amber-100 text-amber-800 border-amber-200",
-    confirmed: "bg-blue-100 text-blue-800 border-blue-200",
-    "in-transit": "bg-violet-100 text-violet-800 border-violet-200",
-    delivered: "bg-emerald-100 text-emerald-800 border-emerald-200",
+    pending: "bg-amber-950 text-amber-400 border-amber-700",
+    confirmed: "bg-blue-950 text-blue-400 border-blue-700",
+    "in-transit": "bg-violet-950 text-violet-400 border-violet-700",
+    delivered: "bg-emerald-950 text-emerald-400 border-emerald-700",
   };
 
   const label: Record<TraderOrderStatus, string> = {
@@ -397,7 +401,7 @@ function StatusBadge({ status }: { status: TraderOrderStatus }) {
 
   return (
     <span
-      className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${config[status]}`}
+      className={`inline-flex rounded-full border px-3 py-1 text-sm font-medium ${config[status]}`}
     >
       {label[status]}
     </span>

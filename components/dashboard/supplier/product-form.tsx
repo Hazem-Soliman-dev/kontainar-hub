@@ -69,7 +69,7 @@ export function ProductForm({
             value={values.name}
             onChange={handleChange}
             required
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           />
         </FormField>
         <FormField label="SKU">
@@ -79,7 +79,7 @@ export function ProductForm({
             value={values.sku}
             onChange={handleChange}
             required
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           />
         </FormField>
       </div>
@@ -92,7 +92,7 @@ export function ProductForm({
             value={values.category}
             onChange={handleChange}
             required
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           />
         </FormField>
         <FormField label="Inventory">
@@ -103,7 +103,7 @@ export function ProductForm({
             onChange={handleChange}
             min={0}
             required
-            className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
           />
         </FormField>
       </div>
@@ -113,7 +113,7 @@ export function ProductForm({
           name="status"
           value={values.status}
           onChange={handleChange}
-          className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
         >
           <option value="active">Active</option>
           <option value="draft">Draft</option>
@@ -126,7 +126,7 @@ export function ProductForm({
           value={values.description}
           onChange={handleChange}
           rows={4}
-          className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
         />
       </FormField>
 
@@ -135,7 +135,7 @@ export function ProductForm({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100"
+            className="rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-100"
           >
             Cancel
           </button>
@@ -161,7 +161,7 @@ function FormField({
 }) {
   return (
     <label className="block space-y-1">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
+      <span className="text-sm font-medium text-slate-400">{label}</span>
       {children}
     </label>
   );

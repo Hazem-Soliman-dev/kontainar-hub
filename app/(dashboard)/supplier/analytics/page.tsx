@@ -82,15 +82,12 @@ export default function SupplierAnalyticsPage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col gap-12 bg-slate-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-6xl flex-col gap-3 text-center">
-        <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-          Analytics Overview
-        </p>
-        <h1 className="text-3xl font-semibold text-slate-900">
+    <main className="flex min-h-screen flex-col gap-8 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
+      <header className="mx-auto flex w-full max-w-6xl flex-col gap-2 text-center">
+        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
           Sales performance & customer trends
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-md text-neutral-700 dark:text-neutral-700">
           High-level insight into sales velocity, best-performing products, and
           priority regions.
         </p>
@@ -167,13 +164,13 @@ export default function SupplierAnalyticsPage() {
         </AnalyticsPanel>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="mx-auto w-full max-w-6xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
         <header className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-900">
               Revenue by region
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-md text-neutral-700 dark:text-neutral-700">
               Where demand is accelerating for your current catalogue.
             </p>
           </div>
@@ -183,15 +180,15 @@ export default function SupplierAnalyticsPage() {
           {REGION_REVENUE.map((region) => (
             <div
               key={region.region}
-              className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-5"
+              className="rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-4 py-5"
             >
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              <p className="text-sm font-semibold uppercase tracking-widest text-neutral-700 dark:text-neutral-700">
                 {region.region}
               </p>
-              <p className="mt-2 text-xl font-semibold text-slate-900">
+              <p className="mt-2 text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
                 {formatCurrency(region.revenue)}
               </p>
-              <p className="mt-1 text-xs text-slate-500">
+              <p className="mt-1 text-sm text-neutral-700 dark:text-neutral-700">
                 Login to drill into buyer activity →
               </p>
             </div>
@@ -212,12 +209,14 @@ function MetricCard({
   description: string;
 }) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-        {label}
-      </p>
-      <p className="mt-3 text-2xl font-semibold text-slate-900">{value}</p>
-      <p className="mt-2 text-xs text-slate-500">{description}</p>
+    <article className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-5 shadow-sm flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
+        <p className="text-sm font-semibold uppercase tracking-widest text-neutral-700 dark:text-neutral-700">
+          {label}
+        </p>
+        <p className="mt-3 text-2xl font-semibold text-neutral-900 dark:text-neutral-900">{value}</p>
+        <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-700">{description}</p>
+      </div>
     </article>
   );
 }
@@ -232,12 +231,12 @@ function AnalyticsPanel({
   children: React.ReactNode;
 }) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-      <header>
-        <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        <p className="text-sm text-slate-500">{subtitle}</p>
+    <article className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm ">
+      <header className="flex flex-col items-center justify-center">
+        <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">{title}</h2>
+        <p className="text-md text-neutral-700 dark:text-neutral-700">{subtitle}</p>
       </header>
-      <div className="mt-6">{children}</div>
+      <div className="mt-6 flex flex-col items-center justify-center">{children}</div>
     </article>
   );
 }

@@ -3,6 +3,7 @@
 import useSWR from "swr";
 
 import type { ProductRecord } from "../../lib/mock/products";
+import { FavoriteButton } from "../ui/favorite-button";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -35,8 +36,11 @@ export default function TrendingProducts() {
         {data.map((product) => (
           <article
             key={product.id}
-            className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+            className="relative flex flex-col gap-3 rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
           >
+            <div className="absolute right-4 top-4 z-10">
+              <FavoriteButton product={product} size={18} className="h-8 w-8" />
+            </div>
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h3 className="text-base font-semibold text-slate-900">

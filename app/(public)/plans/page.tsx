@@ -48,11 +48,11 @@ export default async function PlansPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-12">
       <JsonLd data={structuredData} id="plans-json-ld" />
-      <header className="mx-auto max-w-3xl text-center">
-        <h1 className="text-3xl font-semibold text-slate-900">
+      <header className="mx-auto max-w-3xl text-center text-neutral-900 dark:text-neutral-900">
+        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl lg:text-5xl">
           Choose your plan
         </h1>
-        <p className="mt-3 text-base text-slate-600">
+        <p className="max-w-3xl text-md text-neutral-700 dark:text-neutral-700 mt-3">
           Start with a 1-day trial on any paid plan. You can upgrade or cancel
           at any time.
         </p>

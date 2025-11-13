@@ -1,0 +1,44 @@
+warning: in the working copy of 'app/(public)/page.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'app/layout.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'components/header.tsx', LF will be replaced by CRLF the next time Git touches it
+ app/(auth)/login/page.tsx                      |  13 [32m+[m[31m-[m
+ app/(auth)/register/page.tsx                   |  13 [32m+[m[31m-[m
+ app/(dashboard)/supplier/analytics/page.tsx    |  51 [32m++[m[31m-[m
+ app/(dashboard)/supplier/dashboard/page.tsx    | 344 [32m++++++++++[m[31m----------[m
+ app/(dashboard)/supplier/orders/page.tsx       |  61 [32m++[m[31m--[m
+ app/(dashboard)/supplier/products/page.tsx     |  43 [32m++[m[31m-[m
+ app/(dashboard)/trader/dashboard/page.tsx      | 420 [32m+++++++++++++[m[31m------------[m
+ app/(dashboard)/trader/inventory/page.tsx      |  72 [32m++[m[31m---[m
+ app/(dashboard)/trader/orders/page.tsx         |  49 [32m++[m[31m-[m
+ app/(dashboard)/trader/store/page.tsx          | 156 [32m++++[m[31m-----[m
+ app/(public)/best-sellers/page.tsx             | 118 [32m+[m[31m------[m
+ app/(public)/categories/page.tsx               | 127 [31m--------[m
+ app/(public)/deals/page.tsx                    | 128 [31m--------[m
+ app/(public)/page.tsx                          | 233 [32m+++++++[m[31m-------[m
+ app/(public)/plans/page.tsx                    |   6 [32m+[m[31m-[m
+ app/(public)/plans/plan-comparison-client.tsx  |  16 [32m+[m[31m-[m
+ app/(public)/stores/page.tsx                   |  99 [32m+[m[31m-----[m
+ app/account/page.tsx                           | 100 [32m+[m[31m-----[m
+ app/api/auth/login/route.ts                    |  29 [32m+[m[31m-[m
+ app/api/auth/register/route.ts                 |  83 [32m+++[m[31m--[m
+ app/api/subscription/route.ts                  |  50 [32m++[m[31m-[m
+ app/cart/page.tsx                              |  85 [32m+[m[31m----[m
+ app/favorites/page.tsx                         |  58 [32m+[m[31m---[m
+ app/globals.css                                |  10 [32m+[m[31m-[m
+ app/layout.tsx                                 |   2 [32m+[m
+ app/settings/page.tsx                          |  20 [32m+[m[31m-[m
+ components/dashboard/supplier/product-form.tsx |  16 [32m+[m[31m-[m
+ components/footer.tsx                          |  83 [32m+++[m[31m--[m
+ components/header.tsx                          | 190 [32m+++++++[m[31m----[m
+ components/public/trending-products.tsx        |   6 [32m+[m[31m-[m
+ components/subscription/plan-card.tsx          |  45 [32m++[m[31m-[m
+ components/subscription/trial-banner.tsx       |  13 [32m+[m[31m-[m
+ lib/mock/db.ts                                 |  82 [32m++++[m[31m-[m
+ lib/mock/products.ts                           |   6 [32m+[m
+ lib/mock/public.ts                             |   8 [32m+[m
+ lib/store/auth-store.ts                        |  26 [32m+[m[31m-[m
+ middleware.ts                                  |  23 [32m+[m[31m-[m
+ styles/design-tokens.css                       |  35 [32m++[m[31m-[m
+ tailwind.config.ts                             |  11 [32m+[m[31m-[m
+ 39 files changed, 1246 insertions(+), 1684 deletions(-)

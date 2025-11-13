@@ -57,3 +57,9 @@ export async function getProducts(): Promise<ProductRecord[]> {
   return products;
 }
 
+export async function getProductById(id: string): Promise<ProductRecord | null> {
+  // simulate async data fetch
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  return products.find((product) => product.id === id) ?? null;
+}
+

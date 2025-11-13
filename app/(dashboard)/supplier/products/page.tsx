@@ -137,25 +137,22 @@ export default function SupplierProductsPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col gap-10 bg-slate-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-5xl flex-col gap-3 text-center">
-        <h1 className="text-3xl font-semibold text-slate-900">
+    <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
+      <header className="mx-auto flex w-full max-w-7xl flex-col gap-2 text-center">
+        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
           Product catalogue
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="text-md text-neutral-700 dark:text-neutral-700">
           Manage product details, inventory, and status before publishing to the
           marketplace.
         </p>
       </header>
 
-      <section className="mx-auto grid w-full max-w-5xl gap-6 lg:grid-cols-[1fr_1.5fr]">
-        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-slate-900">
+      <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1fr_1.5fr]">
+        <article className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
             {editingProduct ? "Edit product" : "Create product"}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Capture the essentials shoppers see across Kontainar Hub.
-          </p>
           <div className="mt-4">
             <ProductForm
               initialValues={editingProduct ?? undefined}
@@ -169,13 +166,13 @@ export default function SupplierProductsPage() {
           </div>
         </article>
 
-        <article className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
                 Product list
               </h2>
-              <p className="text-sm text-slate-500">
+              <p className="text-md text-neutral-700 dark:text-neutral-700">
                 {filteredProducts.length} item(s) • {products.length} total
               </p>
             </div>
@@ -184,7 +181,7 @@ export default function SupplierProductsPage() {
               onChange={(event) =>
                 setFilter(event.target.value as ProductStatus | "all")
               }
-              className="rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+              className="rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
             >
               <option value="all">All statuses</option>
               <option value="active">Active only</option>
@@ -196,24 +193,24 @@ export default function SupplierProductsPage() {
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white/70 p-4 shadow-sm md:flex-row md:items-center md:justify-between"
+                className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-4 shadow-sm md:flex-row md:items-center md:justify-between"
               >
                 <div className="max-w-lg space-y-2">
                   <div className="flex flex-wrap items-center gap-3">
-                    <h3 className="text-base font-semibold text-slate-900">
+                    <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">
                       {product.name}
                     </h3>
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium uppercase tracking-wide text-slate-600">
+                    <span className="rounded-full bg-blue-950 dark:bg-blue-950 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-400 dark:text-blue-400">
                       {product.status}
                     </span>
-                    <span className="text-xs text-slate-400">
+                    <span className="text-sm text-neutral-700 dark:text-neutral-700">
                       SKU {product.sku}
                     </span>
                   </div>
-                  <p className="text-sm text-slate-600">
+                  <p className="text-sm text-neutral-700 dark:text-neutral-700">
                     {product.description}
                   </p>
-                  <div className="flex flex-wrap gap-4 text-xs text-slate-500">
+                  <div className="flex flex-wrap gap-4 text-sm text-neutral-700 dark:text-neutral-700">
                     <span>Inventory: {product.inventory} units</span>
                     <span>Category: {product.category}</span>
                     <span>
@@ -224,13 +221,13 @@ export default function SupplierProductsPage() {
                 <div className="flex flex-1 items-center justify-end gap-3 md:flex-col md:items-end">
                   <button
                     onClick={() => setEditingProduct(product)}
-                    className="w-full rounded-md border border-blue-600/40 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-50 md:w-auto"
+                    className="w-full rounded-md border border-blue-700 dark:border-blue-700 bg-neutral-50 dark:bg-neutral-50 px-4 py-2 text-sm font-semibold text-blue-400 dark:text-blue-400 hover:bg-blue-950 dark:hover:bg-blue-950 md:w-auto"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteProduct(product.id)}
-                    className="w-full rounded-md border border-red-200 px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 md:w-auto"
+                    className="w-full rounded-md border border-red-700 dark:border-red-700 bg-neutral-50 dark:bg-neutral-50 px-4 py-2 text-sm font-semibold text-red-400 dark:text-red-400 hover:bg-red-950 dark:hover:bg-red-950 md:w-auto"
                   >
                     Delete
                   </button>
@@ -239,7 +236,7 @@ export default function SupplierProductsPage() {
             ))}
 
             {filteredProducts.length === 0 && (
-              <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-6 text-center text-sm text-slate-500">
+              <p className="rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-4 py-6 text-center text-sm text-neutral-700 dark:text-neutral-700">
                 No products match this filter. Adjust the status or create a new
                 product.
               </p>

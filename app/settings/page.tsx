@@ -11,13 +11,13 @@ export const metadata = createMetadata({
 
 export default function SettingsPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12">
         <header className="space-y-2">
-          <h1 className="text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">
+          <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl lg:text-5xl">
             Personal preferences
           </h1>
-          <p className="text-md text-slate-400">
+          <p className="text-md text-neutral-700 dark:text-neutral-700">
             Update communication channels, marketplace alerts, and privacy
             controls. More advanced settings unlock with a paid subscription.
           </p>
@@ -43,8 +43,8 @@ export default function SettingsPage() {
           </PreferenceCard>
         </section>
 
-        <section className="rounded-3xl border border-blue-500/20 bg-blue-500/10 px-6 py-8 text-sm text-blue-200">
-          <h2 className="text-lg font-semibold text-white">
+        <section className="rounded-3xl border border-blue-500/20 bg-blue-500/10 dark:bg-blue-500/10 px-6 py-8 text-sm text-blue-400 dark:text-blue-400">
+          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
             Need more control?
           </h2>
           <p className="mt-2">
@@ -67,12 +67,12 @@ function PreferenceCard({
   children: ReactNode;
 }) {
   return (
-    <article className="space-y-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-blue-950/20">
+    <article className="space-y-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-blue-950/20">
       <div>
-        <h2 className="text-lg font-semibold text-white">{title}</h2>
-        <p className="mt-2 text-md text-slate-400">{description}</p>
+        <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">{title}</h2>
+        <p className="mt-2 text-md text-neutral-700 dark:text-neutral-700">{description}</p>
       </div>
-      <div className="space-y-3 text-md text-slate-300">{children}</div>
+      <div className="space-y-3 text-md text-neutral-700 dark:text-neutral-700">{children}</div>
     </article>
   );
 }
@@ -85,7 +85,7 @@ function ToggleRow({
   defaultChecked?: boolean;
 }) {
   return (
-    <label className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/60 p-3">
+    <label className="flex items-center justify-between rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-3">
       <span>{label}</span>
       <input
         type="checkbox"

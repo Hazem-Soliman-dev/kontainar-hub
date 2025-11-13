@@ -2,11 +2,12 @@ import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
+  darkMode: 'class',
   content: [
-    "./src/app/**/*.{ts,tsx}",
-    "./src/components/**/*.{ts,tsx}",
-    "./src/lib/**/*.{ts,tsx}",
-    "./src/hooks/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./lib/**/*.{ts,tsx}",
+    "./hooks/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {
@@ -40,6 +41,8 @@ const config: Config = {
           50: "var(--color-neutral-50)",
           100: "var(--color-neutral-100)",
           200: "var(--color-neutral-200)",
+          300: "var(--color-neutral-300)",
+          400: "var(--color-neutral-400)",
           700: "var(--color-neutral-700)",
           900: "var(--color-neutral-900)",
         },

@@ -3,7 +3,8 @@
 import { ChangeEvent, FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { useAuthStore, type AuthUser } from "../../../lib/store/auth-store";
+import { useAuthStore } from "../../../lib/store/auth-store";
+import type { AuthSuccessBody } from "../../../lib/auth-response";
 
 type FormState = {
   identifier: string;
@@ -73,14 +74,12 @@ function LoginPageContent() {
         throw new Error(data?.message ?? "Unable to login.");
       }
 
-      const { user, token } = data as { user: AuthUser; token: string };
-      setAuth({ user, token });
+      const { user, token, subscription, dashboardPath } =
+        data as AuthSuccessBody;
+      setAuth({ user, token, subscription, dashboardPath });
 
       const redirect = searchParams.get("redirect");
-      const fallback =
-        user.role === "supplier" ? "/supplier/dashboard" : "/trader/dashboard";
-
-      router.push(redirect ?? fallback);
+      router.push(redirect ?? dashboardPath);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {

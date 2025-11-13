@@ -3,19 +3,21 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
   ArrowRight,
-  Bell,
   Heart,
   LogIn,
+  LogOut,
   Settings,
   ShoppingCart,
   UserRound,
 } from "lucide-react";
 
 import { bestSellerProducts, featuredStores } from "../lib/mock/public";
-import { useAuthStore } from "../lib/store/auth-store";
+import { useAuthStore, type AuthUser } from "../lib/store/auth-store";
+import { ThemeToggle } from "./ui/theme-toggle";
 
 type Panel =
   | "notifications"
@@ -29,8 +31,8 @@ type Panel =
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/stores", label: "Stores" },
-  { href: "/categories", label: "Categories" },
-  { href: "/deals", label: "Deals" },
+  { href: "/top-products", label: "Top Products" },
+  { href: "/contact", label: "Contact" },
 ];
 
 const quickCartItems = bestSellerProducts.slice(0, 2);
@@ -38,30 +40,39 @@ const quickFavorites = featuredStores.slice(0, 3);
 
 export function Header() {
   const [openPanel, setOpenPanel] = useState<Panel | null>(null);
+  const router = useRouter();
   const user = useAuthStore((state) => state.user);
+  const dashboardPath = useAuthStore((state) => state.dashboardPath);
+  const logout = useAuthStore((state) => state.logout);
   const togglePanel = (panel: Panel) => {
     setOpenPanel((prev) => (prev === panel ? null : panel));
   };
 
   const closePanel = () => setOpenPanel(null);
 
+  const handleLogout = () => {
+    logout();
+    closePanel();
+    router.push("/");
+  };
+
   return (
-    <header className="relative border-b border-slate-800 bg-slate-900/95 backdrop-blur">
+    <header className="relative z-50 border-b border-neutral-200 dark:border-neutral-200 bg-neutral-100/95 dark:bg-neutral-100/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <div className="flex items-center gap-16">
           <Link
             href="/"
-            className="text-2xl font-semibold tracking-tight text-white"
+            className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-900"
             onClick={closePanel}
           >
             Market Hub
           </Link>
-          <nav className="hidden gap-10 text-md font-medium text-slate-300 md:flex">
+          <nav className="hidden gap-10 text-md font-medium text-neutral-700 dark:text-neutral-700 md:flex">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="transition hover:text-white"
+                className="transition hover:text-neutral-900 dark:hover:text-neutral-900"
                 onClick={closePanel}
               >
                 {link.label}
@@ -70,10 +81,8 @@ export function Header() {
           </nav>
         </div>
 
-        <div className="hidden items-center gap-10 text-slate-300 md:flex">
-          <Link href="/settings">
-            <Settings className="h-5 w-5" />
-          </Link>
+        <div className="hidden items-center gap-10 text-neutral-700 dark:text-neutral-700 md:flex">
+          <ThemeToggle />
           <Link href="/favorites">
             <Heart className="h-5 w-5" />
           </Link>
@@ -81,13 +90,35 @@ export function Header() {
             <ShoppingCart className="h-5 w-5" />
           </Link>
           {user ? (
-            <Link href="/account">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                togglePanel("account");
+              }}
+              className="rounded-full p-2 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900"
+              aria-haspopup="menu"
+              aria-expanded={openPanel === "account"}
+              aria-label="Account menu"
+            >
               <UserRound className="h-5 w-5" />
-            </Link>
+            </button>
           ) : (
-            <Link href="/login">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                togglePanel("account");
+              }}
+              className="rounded-full p-2 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900"
+              aria-haspopup="menu"
+              aria-expanded={openPanel === "account"}
+              aria-label="Account quick actions"
+            >
               <LogIn className="h-4 w-4" />
-            </Link>
+            </button>
           )}
         </div>
       </div>
@@ -100,8 +131,12 @@ export function Header() {
             className="fixed inset-0 z-40 bg-black/30 lg:bg-transparent"
             onClick={closePanel}
           />
-          <div className="absolute right-6 top-20 z-50 w-[22rem] rounded-2xl border border-slate-800 bg-slate-900/95 p-4 shadow-xl shadow-blue-950/30">
-            {renderPanel(openPanel, closePanel)}
+          <div className="fixed right-6 top-20 z-50 w-88 rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/95 dark:bg-neutral-100/95 p-4 shadow-xl shadow-blue-950/30">
+            {renderPanel(openPanel, closePanel, {
+              user,
+              dashboardPath,
+              onLogout: handleLogout,
+            })}
           </div>
         </>
       ) : null}
@@ -109,7 +144,13 @@ export function Header() {
   );
 }
 
-function renderPanel(panel: Panel, close: () => void) {
+interface PanelContext {
+  user: AuthUser | null;
+  dashboardPath: string | null;
+  onLogout: () => void;
+}
+
+function renderPanel(panel: Panel, close: () => void, context: PanelContext) {
   switch (panel) {
     case "notifications":
       return (
@@ -158,10 +199,10 @@ function renderPanel(panel: Panel, close: () => void) {
             {quickFavorites.map((store) => (
               <li
                 key={store.id}
-                className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-sm text-slate-300"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-3 text-sm text-neutral-700 dark:text-neutral-700"
               >
-                <p className="font-semibold text-white">{store.name}</p>
-                <p className="text-xs text-slate-400">{store.domain}</p>
+                <p className="font-semibold text-neutral-900 dark:text-neutral-900">{store.name}</p>
+                <p className="text-xs text-neutral-700 dark:text-neutral-700">{store.domain}</p>
               </li>
             ))}
           </ul>
@@ -179,23 +220,23 @@ function renderPanel(panel: Panel, close: () => void) {
           actionHref="/cart"
           onAction={close}
         >
-          <ul className="space-y-3 text-sm text-slate-300">
+          <ul className="space-y-3 text-sm text-neutral-700 dark:text-neutral-700">
             {quickCartItems.map((item) => (
               <li
                 key={item.id}
-                className="rounded-lg border border-slate-800 bg-slate-900/60 p-3"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-3"
               >
-                <p className="font-semibold text-white">{item.name}</p>
-                <p className="text-xs text-slate-400">{item.brand}</p>
+                <p className="font-semibold text-neutral-900 dark:text-neutral-900">{item.name}</p>
+                <p className="text-xs text-neutral-700 dark:text-neutral-700">{item.brand}</p>
                 <span className="text-sm text-blue-300">
                   {formatCurrency(item.price)}
                 </span>
               </li>
             ))}
           </ul>
-          <div className="flex items-center justify-between text-sm text-slate-300">
+          <div className="flex items-center justify-between text-sm text-neutral-700 dark:text-neutral-700">
             <span>Subtotal</span>
-            <span className="font-semibold text-white">
+            <span className="font-semibold text-neutral-900 dark:text-neutral-900">
               {formatCurrency(subtotal)}
             </span>
           </div>
@@ -209,32 +250,69 @@ function renderPanel(panel: Panel, close: () => void) {
         </PanelWrapper>
       );
     }
-    case "account":
+    case "account": {
+      if (context.user) {
+        const { user, dashboardPath } = context;
+        const resolvedDashboard =
+          dashboardPath ??
+          (user.role === "supplier"
+            ? "/supplier/dashboard"
+            : "/trader/dashboard");
+        return (
+          <PanelWrapper title="Your workspace" onAction={close}>
+            <div className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 text-sm text-neutral-700 dark:text-neutral-700">
+              <p className="font-semibold text-neutral-900 dark:text-neutral-900">{user.fullName}</p>
+              <p className="text-xs text-neutral-700 dark:text-neutral-700">{user.email}</p>
+              <p className="mt-2 inline-flex items-center rounded-full bg-blue-500/10 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-300">
+                {user.role} access
+              </p>
+            </div>
+            <div className="space-y-2">
+              <LinkRow href={resolvedDashboard} onClick={close}>
+                Go to dashboard
+              </LinkRow>
+              <LinkRow href="/account" onClick={close}>
+                Account overview
+              </LinkRow>
+              <LinkRow href="/settings" onClick={close}>
+                Workspace settings
+              </LinkRow>
+            </div>
+            <button
+              type="button"
+              onClick={context.onLogout}
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/80 dark:bg-neutral-100/80 px-4 py-2 text-sm font-semibold text-neutral-700 dark:text-neutral-700 transition hover:border-blue-500/50 hover:text-neutral-900 dark:hover:text-neutral-900"
+            >
+              <LogOut className="h-4 w-4" />
+              Log out
+            </button>
+          </PanelWrapper>
+        );
+      }
+
       return (
         <PanelWrapper title="Your account" onAction={close}>
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-sm text-slate-300">
-            <p className="font-semibold text-white">Guest user</p>
-            <p className="text-xs text-slate-500">
+          <div className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 text-sm text-neutral-700 dark:text-neutral-700">
+            <p className="font-semibold text-neutral-900 dark:text-neutral-900">Guest user</p>
+            <p className="text-xs text-neutral-700 dark:text-neutral-700">
               Sign in or create an account to access saved preferences and
               analytics.
             </p>
           </div>
           <div className="space-y-2">
-            <LinkRow href="/account" onClick={close}>
-              View account
+            <LinkRow href="/login" onClick={close}>
+              Sign in
             </LinkRow>
-            <LinkRow href="/settings" onClick={close}>
-              Account settings
+            <LinkRow href="/register" onClick={close}>
+              Create account
             </LinkRow>
-            <LinkRow href="/favorites" onClick={close}>
-              Favorites
-            </LinkRow>
-            <LinkRow href="/cart" onClick={close}>
-              Cart
+            <LinkRow href="/plans" onClick={close}>
+              View plans
             </LinkRow>
           </div>
         </PanelWrapper>
       );
+    }
     case "login":
       return (
         <PanelWrapper
@@ -244,20 +322,20 @@ function renderPanel(panel: Panel, close: () => void) {
           onAction={close}
         >
           <form
-            className="space-y-3 text-sm text-slate-300"
+            className="space-y-3 text-sm text-neutral-700 dark:text-neutral-700"
             onSubmit={(event) => event.preventDefault()}
           >
             <LabeledField label="Email">
               <input
                 type="email"
                 defaultValue="buyer@example.com"
-                className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2 text-slate-200 focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:outline-none"
               />
             </LabeledField>
             <LabeledField label="Password">
               <input
                 type="password"
-                className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2 text-slate-200 focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:outline-none"
               />
             </LabeledField>
             <button
@@ -278,27 +356,27 @@ function renderPanel(panel: Panel, close: () => void) {
           onAction={close}
         >
           <form
-            className="space-y-3 text-sm text-slate-300"
+            className="space-y-3 text-sm text-neutral-700 dark:text-neutral-700"
             onSubmit={(event) => event.preventDefault()}
           >
             <LabeledField label="Full name">
               <input
                 type="text"
                 placeholder="Jenna Patel"
-                className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2 text-slate-200 focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:outline-none"
               />
             </LabeledField>
             <LabeledField label="Email">
               <input
                 type="email"
                 placeholder="you@company.com"
-                className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2 text-slate-200 focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:outline-none"
               />
             </LabeledField>
             <LabeledField label="Password">
               <input
                 type="password"
-                className="rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2 text-slate-200 focus:border-blue-500 focus:outline-none"
+                className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:outline-none"
               />
             </LabeledField>
             <button
@@ -329,7 +407,7 @@ function IconButton({
   return (
     <button
       type="button"
-      className="relative rounded-full p-2 hover:bg-slate-800 hover:text-white"
+      className="relative rounded-full p-2 hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900"
       aria-label={label}
       onClick={onClick}
     >
@@ -354,7 +432,7 @@ function TextButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:border-blue-500/50 hover:text-white"
+      className="inline-flex items-center gap-2 rounded-full border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-700 dark:text-neutral-700 transition hover:border-blue-500/50 hover:text-neutral-900 dark:hover:text-neutral-900"
     >
       {children}
     </button>
@@ -377,7 +455,7 @@ function PanelWrapper({
   return (
     <div className="space-y-4">
       <header className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-white">{title}</p>
+        <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-900">{title}</p>
         {actionLabel && actionHref ? (
           <Link
             href={actionHref}
@@ -401,9 +479,9 @@ function NotificationItem({
   detail: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 text-sm text-slate-300">
-      <p className="font-semibold text-white">{heading}</p>
-      <p className="text-xs text-slate-400">{detail}</p>
+    <div className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-3 text-sm text-neutral-700 dark:text-neutral-700">
+      <p className="font-semibold text-neutral-900 dark:text-neutral-900">{heading}</p>
+      <p className="text-xs text-neutral-700 dark:text-neutral-700">{detail}</p>
     </div>
   );
 }
@@ -431,7 +509,7 @@ function ToggleRow({
   defaultChecked?: boolean;
 }) {
   return (
-    <label className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/60 p-3">
+    <label className="flex items-center justify-between rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-3">
       <span>{label}</span>
       <input
         type="checkbox"
@@ -455,7 +533,7 @@ function LinkRow({
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300 transition hover:border-blue-500/50 hover:text-white"
+      className="flex items-center justify-between rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-4 py-2 text-sm text-neutral-700 dark:text-neutral-700 transition hover:border-blue-500/50 hover:text-neutral-900 dark:hover:text-neutral-900"
     >
       <span>{children}</span>
       <ArrowRight className="h-3.5 w-3.5" />

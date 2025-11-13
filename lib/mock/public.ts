@@ -225,4 +225,12 @@ export const bestSellerProducts: BestSellerProduct[] = [
   },
 ];
 
+export function getProductById(id: string): BestSellerProduct | null {
+  return bestSellerProducts.find((product) => product.id === id) ?? null;
+}
+
+export function getStoreById(id: string): FeaturedStore | null {
+  return featuredStores.find((store) => store.id === id) ?? null;
+}
+
 

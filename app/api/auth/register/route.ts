@@ -1,29 +1,25 @@
 import { NextResponse } from "next/server";
 
-import {
-  AUTH_COOKIE,
-  buildAuthUser,
-  generateAuthToken,
-  getCookieOptions,
-  hashPassword,
-} from "../../../../lib/auth";
-import {
-  mockDb,
-  type PublicUser,
-  type UserRole,
-} from "../../../../lib/mock/db";
+import { hashPassword } from "../../../../lib/auth";
+import { respondWithAuthSuccess } from "../../../../lib/auth-response";
+import { mockDb, type UserRole } from "../../../../lib/mock/db";
+import { startTrial } from "../../../../lib/mock/subscriptions";
 
 interface RegisterBody {
-  fullName?: unknown;
+  firstName?: unknown;
+  lastName?: unknown;
   email?: unknown;
   phone?: unknown;
   password?: unknown;
+  confirmPassword?: unknown;
   role?: unknown;
   businessName?: unknown;
   businessType?: unknown;
 }
 
 type ValidRegisterBody = {
+  firstName: string;
+  lastName: string;
   fullName: string;
   email: string;
   phone: string;
@@ -42,11 +38,21 @@ function validateBody(
     return { success: false, error: "Invalid request payload." };
   }
 
-  const { fullName, email, phone, password, role, businessName, businessType } =
-    body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    password,
+    confirmPassword,
+    role,
+    businessName,
+    businessType,
+  } = body;
 
   if (
-    !isNonEmptyString(fullName) ||
+    !isNonEmptyString(firstName) ||
+    !isNonEmptyString(lastName) ||
     !isNonEmptyString(email) ||
     !isNonEmptyString(phone) ||
     !isNonEmptyString(password) ||
@@ -56,14 +62,33 @@ function validateBody(
     return { success: false, error: "All fields are required." };
   }
 
+  if (
+    typeof confirmPassword === "string" &&
+    confirmPassword.length > 0 &&
+    confirmPassword !== password
+  ) {
+    return {
+      success: false,
+      error: "Password confirmation does not match.",
+    };
+  }
+
   if (typeof role !== "string" || !["supplier", "trader"].includes(role)) {
     return { success: false, error: "Role must be either supplier or trader." };
   }
 
+  const normalizedFirstName = firstName.trim();
+  const normalizedLastName = lastName.trim();
+
   return {
     success: true,
     data: {
-      fullName: fullName.trim(),
+      firstName: normalizedFirstName,
+      lastName: normalizedLastName,
+      fullName: `${normalizedFirstName} ${normalizedLastName}`.replace(
+        /\s+/g,
+        " "
+      ),
       email: email.trim(),
       phone: phone.trim(),
       password,
@@ -95,7 +120,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: validation.error }, { status: 400 });
   }
 
-  const { email, phone, password, ...rest } = validation.data;
+  const { email, phone, password, firstName, lastName, ...rest } =
+    validation.data;
+  void firstName;
+  void lastName;
 
   if (mockDb.getUserByEmail(email)) {
     return NextResponse.json(
@@ -113,26 +141,13 @@ export async function POST(request: Request) {
 
   const passwordHash = hashPassword(password);
   const publicUser = mockDb.createUser({
+    ...rest,
     email,
     phone,
     passwordHash,
-    ...rest,
   });
 
-  return respondWithToken(publicUser, { status: 201 });
-}
+  const subscription = startTrial(publicUser.id, rest.role);
 
-async function respondWithToken(user: PublicUser, init?: ResponseInit) {
-  const token = await generateAuthToken(user);
-  const response = NextResponse.json(
-    {
-      user: buildAuthUser(user),
-      token,
-    },
-    init
-  );
-
-  response.cookies.set(AUTH_COOKIE, token, getCookieOptions());
-
-  return response;
+  return respondWithAuthSuccess(publicUser, { status: 201 }, { subscription });
 }

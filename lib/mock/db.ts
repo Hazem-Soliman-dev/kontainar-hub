@@ -1,6 +1,8 @@
-import { randomUUID } from 'node:crypto';
+import { createHmac, randomUUID } from "node:crypto";
 
-export type UserRole = 'supplier' | 'trader';
+import { startTrial } from "./subscriptions";
+
+export type UserRole = "supplier" | "trader";
 
 export interface UserRecord {
   id: string;
@@ -15,7 +17,7 @@ export interface UserRecord {
   updatedAt: Date;
 }
 
-export type PublicUser = Omit<UserRecord, 'passwordHash'>;
+export type PublicUser = Omit<UserRecord, "passwordHash">;
 
 export interface CreateUserInput {
   fullName: string;
@@ -30,7 +32,10 @@ export interface CreateUserInput {
 const users = new Map<string, UserRecord>();
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
-const normalizePhone = (phone: string) => phone.replace(/[^\d+]/g, '');
+const normalizePhone = (phone: string) => phone.replace(/[^\d+]/g, "");
+
+const DEFAULT_SALT = "development-salt";
+const passwordSalt = process.env.AUTH_SALT ?? DEFAULT_SALT;
 
 export const mockDb = {
   createUser(data: CreateUserInput): PublicUser {
@@ -62,8 +67,7 @@ export const mockDb = {
 
   getUserByEmailOrPhone(identifier: string): UserRecord | undefined {
     return (
-      mockDb.getUserByEmail(identifier) ??
-      mockDb.getUserByPhone(identifier)
+      mockDb.getUserByEmail(identifier) ?? mockDb.getUserByPhone(identifier)
     );
   },
 
@@ -87,3 +91,69 @@ export function toPublicUser(user: UserRecord): PublicUser {
   return publicFields;
 }
 
+function hashSeedPassword(password: string) {
+  return createHmac("sha256", passwordSalt).update(password).digest("hex");
+}
+
+function seedInitialUsers() {
+  if (users.size > 0) {
+    return;
+  }
+
+  const seeds: Array<{
+    fullName: string;
+    email: string;
+    phone: string;
+    password: string;
+    role: UserRole;
+    businessName: string;
+    businessType: string;
+  }> = [
+    {
+      fullName: "Aurora Commodities Lead",
+      email: "supplier.demo@kontainarhub.com",
+      phone: "+15550001111",
+      password: "Supplier#2025",
+      role: "supplier",
+      businessName: "Aurora Commodities",
+      businessType: "Wholesale Coffee & Commodities",
+    },
+    {
+      fullName: "Northwind Trading Ops",
+      email: "trader.demo@kontainarhub.com",
+      phone: "+15550002222",
+      password: "Trader#2025",
+      role: "trader",
+      businessName: "Northwind Trading",
+      businessType: "Global Trade & Distribution",
+    },
+  ];
+
+  for (const seed of seeds) {
+    if (
+      mockDb.getUserByEmail(seed.email) ||
+      mockDb.getUserByPhone(seed.phone)
+    ) {
+      continue;
+    }
+
+    const passwordHash = hashSeedPassword(seed.password);
+    const user = mockDb.createUser({
+      fullName: seed.fullName,
+      email: seed.email,
+      phone: seed.phone,
+      passwordHash,
+      role: seed.role,
+      businessName: seed.businessName,
+      businessType: seed.businessType,
+    });
+
+    try {
+      startTrial(user.id, seed.role);
+    } catch {
+      // ignore seeding trial errors in mock environment
+    }
+  }
+}
+
+seedInitialUsers();

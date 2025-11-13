@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 import { AUTH_COOKIE, verifyAuthToken } from "./lib/auth-token";
 import {
   ensureAccess,
+  startTrial,
   type SubscriptionPlanId,
 } from "./lib/mock/subscriptions";
 
@@ -19,9 +20,29 @@ export async function middleware(request: NextRequest) {
     const requiredPlan = resolveRequiredPlan(request.nextUrl.pathname);
 
     if (requiredPlan) {
-      const access = ensureAccess(payload.sub, requiredPlan);
+      let access = ensureAccess(payload.sub, requiredPlan);
 
       if (!access.allowed) {
+        const canAutoTrial =
+          payload.role === requiredPlan &&
+          (access.reason === "not-subscribed" ||
+            access.reason === "plan-mismatch" ||
+            access.reason === "trial-expired");
+
+        if (canAutoTrial) {
+          const trial = startTrial(payload.sub, requiredPlan);
+
+          if (trial.planId === requiredPlan && trial.isTrialActive) {
+            return NextResponse.next();
+          }
+
+          access = ensureAccess(payload.sub, requiredPlan);
+
+          if (access.allowed) {
+            return NextResponse.next();
+          }
+        }
+
         return redirectToPlans(request, requiredPlan);
       }
     }
