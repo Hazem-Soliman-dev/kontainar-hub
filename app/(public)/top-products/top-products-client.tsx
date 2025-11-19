@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useMemo, useEffect } from "react";
-import { ArrowRight } from "lucide-react";
 
 import { bestSellerProducts } from "../../../lib/mock/public";
 import { FavoriteButton } from "../../../components/ui/favorite-button";
@@ -10,13 +10,7 @@ import { AddToCartButton } from "../../../components/ui/add-to-cart-button";
 import { ProductFilters } from "../../../components/ui/product-filters";
 import { Pagination } from "../../../components/ui/pagination";
 
-const tagStyles: Record<"surging" | "steady" | "emerging", string> = {
-  surging: "bg-emerald-500/10 text-emerald-300 border-emerald-500/40",
-  steady: "bg-blue-500/10 text-blue-300 border-blue-500/40",
-  emerging: "bg-amber-500/10 text-amber-300 border-amber-500/40",
-};
-
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 8;
 
 export function TopProductsClient() {
   const [filters, setFilters] = useState({
@@ -101,75 +95,58 @@ export function TopProductsClient() {
             products
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {paginatedProducts.map((product) => (
-              <article
+              <div
                 key={product.id}
-                className="relative rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-purple-950/20 transition hover:-translate-y-1 hover:border-purple-500/60 hover:shadow-purple-500/20 md:p-8"
+                className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 shadow-sm transition hover:-translate-y-1 hover:border-purple-500/60"
               >
                 <div className="absolute right-6 top-6 z-10">
-                  <FavoriteButton
-                    product={product}
-                    size={18}
-                    className="h-8 w-8"
-                  />
+                  <FavoriteButton product={product} size={18} className="h-8 w-8" />
                 </div>
                 <Link
                   href={`/products/${product.id}?from=top-products`}
-                  className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between"
+                  className="flex flex-col gap-4"
                 >
-                  <div className="flex max-w-3xl flex-col gap-3">
-                    <span className="text-xs font-semibold uppercase tracking-widest text-blue-400 dark:text-blue-400">
-                      {product.category}
-                    </span>
-                    <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-                      {product.name}
-                    </h2>
-                    <p className="text-sm text-neutral-700 dark:text-neutral-700">{product.summary}</p>
-                    {product.momentum ? (
-                      <span
-                        className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${tagStyles[product.momentum]}`}
-                      >
-                        <span className="inline-block h-2 w-2 rounded-full bg-current" />
-                        {momentumLabel(product.momentum)}
+                  <div className="relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-200/40 dark:bg-neutral-200/40">
+                    <Image
+                      src={product.imageUrl}
+                      alt={product.name}
+                      width={360}
+                      height={220}
+                      className="h-44 w-full object-cover transition duration-500 hover:scale-105"
+                    />
+                    {product.tag ? (
+                      <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-2 py-1 text-xs font-bold text-white">
+                        {product.tag}
                       </span>
                     ) : null}
                   </div>
 
-                  <div className="w-full max-w-sm rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-5">
-                    <div className="flex items-center justify-between text-neutral-700 dark:text-neutral-700">
-                      <p className="text-xs font-semibold uppercase tracking-widest">
-                        Market signals
-                      </p>
-                      <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-900">
-                        {product.brand}
-                      </p>
+                  <div className="flex flex-col gap-2">
+                    <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">
+                      {product.name}
+                    </h3>
+                    <p className="text-sm text-neutral-700 dark:text-neutral-700">{product.brand}</p>
+                  </div>
+
+                  <div className="mt-auto flex items-center justify-between">
+                    <div className="flex items-end gap-2">
+                      <span className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
+                        {formatCurrency(product.price)}
+                      </span>
+                      {product.previousPrice ? (
+                        <span className="text-xs text-neutral-700 dark:text-neutral-700 line-through">
+                          {formatCurrency(product.previousPrice)}
+                        </span>
+                      ) : null}
                     </div>
-                    {product.signals ? (
-                      <ul className="mt-4 space-y-2 text-sm text-neutral-700 dark:text-neutral-700">
-                        {product.signals.map((signal) => (
-                          <li key={signal} className="flex items-start gap-2">
-                            <span className="mt-1 inline-block h-2 w-2 rounded-full bg-blue-500" />
-                            <span>{signal}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
                   </div>
                 </Link>
-                <div className="absolute bottom-6 left-6 z-10">
-                  <Link
-                    href="/login?redirect=/top-products"
-                    className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-blue-400 hover:text-blue-300 dark:text-blue-400 dark:hover:text-blue-300"
-                  >
-                    Login to unlock buyers
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-                <div className="absolute bottom-6 right-6 z-10">
+                <div className="absolute bottom-4 right-4 z-10">
                   <AddToCartButton product={product} size="sm" />
                 </div>
-              </article>
+              </div>
             ))}
           </div>
 
@@ -213,15 +190,11 @@ export function TopProductsClient() {
   );
 }
 
-function momentumLabel(tone: "surging" | "steady" | "emerging") {
-  switch (tone) {
-    case "surging":
-      return "Surging momentum";
-    case "steady":
-      return "Steady demand";
-    case "emerging":
-    default:
-      return "Emerging trend";
-  }
+function formatCurrency(value: number) {
+  return value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
 }
+
 

@@ -2,6 +2,7 @@
 
 import { ShoppingCart } from "lucide-react";
 import { useCartStore } from "../../lib/store/cart-store";
+import { useAuthStore } from "../../lib/store/auth-store";
 import type { BestSellerProduct } from "../../lib/mock/public";
 
 interface AddToCartButtonProps {
@@ -15,14 +16,22 @@ export function AddToCartButton({
   className = "",
   size = "md",
 }: AddToCartButtonProps) {
+  const user = useAuthStore((state) => state.user);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const addToCart = useCartStore((state) => state.addToCart);
   const items = useCartStore((state) => state.items);
 
+  const isDisabled = !isAuthenticated || !user;
   const inCart = items.some((item) => item.id === product.id);
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
+    
+    if (isDisabled) {
+      return;
+    }
+    
     addToCart(product, 1);
   };
 
@@ -36,13 +45,16 @@ export function AddToCartButton({
     <button
       type="button"
       onClick={handleAddToCart}
+      disabled={isDisabled}
       className={`flex items-center justify-center rounded-full transition-colors ${
-        inCart
-          ? "bg-green-500 text-white hover:bg-green-600"
-          : "bg-blue-500 text-white hover:bg-blue-600"
+        isDisabled
+          ? "bg-gray-400 text-white cursor-not-allowed opacity-60"
+          : inCart
+            ? "bg-green-500 text-white hover:bg-green-600"
+            : "bg-blue-500 text-white hover:bg-blue-600"
       } ${sizeClasses[size]} ${className}`}
       aria-label={inCart ? "Item in cart - Add more" : "Add to cart"}
-      title={inCart ? "Item in cart - Click to add more" : "Add to cart"}
+      title={isDisabled ? "Please login to add to cart" : inCart ? "Item in cart - Click to add more" : "Add to cart"}
     >
       <ShoppingCart className="h-4 w-4" />
     </button>

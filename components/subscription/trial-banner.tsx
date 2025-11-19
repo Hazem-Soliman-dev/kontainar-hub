@@ -45,14 +45,14 @@ export function TrialBanner({
   const countdown = formatCountdown(secondsRemaining);
 
   return (
-    <aside className="rounded-2xl border border-blue-700 bg-neutral-100/60 dark:bg-neutral-100/60 px-4 py-3 text-sm text-blue-400 shadow-sm shadow-blue-950/40 mb-1">
+    <aside className="rounded-2xl border border-blue-700 bg-neutral-100/60 dark:bg-neutral-100/60 px-4 py-3 text-sm text-blue-400 shadow-sm mb-1">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col">
           <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
             {planName} • Ends {new Date(trialEndsAt).toLocaleString()}
           </span>
         </div>
-        <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-blue-950 dark:bg-blue-950 px-3 py-1 text-xs font-semibold text-blue-400 shadow shadow-blue-950/40 sm:mt-0">
+        <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-blue-950 dark:bg-blue-950 px-3 py-1 text-xs font-semibold text-blue-400 sm:mt-0">
           <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-blue-400 dark:bg-blue-400" aria-hidden />
           {countdown}
         </span>

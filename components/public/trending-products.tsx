@@ -36,7 +36,7 @@ export default function TrendingProducts() {
         {data.map((product) => (
           <article
             key={product.id}
-            className="relative flex flex-col gap-3 rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+            className="relative flex flex-col gap-3 rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm transition hover:-translate-y-0.5"
           >
             <div className="absolute right-4 top-4 z-10">
               <FavoriteButton product={product} size={18} className="h-8 w-8" />

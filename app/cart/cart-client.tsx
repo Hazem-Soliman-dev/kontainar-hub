@@ -155,7 +155,7 @@ export function CartClient() {
               {paginatedItems.map((item) => (
                 <article
                   key={item.id}
-                  className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-5 shadow-lg shadow-blue-950/20 md:flex-row md:items-center md:justify-between"
+                  className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-5 shadow-sm md:flex-row md:items-center md:justify-between"
                 >
                   <Link
                     href={`/products/${item.id}?from=cart`}

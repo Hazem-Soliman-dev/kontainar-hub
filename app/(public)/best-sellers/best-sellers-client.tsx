@@ -102,7 +102,7 @@ export function BestSellersClient() {
             {paginatedProducts.map((product) => (
               <article
                 key={product.id}
-                className="relative rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-purple-950/20 transition hover:-translate-y-1 hover:border-purple-500/60 hover:shadow-purple-500/20 md:p-8"
+                className="relative rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-purple-500/60 md:p-8"
               >
                 <div className="absolute right-6 top-6 z-10">
                   <FavoriteButton

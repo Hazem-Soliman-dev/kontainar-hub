@@ -76,7 +76,7 @@ export default function StoresClient() {
             {paginatedStores.map((store) => (
               <article
                 key={store.id}
-                className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-blue-950/20 transition hover:-translate-y-1 hover:border-blue-500/60 hover:shadow-blue-600/20"
+                className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
               >
                 <div className="absolute right-6 top-6 z-10">
                   <FavoriteButton store={store} size={18} className="h-8 w-8" />

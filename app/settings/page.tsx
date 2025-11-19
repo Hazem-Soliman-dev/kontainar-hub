@@ -67,7 +67,7 @@ function PreferenceCard({
   children: ReactNode;
 }) {
   return (
-    <article className="space-y-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-blue-950/20">
+    <article className="space-y-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm">
       <div>
         <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">{title}</h2>
         <p className="mt-2 text-md text-neutral-700 dark:text-neutral-700">{description}</p>

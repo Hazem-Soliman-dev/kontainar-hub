@@ -14,17 +14,17 @@ export function ProductDescription({ product, isBestSeller }: ProductDescription
 
   return (
     <div className="space-y-1">
-      <h2 className="text-xl font-semibold text-white">Description</h2>
-      <p className="text-slate-300 leading-relaxed">{description}</p>
+      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-900">Description</h2>
+      <p className="text-neutral-900 dark:text-neutral-900 leading-relaxed">{description}</p>
       
       {!isBestSeller && "supplier" in product && (
-        <div className="mt-4 rounded-lg border border-slate-700 bg-slate-800/40 p-4">
-          <p className="text-sm text-slate-400">
-            <span className="font-semibold text-slate-300">Supplier:</span> {product.supplier}
+        <div className="mt-4 rounded-lg border border-neutral-900 dark:border-neutral-900 bg-neutral-900/40 p-4">
+          <p className="text-sm text-neutral-900 dark:text-neutral-900">
+            <span className="font-semibold text-neutral-900 dark:text-neutral-900">Supplier:</span> {product.supplier}
           </p>
           {"availability" in product && (
-            <p className="mt-2 text-sm text-slate-400">
-              <span className="font-semibold text-slate-300">Availability:</span>{" "}
+            <p className="mt-2 text-sm text-neutral-900 dark:text-neutral-900">
+              <span className="font-semibold text-neutral-900 dark:text-neutral-900">Availability:</span>{" "}
               <span className="capitalize">{product.availability.replace("-", " ")}</span>
             </p>
           )}

@@ -4,7 +4,14 @@ export interface FeaturedCategory {
   id: string;
   title: string;
   stats: string;
-  icon: "electronics" | "fashion" | "home" | "sports" | "beauty" | "gaming";
+  icon:
+    | "electronics"
+    | "fashion"
+    | "home"
+    | "sports"
+    | "beauty"
+    | "gaming"
+    | "books";
   summary?: string;
   regions?: string[];
 }
@@ -94,6 +101,15 @@ export const featuredCategories: FeaturedCategory[] = [
     summary:
       "Peripherals, accessories, and console-ready hardware fueling the gaming boom.",
     regions: ["Japan", "USA", "United Kingdom"],
+  },
+  {
+    id: "cat-books",
+    title: "Books",
+    stats: "890+ products",
+    icon: "books",
+    summary:
+      "Educational materials, fiction, non-fiction, and academic resources for all readers.",
+    regions: ["USA", "United Kingdom", "India"],
   },
 ];
 
@@ -232,5 +248,3 @@ export function getProductById(id: string): BestSellerProduct | null {
 export function getStoreById(id: string): FeaturedStore | null {
   return featuredStores.find((store) => store.id === id) ?? null;
 }
-
-

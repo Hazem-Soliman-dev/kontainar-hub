@@ -27,7 +27,7 @@ export function HeroSearch() {
   return (
     <div className="flex w-full max-w-3xl flex-col gap-6">
       <form onSubmit={handleSubmit} className="w-full">
-        <div className="flex w-full overflow-hidden rounded-full border bg-white shadow-lg backdrop-blur">
+        <div className="flex w-full overflow-hidden rounded-full border bg-white shadow-sm backdrop-blur">
           <div className="flex-1">
             <SearchAutocomplete
               query={searchQuery}
@@ -44,7 +44,10 @@ export function HeroSearch() {
         </div>
       </form>
 
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <p className="text-sm font-medium text-white/90">
+          Popular Search
+        </p>
         {quickFilters.map((filter) => (
           <button
             key={filter}

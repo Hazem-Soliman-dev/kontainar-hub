@@ -165,22 +165,22 @@ export function PlanComparisonClient({
         })}
       </div>
 
-      <section className="mt-4 grid gap-4 rounded-xl bg-neutral-100/60 dark:bg-neutral-100/60 p-6 text-sm text-neutral-700 dark:text-neutral-700 md:grid-cols-3">
+      <section className="mt-4 grid gap-4 rounded-xl bg-neutral-100/60 dark:bg-neutral-100/60 p-6 text-sm text-neutral-900 dark:text-neutral-900 md:grid-cols-3">
         <div>
           <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">Free Plan</h3>
-          <p className="mt-2 text-neutral-700 dark:text-neutral-700">
+          <p className="mt-2 text-neutral-900 dark:text-neutral-900">
             Perfect for exploring public marketplace data and understanding how Kontainar Hub works.
           </p>
         </div>
         <div>
           <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">Supplier Plan</h3>
-          <p className="mt-2 text-neutral-700 dark:text-neutral-700">
+          <p className="mt-2 text-neutral-900 dark:text-neutral-900">
             Unlock operational tools to manage inventory, process orders, and reach motivated traders.
           </p>
         </div>
         <div>
           <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">Trader Plan</h3>
-          <p className="mt-2 text-neutral-700 dark:text-neutral-700">
+          <p className="mt-2 text-neutral-900 dark:text-neutral-900">
             Find quality suppliers, monitor live pricing, and collaborate with your team on every purchase.
           </p>
         </div>

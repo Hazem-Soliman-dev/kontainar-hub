@@ -102,7 +102,7 @@ function ContactInfoSection() {
           return (
             <div
               key={card.title}
-              className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-blue-950/20 transition hover:-translate-y-1 hover:border-blue-500/60 hover:shadow-blue-600/20"
+              className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
             >
               <div
                 className={`flex h-16 w-16 items-center justify-center rounded-2xl ${colorClass} border`}

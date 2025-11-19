@@ -196,7 +196,7 @@ function GuardShell({
 }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-950 px-6 py-16 text-slate-100">
-      <div className="w-full max-w-2xl space-y-6 rounded-3xl border border-slate-800 bg-slate-900/70 p-8 text-center shadow-xl shadow-blue-950/30">
+      <div className="w-full max-w-2xl space-y-6 rounded-3xl border border-slate-800 bg-slate-900/70 p-8 text-center shadow-sm">
         <h1 className="text-3xl font-semibold text-white">{title}</h1>
         <p className="text-sm text-slate-400">{description}</p>
         {error ? (

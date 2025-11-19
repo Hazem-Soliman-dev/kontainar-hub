@@ -62,7 +62,7 @@ export function PlanCard({
       className={[
         "flex h-full flex-col gap-4 rounded-2xl border bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition",
         recommended
-          ? "border-blue-700 shadow-lg shadow-blue-950/40"
+          ? "border-blue-700"
           : "border-neutral-200 dark:border-neutral-200",
       ].join(" ")}
     >

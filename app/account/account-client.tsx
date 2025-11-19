@@ -411,7 +411,7 @@ export function AccountClient() {
         ) : null}
 
         <section className="grid gap-6 lg:grid-cols-[2fr_3fr]">
-          <article className="rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-blue-950/20">
+          <article className="rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">Profile</h2>
@@ -509,7 +509,7 @@ export function AccountClient() {
             )}
           </article>
 
-          <article className="rounded-3xl border border-blue-500/20 bg-blue-500/10 dark:bg-blue-500/10 p-6 shadow-lg shadow-blue-950/20">
+          <article className="rounded-3xl border border-blue-500/20 bg-blue-500/10 dark:bg-blue-500/10 p-6 shadow-sm">
             <header className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">

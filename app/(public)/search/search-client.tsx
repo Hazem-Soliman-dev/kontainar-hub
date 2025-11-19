@@ -7,7 +7,10 @@ import Link from "next/link";
 import { Star, Search, ArrowUpDown, X } from "lucide-react";
 import { searchAll } from "../../../lib/search/search-utils";
 import { parseAdvancedQuery } from "../../../lib/search/query-parser";
-import { sortByRelevance, sortStoresByRelevance } from "../../../lib/search/ranking";
+import {
+  sortByRelevance,
+  sortStoresByRelevance,
+} from "../../../lib/search/ranking";
 import { HeroSearch } from "../../../components/public/hero-search";
 import { SearchFilters } from "../../../components/ui/search-filters";
 import { FavoriteButton } from "../../../components/ui/favorite-button";
@@ -29,7 +32,7 @@ function highlightText(text: string, query: string) {
   const parts = text.split(new RegExp(`(${query})`, "gi"));
   return parts.map((part, i) =>
     part.toLowerCase() === query.toLowerCase() ? (
-      <mark key={i} className="bg-blue-500/20 text-blue-300">
+      <mark key={i} className="bg-blue-500/20 text-blue-400">
         {part}
       </mark>
     ) : (
@@ -71,7 +74,8 @@ export default function SearchClient() {
     if (minPrice) filters.minPrice = parseFloat(minPrice);
     if (maxPrice) filters.maxPrice = parseFloat(maxPrice);
     if (minRating) filters.minRating = parseFloat(minRating);
-    if (momentum) filters.momentum = momentum as "surging" | "steady" | "emerging";
+    if (momentum)
+      filters.momentum = momentum as "surging" | "steady" | "emerging";
     if (region) filters.region = region;
     if (brand) filters.brand = brand;
 
@@ -84,9 +88,12 @@ export default function SearchClient() {
       const params = new URLSearchParams();
       if (query) params.set("q", query);
       if (newFilters.category) params.set("category", newFilters.category);
-      if (newFilters.minPrice) params.set("minPrice", newFilters.minPrice.toString());
-      if (newFilters.maxPrice) params.set("maxPrice", newFilters.maxPrice.toString());
-      if (newFilters.minRating) params.set("minRating", newFilters.minRating.toString());
+      if (newFilters.minPrice)
+        params.set("minPrice", newFilters.minPrice.toString());
+      if (newFilters.maxPrice)
+        params.set("maxPrice", newFilters.maxPrice.toString());
+      if (newFilters.minRating)
+        params.set("minRating", newFilters.minRating.toString());
       if (newFilters.momentum) params.set("momentum", newFilters.momentum);
       if (newFilters.region) params.set("region", newFilters.region);
       if (newFilters.brand) params.set("brand", newFilters.brand);
@@ -105,7 +112,11 @@ export default function SearchClient() {
     const rawResults = searchAll(searchQuery, filters);
 
     // Apply smart ranking
-    const rankedProducts = sortByRelevance(rawResults.products, searchQuery, parsedQuery);
+    const rankedProducts = sortByRelevance(
+      rawResults.products,
+      searchQuery,
+      parsedQuery
+    );
     const rankedStores = sortStoresByRelevance(rawResults.stores, searchQuery);
 
     // Apply sort options
@@ -155,10 +166,12 @@ export default function SearchClient() {
     results.stores.length > 0 ||
     results.categories.length > 0;
 
-  const activeFilterCount = Object.values(filters).filter((v) => v !== undefined).length;
+  const activeFilterCount = Object.values(filters).filter(
+    (v) => v !== undefined
+  ).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
       <main className="flex flex-col gap-8 pb-24">
         {/* Search Bar */}
         <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700">
@@ -179,9 +192,11 @@ export default function SearchClient() {
         <section className="mx-auto w-full max-w-7xl px-6">
           {!hasResults ? (
             <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
-              <Search className="h-16 w-16 text-slate-600" />
-              <h2 className="text-2xl font-semibold text-white">No results found</h2>
-              <p className="text-slate-400">
+              <Search className="h-16 w-16 text-neutral-400 dark:text-neutral-400" />
+              <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
+                No results found
+              </h2>
+              <p className="text-neutral-700 dark:text-neutral-700">
                 {query
                   ? `We couldn't find anything matching "${query}"`
                   : "Try searching for products, stores, or categories"}
@@ -195,7 +210,7 @@ export default function SearchClient() {
                 </Link>
                 <Link
                   href="/stores"
-                  className="rounded-lg border border-slate-700 px-4 py-2 text-sm font-semibold text-slate-300 transition hover:border-blue-500 hover:text-white"
+                  className="rounded-lg border border-neutral-200 dark:border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 dark:text-neutral-700 transition hover:border-blue-500 hover:text-neutral-900 dark:hover:text-neutral-900"
                 >
                   View All Stores
                 </Link>
@@ -206,7 +221,10 @@ export default function SearchClient() {
               {/* Filters Sidebar */}
               <aside className="lg:col-span-1">
                 <div className="sticky top-4">
-                  <SearchFilters filters={filters} onFilterChange={updateFilters} />
+                  <SearchFilters
+                    filters={filters}
+                    onFilterChange={updateFilters}
+                  />
                 </div>
               </aside>
 
@@ -214,28 +232,30 @@ export default function SearchClient() {
               <div className="lg:col-span-3 space-y-8">
                 {/* Results Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="text-sm text-slate-400">
+                  <div className="text-sm text-neutral-700 dark:text-neutral-700">
                     {query && (
                       <span>
-                        Found {results.products.length} products, {results.stores.length}{" "}
-                        stores, {results.categories.length} categories for "{query}"
+                        Found {results.products.length} products,{" "}
+                        {results.stores.length} stores,{" "}
+                        {results.categories.length} categories for "{query}"
                       </span>
                     )}
                     {category && !query && (
                       <span>
-                        Found {results.products.length} products, {results.stores.length}{" "}
-                        stores, {results.categories.length} categories in "{category}"
+                        Found {results.products.length} products,{" "}
+                        {results.stores.length} stores,{" "}
+                        {results.categories.length} categories in "{category}"
                       </span>
                     )}
                   </div>
 
                   {/* Sort Options */}
                   <div className="flex items-center gap-2">
-                    <ArrowUpDown className="h-4 w-4 text-slate-400" />
+                    <ArrowUpDown className="h-4 w-4 text-neutral-700 dark:text-neutral-700" />
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value as SortOption)}
-                      className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none"
+                      className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
                     >
                       <option value="relevance">Sort by Relevance</option>
                       <option value="price-asc">Price: Low to High</option>
@@ -247,34 +267,42 @@ export default function SearchClient() {
                 {/* Active Filters */}
                 {activeFilterCount > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm text-slate-400">Active filters:</span>
+                    <span className="text-sm text-neutral-700 dark:text-neutral-700">
+                      Active filters:
+                    </span>
                     {filters.category && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-300">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400 dark:text-blue-400">
                         Category: {filters.category}
                         <button
                           type="button"
-                          onClick={() => updateFilters({ ...filters, category: undefined })}
-                          className="hover:text-blue-200"
+                          onClick={() =>
+                            updateFilters({ ...filters, category: undefined })
+                          }
+                          className="hover:text-blue-300"
                         >
                           <X className="h-3 w-3" />
                         </button>
                       </span>
                     )}
                     {filters.brand && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-300">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400 dark:text-blue-400">
                         Brand: {filters.brand}
                         <button
                           type="button"
-                          onClick={() => updateFilters({ ...filters, brand: undefined })}
-                          className="hover:text-blue-200"
+                          onClick={() =>
+                            updateFilters({ ...filters, brand: undefined })
+                          }
+                          className="hover:text-blue-300"
                         >
                           <X className="h-3 w-3" />
                         </button>
                       </span>
                     )}
-                    {(filters.minPrice !== undefined || filters.maxPrice !== undefined) && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-300">
-                        Price: ${filters.minPrice || 0} - ${filters.maxPrice || "∞"}
+                    {(filters.minPrice !== undefined ||
+                      filters.maxPrice !== undefined) && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400 dark:text-blue-400">
+                        Price: ${filters.minPrice || 0} - $
+                        {filters.maxPrice || "∞"}
                         <button
                           type="button"
                           onClick={() =>
@@ -284,7 +312,7 @@ export default function SearchClient() {
                               maxPrice: undefined,
                             })
                           }
-                          className="hover:text-blue-200"
+                          className="hover:text-blue-300"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -295,8 +323,8 @@ export default function SearchClient() {
 
                 {/* Related Searches */}
                 {relatedSearches.length > 0 && (
-                  <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-4">
-                    <h3 className="mb-2 text-sm font-semibold text-white">
+                  <div className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4">
+                    <h3 className="mb-2 text-sm font-semibold text-neutral-900 dark:text-neutral-900">
                       People also searched for
                     </h3>
                     <div className="flex flex-wrap gap-2">
@@ -304,7 +332,7 @@ export default function SearchClient() {
                         <Link
                           key={related}
                           href={`/search?q=${encodeURIComponent(related)}`}
-                          className="rounded-full bg-slate-800 px-3 py-1 text-xs font-medium text-slate-300 transition hover:bg-blue-500/20 hover:text-blue-300"
+                          className="rounded-full border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-700 transition hover:bg-blue-500/20 hover:text-blue-400 dark:hover:text-blue-400"
                         >
                           {related}
                         </Link>
@@ -316,24 +344,39 @@ export default function SearchClient() {
                 {/* Products */}
                 {results.products.length > 0 && (
                   <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">Products</h2>
+                    <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
+                      Products
+                    </h2>
                     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                       {results.products.map((product) => (
                         <div
                           key={product.id}
-                          className="relative flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-4 shadow-lg shadow-purple-950/20 transition hover:-translate-y-1 hover:border-purple-500/60 hover:shadow-purple-500/20"
+                          className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 shadow-sm transition hover:-translate-y-1 hover:border-purple-500/60"
                         >
                           <div className="absolute right-6 top-6 z-10">
-                            <FavoriteButton product={product} size={18} className="h-8 w-8" />
+                            <FavoriteButton
+                              product={product}
+                              size={18}
+                              className="h-8 w-8"
+                            />
                           </div>
-                        <Link
-                          href={`/products/${product.id}?from=search&q=${encodeURIComponent(query || category)}`}
-                          className="flex flex-col gap-4"
-                          onClick={() =>
-                            trackResultClick("product", product.id, query || category, results.products.indexOf(product) + 1)
-                          }
-                        >
-                            <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-800/40">
+                          <Link
+                            href={`/products/${
+                              product.id
+                            }?from=search&q=${encodeURIComponent(
+                              query || category
+                            )}`}
+                            className="flex flex-col gap-4"
+                            onClick={() =>
+                              trackResultClick(
+                                "product",
+                                product.id,
+                                query || category,
+                                results.products.indexOf(product) + 1
+                              )
+                            }
+                          >
+                            <div className="relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-200/40 dark:bg-neutral-200/40">
                               <Image
                                 src={product.imageUrl}
                                 alt={product.name}
@@ -354,24 +397,27 @@ export default function SearchClient() {
                             </div>
 
                             <div className="flex flex-col gap-2">
-                              <h3 className="text-base font-semibold text-white">
+                              <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">
                                 {highlightText(product.name, query || category)}
                               </h3>
-                              <p className="text-sm text-slate-400">{product.brand}</p>
-                              {product.signals && product.signals.length > 0 && (
-                                <p className="text-xs text-slate-500">
-                                  {product.signals[0]}
-                                </p>
-                              )}
+                              <p className="text-sm text-neutral-700 dark:text-neutral-700">
+                                {product.brand}
+                              </p>
+                              {product.signals &&
+                                product.signals.length > 0 && (
+                                  <p className="text-xs text-neutral-700 dark:text-neutral-700">
+                                    {product.signals[0]}
+                                  </p>
+                                )}
                             </div>
 
                             <div className="mt-auto flex items-center justify-between">
                               <div className="flex items-end gap-2">
-                                <span className="text-md font-semibold text-white">
+                                <span className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
                                   {formatCurrency(product.price)}
                                 </span>
                                 {product.previousPrice && (
-                                  <span className="text-xs text-slate-500 line-through">
+                                  <span className="text-xs text-neutral-700 dark:text-neutral-700 line-through">
                                     {formatCurrency(product.previousPrice)}
                                   </span>
                                 )}
@@ -390,25 +436,40 @@ export default function SearchClient() {
                 {/* Stores */}
                 {results.stores.length > 0 && (
                   <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">Stores</h2>
+                    <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
+                      Stores
+                    </h2>
                     <div className="grid gap-5 lg:grid-cols-2">
                       {results.stores.map((store) => (
                         <div
                           key={store.id}
-                          className="relative flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-blue-950/20 transition hover:-translate-y-1 hover:border-blue-500/60 hover:shadow-blue-600/20"
+                          className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
                         >
                           <div className="absolute right-6 top-6 z-10">
-                            <FavoriteButton store={store} size={18} className="h-8 w-8" />
+                            <FavoriteButton
+                              store={store}
+                              size={18}
+                              className="h-8 w-8"
+                            />
                           </div>
                           <Link
-                            href={`/stores/${store.id}?from=search&q=${encodeURIComponent(query || category)}`}
+                            href={`/stores/${
+                              store.id
+                            }?from=search&q=${encodeURIComponent(
+                              query || category
+                            )}`}
                             className="flex flex-col gap-4"
                             onClick={() =>
-                              trackResultClick("store", store.id, query || category, results.stores.indexOf(store) + 1)
+                              trackResultClick(
+                                "store",
+                                store.id,
+                                query || category,
+                                results.stores.indexOf(store) + 1
+                              )
                             }
                           >
                             <div className="flex items-center gap-3">
-                              <div className="relative h-16 w-16 overflow-hidden rounded-3xl border border-slate-700">
+                              <div className="relative h-16 w-16 overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-200">
                                 <Image
                                   src={store.imageUrl}
                                   alt={store.name}
@@ -417,7 +478,7 @@ export default function SearchClient() {
                                 />
                               </div>
                               <div>
-                                <p className="font-semibold text-white">
+                                <p className="font-semibold text-neutral-900 dark:text-neutral-900">
                                   {highlightText(store.name, query || category)}
                                 </p>
                                 <div className="flex items-center gap-1 text-amber-300">
@@ -425,7 +486,11 @@ export default function SearchClient() {
                                     <Star
                                       key={index}
                                       className="h-4 w-4"
-                                      strokeWidth={index < Math.round(store.rating) ? 0 : 1.5}
+                                      strokeWidth={
+                                        index < Math.round(store.rating)
+                                          ? 0
+                                          : 1.5
+                                      }
                                       fill={
                                         index < Math.round(store.rating)
                                           ? "currentColor"
@@ -433,19 +498,19 @@ export default function SearchClient() {
                                       }
                                     />
                                   ))}
-                                  <span className="ml-2 text-sm text-slate-300">
+                                  <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-700">
                                     ({store.rating.toFixed(1)})
                                   </span>
                                 </div>
                               </div>
                             </div>
 
-                            <p className="text-sm leading-relaxed text-slate-400">
+                            <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-700">
                               {store.description}
                             </p>
 
                             <div className="flex items-center justify-between">
-                              <span className="text-xs uppercase tracking-wide text-slate-500">
+                              <span className="text-xs uppercase tracking-wide text-neutral-700 dark:text-neutral-700">
                                 {store.domain}
                               </span>
                               <span className="rounded-full bg-blue-500 px-4 py-2 text-xs uppercase tracking-wide text-white transition hover:bg-blue-600">
@@ -462,22 +527,28 @@ export default function SearchClient() {
                 {/* Categories */}
                 {results.categories.length > 0 && (
                   <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-white">Categories</h2>
+                    <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
+                      Categories
+                    </h2>
                     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                       {results.categories.map((category) => (
                         <Link
                           key={category.id}
-                          href={`/search?category=${encodeURIComponent(category.title)}`}
-                          className="flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-6 shadow-lg shadow-blue-950/20 transition hover:-translate-y-1 hover:border-blue-500/60 hover:shadow-blue-600/20 items-center justify-center text-center"
+                          href={`/search?category=${encodeURIComponent(
+                            category.title
+                          )}`}
+                          className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60 items-center justify-center text-center"
                         >
                           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600/10 text-blue-300">
                             <span className="text-2xl">📦</span>
                           </div>
                           <div className="items-center justify-center text-center gap-1">
-                            <h3 className="text-md font-semibold text-white">
+                            <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
                               {category.title}
                             </h3>
-                            <p className="text-sm text-slate-400">{category.stats}</p>
+                            <p className="text-sm text-neutral-700 dark:text-neutral-700">
+                              {category.stats}
+                            </p>
                           </div>
                         </Link>
                       ))}

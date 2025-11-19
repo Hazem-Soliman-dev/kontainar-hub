@@ -4,6 +4,7 @@ import Link from "next/link";
 import { createMetadata } from "../../lib/seo/metadata";
 import type { LucideIcon } from "lucide-react";
 import {
+  BookOpen,
   Dumbbell,
   Gamepad2,
   Home as HomeIcon,
@@ -33,6 +34,7 @@ const categoryIconMap: Record<
   sports: Dumbbell,
   beauty: Sparkles,
   gaming: Gamepad2,
+  books: BookOpen,
 };
 
 export const metadata = createMetadata({
@@ -88,26 +90,33 @@ function CategoriesSection() {
         </h2>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-6">
-        {featuredCategories.map((category) => {
-          const Icon = categoryIconMap[category.icon];
-          return (
-            <div
-              key={category.title}
-              className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-blue-950/20 transition hover:-translate-y-1 hover:border-blue-500/60 hover:shadow-blue-600/20 items-center justify-center"
-            >
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600/10 text-blue-300">
-                <Icon className="h-8 w-8" />
+      <div
+        className="overflow-x-auto pb-4"
+        style={{ scrollBehavior: "smooth", scrollbarWidth: "thin" }}
+      >
+        <div className="flex gap-5 md:grid md:grid-cols-2 xl:grid-cols-6 xl:flex xl:flex-nowrap xl:min-w-max">
+          {featuredCategories.map((category) => {
+            const Icon = categoryIconMap[category.icon];
+            return (
+              <div
+                key={category.title}
+                className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60 items-center justify-center min-w-[200px] shrink-0 xl:snap-start"
+              >
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600/10 text-blue-300">
+                  <Icon className="h-8 w-8" />
+                </div>
+                <div className="items-center justify-center text-center gap-1">
+                  <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
+                    {category.title}
+                  </h3>
+                  <p className="text-sm text-neutral-700 dark:text-neutral-700">
+                    {category.stats}
+                  </p>
+                </div>
               </div>
-              <div className="items-center justify-center text-center gap-1">
-                <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                  {category.title}
-                </h3>
-                <p className="text-sm text-neutral-700 dark:text-neutral-700">{category.stats}</p>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -138,7 +147,7 @@ function StoresSection() {
           .map((store) => (
             <div
               key={store.name}
-              className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-lg shadow-blue-950/20 transition hover:-translate-y-1 hover:border-blue-500/60 hover:shadow-blue-600/20"
+              className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
             >
               <div className="absolute right-6 top-6 z-10">
                 <FavoriteButton store={store} size={18} className="h-8 w-8" />
@@ -157,7 +166,9 @@ function StoresSection() {
                     />
                   </div>
                   <div>
-                    <p className="font-semibold text-neutral-900 dark:text-neutral-900">{store.name}</p>
+                    <p className="font-semibold text-neutral-900 dark:text-neutral-900">
+                      {store.name}
+                    </p>
                     <div className="flex items-center gap-1 text-amber-300">
                       {Array.from({ length: 5 }).map((_, index) => (
                         <Star
@@ -209,7 +220,9 @@ function BestSellersSection() {
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900">Best Sellers</h2>
+          <h2 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
+            Best Sellers
+          </h2>
         </div>
         <Link
           href="/best-sellers"
@@ -223,7 +236,7 @@ function BestSellersSection() {
         {bestSellerProducts.map((product) => (
           <div
             key={product.name}
-            className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 shadow-lg shadow-purple-950/20 transition hover:-translate-y-1 hover:border-purple-500/60 hover:shadow-purple-500/20"
+            className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 shadow-sm transition hover:-translate-y-1 hover:border-purple-500/60"
           >
             <div className="absolute right-6 top-6 z-10">
               <FavoriteButton product={product} size={18} className="h-8 w-8" />
@@ -251,7 +264,9 @@ function BestSellersSection() {
                 <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">
                   {product.name}
                 </h3>
-                <p className="text-sm text-neutral-700 dark:text-neutral-700">{product.brand}</p>
+                <p className="text-sm text-neutral-700 dark:text-neutral-700">
+                  {product.brand}
+                </p>
               </div>
 
               <div className="mt-auto flex items-center justify-between">

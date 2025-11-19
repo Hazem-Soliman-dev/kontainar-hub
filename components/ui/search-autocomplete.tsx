@@ -345,7 +345,7 @@ export function SearchAutocomplete({
       {isOpen && (hasResults || showPersonalized) && (
         <div
           ref={suggestionsRef}
-          className="absolute left-0 right-0 top-full z-50 mt-2 max-h-96 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/95 p-2 shadow-xl backdrop-blur"
+          className="absolute left-0 right-0 top-full z-50 mt-2 max-h-96 overflow-y-auto rounded-2xl border border-slate-800 bg-slate-900/95 p-2 shadow-sm backdrop-blur"
         >
           {/* Recent Searches */}
           {showPersonalized && recentSearches.length > 0 && (

@@ -54,8 +54,8 @@
   --radius-xl: 1.5rem;
 
   /* Shadows - Light mode */
-  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
-  --shadow-strong: 0 20px 45px rgba(15, 23, 42, 0.12);
+  --shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-strong: 0 2px 6px rgba(15, 23, 42, 0.08);
 
   /* Breakpoints */
   --bp-sm: 640px;
@@ -74,8 +74,8 @@
   --color-neutral-700: #e2e8f0;
   --color-neutral-900: #f8fafc;
   /* Shadows - Dark mode */
-  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.45);
-  --shadow-strong: 0 20px 45px rgba(15, 23, 42, 0.55);
+  --shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.15);
+  --shadow-strong: 0 2px 6px rgba(15, 23, 42, 0.2);
 }
 
 
