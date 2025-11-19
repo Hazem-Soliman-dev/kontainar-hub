@@ -13,6 +13,7 @@ import {
   Dumbbell,
   Sparkles,
   Gamepad2,
+  BookOpen,
   Store,
   Tag,
   ChevronRight,
@@ -34,7 +35,10 @@ import {
   getPersonalizedSuggestions,
   getContinueSearchingSuggestions,
 } from "../../lib/search/personalization";
-import type { SearchSuggestion, GroupedSuggestions } from "../../lib/search/types";
+import type {
+  SearchSuggestion,
+  GroupedSuggestions,
+} from "../../lib/search/types";
 
 const categoryIconMap: Record<
   (typeof featuredCategories)[number]["icon"],
@@ -46,6 +50,7 @@ const categoryIconMap: Record<
   sports: Dumbbell,
   beauty: Sparkles,
   gaming: Gamepad2,
+  books: BookOpen,
 };
 
 interface SearchAutocompleteProps {
@@ -150,13 +155,19 @@ export function SearchAutocomplete({
   }, [suggestions]);
 
   // Get recent searches, trending, and personalized suggestions
-  const recentSearches = useMemo(() => getRecentSearches(5), [getRecentSearches]);
+  const recentSearches = useMemo(
+    () => getRecentSearches(5),
+    [getRecentSearches]
+  );
   const trendingSearches = useMemo(() => getTrendingSearches(5), []);
   const personalizedSuggestions = useMemo(
     () => getPersonalizedSuggestions(undefined, { recentSearches }),
     [recentSearches]
   );
-  const continueSearching = useMemo(() => getContinueSearchingSuggestions(3), []);
+  const continueSearching = useMemo(
+    () => getContinueSearchingSuggestions(3),
+    []
+  );
 
   const showPersonalized = !debouncedQuery.trim() || debouncedQuery.length < 2;
 
@@ -173,7 +184,8 @@ export function SearchAutocomplete({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [isOpen]);
 
@@ -220,9 +232,15 @@ export function SearchAutocomplete({
         } else if (suggestion.type === "store") {
           router.push(`/stores/${suggestion.id}`);
         } else if (suggestion.type === "category") {
-          router.push(`/search?category=${encodeURIComponent(suggestion.title)}`);
+          router.push(
+            `/search?category=${encodeURIComponent(suggestion.title)}`
+          );
         } else if (suggestion.type === "brand") {
-          router.push(`/search?q=${encodeURIComponent(suggestion.title)}&brand=${encodeURIComponent(suggestion.title)}`);
+          router.push(
+            `/search?q=${encodeURIComponent(
+              suggestion.title
+            )}&brand=${encodeURIComponent(suggestion.title)}`
+          );
         }
       }
       setIsOpen(false);
@@ -275,9 +293,10 @@ export function SearchAutocomplete({
     groupTitle: string
   ) => {
     const isSelected = selectedIndex === index;
-    const iconKey = suggestion.type === "category" && suggestion.icon
-      ? suggestion.icon as keyof typeof categoryIconMap
-      : null;
+    const iconKey =
+      suggestion.type === "category" && suggestion.icon
+        ? (suggestion.icon as keyof typeof categoryIconMap)
+        : null;
     const Icon = iconKey ? categoryIconMap[iconKey] : null;
 
     return (
@@ -455,89 +474,85 @@ export function SearchAutocomplete({
           {/* Search Results */}
           {!showPersonalized && hasResults && (
             <>
-          {suggestions.products.length > 0 && (
-            <div className="mb-2">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                Products ({suggestions.products.length})
-              </div>
-              <div className="space-y-1">
-                {suggestions.products.map((suggestion, idx) =>
-                  renderSuggestion(
-                    suggestion,
-                    idx,
-                    "products"
-                  )
-                )}
-              </div>
-            </div>
-          )}
+              {suggestions.products.length > 0 && (
+                <div className="mb-2">
+                  <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    Products ({suggestions.products.length})
+                  </div>
+                  <div className="space-y-1">
+                    {suggestions.products.map((suggestion, idx) =>
+                      renderSuggestion(suggestion, idx, "products")
+                    )}
+                  </div>
+                </div>
+              )}
 
-          {suggestions.stores.length > 0 && (
-            <div className="mb-2">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                Stores ({suggestions.stores.length})
-              </div>
-              <div className="space-y-1">
-                {suggestions.stores.map((suggestion, idx) =>
-                  renderSuggestion(
-                    suggestion,
-                    suggestions.products.length + idx,
-                    "stores"
-                  )
-                )}
-              </div>
-            </div>
-          )}
+              {suggestions.stores.length > 0 && (
+                <div className="mb-2">
+                  <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    Stores ({suggestions.stores.length})
+                  </div>
+                  <div className="space-y-1">
+                    {suggestions.stores.map((suggestion, idx) =>
+                      renderSuggestion(
+                        suggestion,
+                        suggestions.products.length + idx,
+                        "stores"
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
 
-          {suggestions.categories.length > 0 && (
-            <div className="mb-2">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                Categories ({suggestions.categories.length})
-              </div>
-              <div className="space-y-1">
-                {suggestions.categories.map((suggestion, idx) =>
-                  renderSuggestion(
-                    suggestion,
-                    suggestions.products.length +
-                      suggestions.stores.length +
-                      idx,
-                    "categories"
-                  )
-                )}
-              </div>
-            </div>
-          )}
+              {suggestions.categories.length > 0 && (
+                <div className="mb-2">
+                  <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    Categories ({suggestions.categories.length})
+                  </div>
+                  <div className="space-y-1">
+                    {suggestions.categories.map((suggestion, idx) =>
+                      renderSuggestion(
+                        suggestion,
+                        suggestions.products.length +
+                          suggestions.stores.length +
+                          idx,
+                        "categories"
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
 
-          {suggestions.brands.length > 0 && (
-            <div className="mb-2">
-              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                Brands ({suggestions.brands.length})
-              </div>
-              <div className="space-y-1">
-                {suggestions.brands.map((suggestion, idx) =>
-                  renderSuggestion(
-                    suggestion,
-                    suggestions.products.length +
-                      suggestions.stores.length +
-                      suggestions.categories.length +
-                      idx,
-                    "brands"
-                  )
-                )}
-              </div>
-            </div>
-          )}
+              {suggestions.brands.length > 0 && (
+                <div className="mb-2">
+                  <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    Brands ({suggestions.brands.length})
+                  </div>
+                  <div className="space-y-1">
+                    {suggestions.brands.map((suggestion, idx) =>
+                      renderSuggestion(
+                        suggestion,
+                        suggestions.products.length +
+                          suggestions.stores.length +
+                          suggestions.categories.length +
+                          idx,
+                        "brands"
+                      )
+                    )}
+                  </div>
+                </div>
+              )}
 
-          <div className="mt-2 border-t border-slate-800 pt-2">
-            <Link
-              href={`/search?q=${encodeURIComponent(debouncedQuery)}`}
-              className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-blue-400 transition hover:bg-blue-500/10 hover:text-blue-300"
-              onClick={() => setIsOpen(false)}
-            >
-              View all results for "{debouncedQuery}"
-              <ChevronRight className="h-4 w-4" />
-            </Link>
-          </div>
+              <div className="mt-2 border-t border-slate-800 pt-2">
+                <Link
+                  href={`/search?q=${encodeURIComponent(debouncedQuery)}`}
+                  className="flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-blue-400 transition hover:bg-blue-500/10 hover:text-blue-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  View all results for "{debouncedQuery}"
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              </div>
             </>
           )}
         </div>
@@ -545,4 +560,3 @@ export function SearchAutocomplete({
     </div>
   );
 }
-
