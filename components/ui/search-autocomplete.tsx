@@ -19,7 +19,6 @@ import {
   ChevronRight,
   Clock,
   TrendingUp,
-  X,
   Sparkles as SparklesIcon,
 } from "lucide-react";
 import {
@@ -311,7 +310,7 @@ export function SearchAutocomplete({
         }`}
       >
         {suggestion.imageUrl ? (
-          <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-slate-700">
+          <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-slate-700">
             <Image
               src={suggestion.imageUrl}
               alt={suggestion.title}
@@ -320,11 +319,11 @@ export function SearchAutocomplete({
             />
           </div>
         ) : Icon ? (
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-blue-600/10 text-blue-300">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-600/10 text-blue-300">
             <Icon className="h-5 w-5" />
           </div>
         ) : (
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-400">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-400">
             {suggestion.type === "brand" ? (
               <Tag className="h-5 w-5" />
             ) : (
@@ -340,7 +339,7 @@ export function SearchAutocomplete({
             <div className="text-xs text-slate-400">{suggestion.subtitle}</div>
           )}
         </div>
-        <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-500" />
+        <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
       </button>
     );
   };
@@ -400,9 +399,9 @@ export function SearchAutocomplete({
                         : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
                     }`}
                   >
-                    <Clock className="h-4 w-4 flex-shrink-0 text-slate-500" />
+                    <Clock className="h-4 w-4 shrink-0 text-slate-500" />
                     <span className="flex-1 text-sm">{search}</span>
-                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-500" />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
                   </button>
                 ))}
               </div>
@@ -431,9 +430,9 @@ export function SearchAutocomplete({
                         : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
                     }`}
                   >
-                    <TrendingUp className="h-4 w-4 flex-shrink-0 text-slate-500" />
+                    <TrendingUp className="h-4 w-4 shrink-0 text-slate-500" />
                     <span className="flex-1 text-sm">{search}</span>
-                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-500" />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
                   </button>
                 ))}
               </div>
@@ -462,9 +461,9 @@ export function SearchAutocomplete({
                         : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
                     }`}
                   >
-                    <SparklesIcon className="h-4 w-4 flex-shrink-0 text-slate-500" />
+                    <SparklesIcon className="h-4 w-4 shrink-0 text-slate-500" />
                     <span className="flex-1 text-sm">{search}</span>
-                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-500" />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
                   </button>
                 ))}
               </div>

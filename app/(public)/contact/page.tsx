@@ -13,12 +13,15 @@ import { metadata } from "./metadata";
 export { metadata };
 
 import { ContactClient } from "./contact-client";
+import { Breadcrumb } from "../../../components/ui/breadcrumb";
 
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col gap-20 pb-26">
-        <HeroSection />
+      <main className="flex flex-col pb-16 sm:pb-26">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-6 sm:pt-8">
+          <Breadcrumb />
+        </div>
         <ContactInfoSection />
         <ContactFormSection />
       </main>
@@ -28,18 +31,11 @@ export default function ContactPage() {
 
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700">
+    <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700">
       <div className="absolute -left-24 top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-purple-400/20 blur-3xl" />
 
-      <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-16 text-center">
-        <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-          Get in Touch
-          <span className="block font-normal text-white/80 text-2xl lg:text-5xl mt-2">
-            We're Here to Help
-          </span>
-        </h1>
-      </div>
+      <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-16 text-center"></div>
     </section>
   );
 }
@@ -87,14 +83,8 @@ function ContactInfoSection() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-7xl space-y-6 px-6 text-neutral-900 dark:text-neutral-900">
-      <div className="flex flex-col gap-2 items-center justify-center">
-        <h2 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Contact Information
-        </h2>
-      </div>
-
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900">
+      <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
         {contactCards.map((card) => {
           const Icon = card.icon;
           const colorClass =
@@ -102,20 +92,22 @@ function ContactInfoSection() {
           return (
             <div
               key={card.title}
-              className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
+              className="flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
             >
               <div
-                className={`flex h-16 w-16 items-center justify-center rounded-2xl ${colorClass} border`}
+                className={`flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl ${colorClass} border`}
               >
-                <Icon className="h-8 w-8" />
+                <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
               </div>
-              <div className="flex flex-col gap-2">
-                <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
+              <div className="flex flex-col gap-1 sm:gap-2">
+                <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900">
                   {card.title}
                 </h3>
-                <p className="text-sm text-neutral-700 dark:text-neutral-700">{card.description}</p>
+                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
+                  {card.description}
+                </p>
               </div>
-              <div className="space-y-2 text-sm text-neutral-700 dark:text-neutral-700">
+              <div className="space-y-2 text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
                 <div>
                   <p className="text-xs text-neutral-700 dark:text-neutral-700 uppercase tracking-wide">
                     Email
@@ -145,7 +137,9 @@ function ContactInfoSection() {
                     <p className="text-xs text-neutral-700 dark:text-neutral-700 uppercase tracking-wide">
                       Hours
                     </p>
-                    <p className="text-neutral-700 dark:text-neutral-700">{card.hours}</p>
+                    <p className="text-neutral-700 dark:text-neutral-700">
+                      {card.hours}
+                    </p>
                   </div>
                 )}
                 {card.responseTime && (
@@ -153,7 +147,9 @@ function ContactInfoSection() {
                     <p className="text-xs text-neutral-700 dark:text-neutral-700 uppercase tracking-wide">
                       Response Time
                     </p>
-                    <p className="text-neutral-700 dark:text-neutral-700">{card.responseTime}</p>
+                    <p className="text-neutral-700 dark:text-neutral-700">
+                      {card.responseTime}
+                    </p>
                   </div>
                 )}
               </div>
@@ -167,9 +163,11 @@ function ContactInfoSection() {
 
 function ContactFormSection() {
   return (
-    <section className="mx-auto w-full max-w-3xl px-6 text-neutral-900 dark:text-neutral-900">
-      <div className="flex flex-col gap-2 items-center justify-center mb-8">
-        <h2 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900">Send us a Message</h2>
+    <section className="mx-auto w-full max-w-3xl px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-10">
+      <div className="flex flex-col gap-2 items-center justify-center mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
+          Send us a Message
+        </h2>
       </div>
       <ContactClient />
     </section>

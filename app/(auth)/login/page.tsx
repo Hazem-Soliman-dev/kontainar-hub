@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useAuthStore } from "../../../lib/store/auth-store";
+import { Breadcrumb } from "../../../components/ui/breadcrumb";
 import type { AuthSuccessBody } from "../../../lib/auth-response";
 
 type FormState = {
@@ -33,8 +34,8 @@ function LoginFallback() {
 }
 
 const initialState: FormState = {
-  identifier: "",
-  password: "",
+  identifier: "john.doe@example.com",
+  password: "password",
 };
 
 function LoginPageContent() {
@@ -78,6 +79,9 @@ function LoginPageContent() {
         data as AuthSuccessBody;
       setAuth({ user, token, subscription, dashboardPath });
 
+      // Give persist middleware time to save to localStorage before redirect
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const redirect = searchParams.get("redirect");
       router.push(redirect ?? dashboardPath);
     } catch (err) {
@@ -88,50 +92,56 @@ function LoginPageContent() {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-4">
-      <h1 className="mb-6 text-center text-3xl font-semibold">Sign in to your account</h1>
+    <div className="mx-auto w-full max-w-7xl space-y-6 px-6 text-neutral-900 dark:text-neutral-900">
+      <div className="pt-8 pb-6">
+        <Breadcrumb />
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="Email or Phone"
-          value={formState.identifier}
-          onChange={handleChange("identifier")}
-          placeholder="hazem@example.com or +201234567890"
-          required
-        />
-        <Input
-          label="Password"
-          type="password"
-          value={formState.password}
-          onChange={handleChange("password")}
-          placeholder="********"
-          required
-        />
+      <div className="flex flex-1 items-center justify-center mb-30">
+        <div className="w-full max-w-sm">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Email or Phone"
+              value={formState.identifier}
+              onChange={handleChange("identifier")}
+              placeholder="john.doe@example.com or +201234567890"
+              required
+            />
+            <Input
+              label="Password"
+              type="password"
+              value={formState.password}
+              onChange={handleChange("password")}
+              placeholder="********"
+              required
+            />
 
-        {error && (
-          <p className="rounded-md bg-red-100 px-3 py-2 text-md text-red-600">
-            {error}
+            {error && (
+              <p className="rounded-md bg-red-100 px-3 py-2 text-md text-red-600 dark:text-red-600">
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full rounded-sm bg-blue-600 px-3 py-1 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isSubmitting ? "Signing in..." : "Login"}
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-md text-neutral-700 dark:text-neutral-700">
+            Need an account?{" "}
+            <a
+              href="/register"
+              className="font-semibold text-blue-600 hover:underline"
+            >
+              Register
+            </a>
           </p>
-        )}
-
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full rounded-sm bg-blue-600 px-3 py-1 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {isSubmitting ? "Signing in..." : "Login"}
-        </button>
-      </form>
-
-      <p className="mt-6 text-center text-md text-slate-600">
-        Need an account?{" "}
-        <a
-          href="/register"
-          className="font-semibold text-blue-600 hover:underline"
-        >
-          Register
-        </a>
-      </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -155,11 +165,11 @@ function Input({
 }: InputProps) {
   return (
     <label className="block">
-      <span className="mb-1 block text-md font-semibold text-slate-700">
+      <span className="mb-1 block text-md font-semibold text-neutral-700 dark:text-neutral-700">
         {label}
       </span>
       <input
-        className="w-full rounded-sm border border-slate-300 px-3 py-1 text-md outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+        className="w-full rounded-sm border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-1 text-md text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
         type={type}
         value={value}
         onChange={onChange}

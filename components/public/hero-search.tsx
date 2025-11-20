@@ -25,7 +25,7 @@ export function HeroSearch() {
   };
 
   return (
-    <div className="flex w-full max-w-3xl flex-col gap-6">
+    <div className="flex w-full max-w-3xl flex-col gap-4 sm:gap-6">
       <form onSubmit={handleSubmit} className="w-full">
         <div className="flex w-full overflow-hidden rounded-full border bg-white shadow-sm backdrop-blur">
           <div className="flex-1">
@@ -36,16 +36,16 @@ export function HeroSearch() {
           </div>
           <button
             type="submit"
-            className="text-white px-3 my-2 mx-4 rounded-full text-md bg-blue-600 transition hover:bg-blue-700"
+            className="text-white px-2 sm:px-3 my-2 mx-2 sm:mx-4 rounded-full text-md bg-blue-600 transition hover:bg-blue-700"
             aria-label="Search"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
       </form>
 
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <p className="text-sm font-medium text-white/90">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        <p className="text-xs sm:text-sm font-medium text-white/90">
           Popular Search
         </p>
         {quickFilters.map((filter) => (
@@ -53,7 +53,7 @@ export function HeroSearch() {
             key={filter}
             type="button"
             onClick={() => handleQuickFilterClick(filter)}
-            className="rounded-full bg-white/20 px-3 py-1 text-md font-medium text-white backdrop-blur transition hover:bg-white/30"
+            className="rounded-full bg-white/20 px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium text-white backdrop-blur transition hover:bg-white/30"
           >
             {filter}
           </button>

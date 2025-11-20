@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { useRealtimeOrders } from "../../../../hooks/use-realtime-orders";
 import { ordersBus } from "../../../../lib/realtime/orders-bus";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 import type { OrderStatus } from "../../../../lib/mock/orders";
 
 export default function SupplierOrdersPage() {
@@ -94,17 +95,9 @@ export default function SupplierOrdersPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
-            Manage fulfillment workflow
-          </h1>
-          <p className="mt-1 text-md text-neutral-700 dark:text-neutral-700">
-            Track order status, confirm shipments, and maintain buyer
-            communication.
-          </p>
-        </div>
+    <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 pt-8 pb-10">
+      <header className="mx-auto flex w-full max-w-7xl flex-col">
+        <Breadcrumb />
         <div className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-5 py-4 gap-2 flex flex-col items-center justify-center">
           <p className="text-sm font-semibold uppercase tracking-widest text-neutral-700 dark:text-neutral-700">
             30-day revenue
@@ -119,7 +112,7 @@ export default function SupplierOrdersPage() {
         </div>
       </header>
 
-      <section className="mx-auto w-full max-w-6xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
+      <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
         {feedback && (
           <div
             className={[

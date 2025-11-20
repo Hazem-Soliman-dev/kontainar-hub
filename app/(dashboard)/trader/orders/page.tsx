@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { Breadcrumb } from '../../../../components/ui/breadcrumb';
 
 type TraderOrderStatus = 'pending' | 'confirmed' | 'in-transit' | 'delivered' | 'cancelled';
 
@@ -132,18 +133,11 @@ export default function TraderOrdersPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col gap-8 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="gap-1 flex flex-col">
-          <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-            Manage purchase orders
-          </h1>
-          <p className="mt-1 text-md text-neutral-700 dark:text-neutral-700">
-            Coordinate with suppliers, ensure compliance, and track delivery statuses.
-          </p>
-        </div>
+    <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 py-8">
+      <header className="mx-auto flex w-full max-w-7xl flex-col">
+        <Breadcrumb />
         <div className="flex gap-3">
-          <div className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-5 py-4 text-right text-center">
+          <div className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-5 py-4 text-center w-full">
             <p className="text-xs font-semibold uppercase tracking-widest text-neutral-700 dark:text-neutral-700">
               Total spend
             </p>

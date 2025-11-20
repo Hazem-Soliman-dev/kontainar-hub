@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { SalesChart } from "../../../../components/charts/sales-chart";
 import { DashboardGate } from "../../../../components/dashboard/dashboard-gate";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 
 type TraderOrderStatus = "pending" | "confirmed" | "in-transit" | "delivered";
 
@@ -162,19 +163,11 @@ export default function TraderDashboardPage() {
 
   return (
     <DashboardGate requiredPlan="trader">
-      <main className="flex min-h-screen flex-col gap-8 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-        <header className="mx-auto flex w-full max-w-7xl flex-col gap-4">
-          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-            <div>
-              <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
-                Welcome back, Northwind Traders
-              </h1>
-              <p className="mt-2 text-md text-neutral-700 dark:text-neutral-700">
-                Orchestrate supplier relationships, inventory, and omnichannel
-                stores.
-              </p>
-            </div>
-            <div className="flex gap-3">
+      <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 py-8">
+        <header className="mx-auto flex w-full max-w-7xl flex-col">
+          <Breadcrumb />
+          <div className="flex flex-col justify-between md:flex-row md:items-center">
+            <div className="flex gap-3 mb-4">
               <Link
                 href="/trader/store"
                 className="inline-flex items-center rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-neutral-50 dark:text-neutral-50 shadow-sm hover:bg-blue-800 dark:hover:bg-blue-800"

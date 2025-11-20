@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { SalesChart } from "../../../../components/charts/sales-chart";
 import { DashboardGate } from "../../../../components/dashboard/dashboard-gate";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 
 type DashboardOrderStatus = "pending" | "processing" | "fulfilled";
 
@@ -148,18 +149,11 @@ export default function SupplierDashboardPage() {
 
   return (
     <DashboardGate requiredPlan="supplier">
-      <main className="flex min-h-screen flex-col gap-10 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-        <header className="mx-auto flex w-full max-w-7xl flex-col gap-4">
-          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-            <div>
-              <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
-                Welcome back, Aurora Commodities
-              </h1>
-              <p className="mt-2 text-md text-neutral-700 dark:text-neutral-700">
-                Monitor orders, manage your catalog, and stay ahead of demand.
-              </p>
-            </div>
-            <div className="flex gap-3">
+      <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 pt-8 pb-10">
+        <header className="mx-auto flex w-full max-w-7xl flex-col md:f">
+          <Breadcrumb />
+          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
+            <div className="flex gap-3 mb-4">
               <Link
                 href="/supplier/products"
                 className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-neutral-50 dark:text-neutral-50 shadow-sm hover:bg-blue-700 dark:hover:bg-blue-700"

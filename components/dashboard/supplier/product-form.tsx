@@ -69,7 +69,8 @@ export function ProductForm({
             value={values.name}
             onChange={handleChange}
             required
-            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            placeholder="Enter product name"
           />
         </FormField>
         <FormField label="SKU">
@@ -79,7 +80,8 @@ export function ProductForm({
             value={values.sku}
             onChange={handleChange}
             required
-            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            placeholder="Enter SKU"
           />
         </FormField>
       </div>
@@ -92,7 +94,8 @@ export function ProductForm({
             value={values.category}
             onChange={handleChange}
             required
-            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            placeholder="Enter category"
           />
         </FormField>
         <FormField label="Inventory">
@@ -103,7 +106,8 @@ export function ProductForm({
             onChange={handleChange}
             min={0}
             required
-            className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+            placeholder="Enter inventory"
           />
         </FormField>
       </div>
@@ -113,7 +117,7 @@ export function ProductForm({
           name="status"
           value={values.status}
           onChange={handleChange}
-          className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
         >
           <option value="active">Active</option>
           <option value="draft">Draft</option>
@@ -126,7 +130,8 @@ export function ProductForm({
           value={values.description}
           onChange={handleChange}
           rows={4}
-          className="w-full rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+          placeholder="Enter description"
         />
       </FormField>
 
@@ -135,7 +140,7 @@ export function ProductForm({
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-100"
+            className="rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-100"
           >
             Cancel
           </button>

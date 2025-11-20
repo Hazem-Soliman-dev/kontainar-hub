@@ -8,6 +8,7 @@ import { Trash2, Plus, Minus } from "lucide-react";
 import { useCartStore, type CartItem } from "../../lib/store/cart-store";
 import { CartFilters } from "../../components/ui/cart-filters";
 import { Pagination } from "../../components/ui/pagination";
+import { Breadcrumb } from "../../components/ui/breadcrumb";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -80,14 +81,9 @@ export function CartClient() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-        <main className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12">
+        <main className="mx-auto flex w-full max-w-7xl flex-col px-6 pt-8 pb-12">
           <header className="space-y-2">
-            <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl lg:text-5xl">
-              Shopping Cart
-            </h1>
-            <p className="text-md text-neutral-700 dark:text-neutral-700">
-              Your cart is empty. Start adding products to your cart.
-            </p>
+            <Breadcrumb />
           </header>
 
           <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-12 text-center">
@@ -113,15 +109,9 @@ export function CartClient() {
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12">
+      <main className="mx-auto flex w-full max-w-7xl flex-col px-6 pt-8 pb-12">
         <header className="space-y-2">
-          <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl lg:text-5xl">
-            Shopping Cart
-          </h1>
-          <p className="text-md text-neutral-700 dark:text-neutral-700">
-            Review selected MarketHub products and finalize your checkout or
-            sourcing requests.
-          </p>
+          <Breadcrumb />
         </header>
 
         {items.length > 0 && (
@@ -145,13 +135,13 @@ export function CartClient() {
           </div>
         ) : (
           <>
-            <div className="text-sm text-neutral-700 dark:text-neutral-700">
+            <div className="text-sm text-neutral-700 dark:text-neutral-700 mt-10">
               Showing {paginatedItems.length} of {filteredItems.length} items
               {items.length !== filteredItems.length &&
                 ` (${items.length} total in cart)`}
             </div>
 
-            <section className="space-y-4">
+            <section className="space-y-4 mt-6">
               {paginatedItems.map((item) => (
                 <article
                   key={item.id}
@@ -234,7 +224,7 @@ export function CartClient() {
             </section>
 
             {totalPages > 1 && (
-              <div className="mt-4">
+              <div className="mt-10">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}
@@ -243,7 +233,7 @@ export function CartClient() {
               </div>
             )}
 
-            <section className="rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 text-sm text-neutral-700 dark:text-neutral-700">
+            <section className="rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 text-sm text-neutral-700 dark:text-neutral-700 mt-10">
               <div className="flex items-center justify-between">
                 <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
                   Subtotal

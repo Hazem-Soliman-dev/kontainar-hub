@@ -9,6 +9,7 @@ import {
 import { createMetadata } from "../../../lib/seo/metadata";
 import { buildOfferLd } from "../../../lib/seo/structured-data";
 import { JsonLd } from "../../../components/seo/json-ld";
+import { Breadcrumb } from "../../../components/ui/breadcrumb";
 import { PlanComparisonClient } from "./plan-comparison-client";
 
 export const metadata = createMetadata({
@@ -18,9 +19,35 @@ export const metadata = createMetadata({
   path: "/plans",
 });
 
-export default async function PlansPage() {
+export default async function PlansPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ requestItem?: string; productName?: string }>;
+}) {
   const cookieStore = await cookies();
   const token = cookieStore.get(AUTH_COOKIE)?.value;
+
+  let params: { requestItem?: string; productName?: string } = {};
+  try {
+    params = await searchParams;
+  } catch (error) {
+    console.error("Error reading searchParams:", error);
+  }
+
+  // Decode URL-encoded product name safely
+  let decodedProductName: string | undefined = undefined;
+  if (params.productName) {
+    try {
+      // Replace + with space first, then decode
+      decodedProductName = decodeURIComponent(
+        params.productName.replace(/\+/g, " ")
+      );
+    } catch (error) {
+      // If decoding fails, use the original value
+      decodedProductName = params.productName.replace(/\+/g, " ");
+    }
+  }
+
   const plans = listPlans();
   const structuredData = plans.map((plan) =>
     buildOfferLd({
@@ -46,21 +73,15 @@ export default async function PlansPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-12">
+    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 sm:px-6 py-6 sm:py-8">
       <JsonLd data={structuredData} id="plans-json-ld" />
-      <header className="mx-auto max-w-3xl text-center text-neutral-900 dark:text-neutral-900">
-        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl lg:text-5xl">
-          Choose your plan
-        </h1>
-        <p className="max-w-3xl text-md text-neutral-700 dark:text-neutral-700 mt-3">
-          Start with a 1-day trial on any paid plan. You can upgrade or cancel
-          at any time.
-        </p>
-      </header>
+      <Breadcrumb />
 
       <PlanComparisonClient
         plans={plans}
         initialSubscription={subscription}
+        requestedProductId={params.requestItem}
+        requestedProductName={decodedProductName}
       />
     </main>
   );

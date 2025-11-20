@@ -10,9 +10,14 @@ import { bestSellerProducts, featuredStores } from "../../lib/mock/public";
 import { getProducts } from "../../lib/mock/products";
 import { FavoriteButton } from "../../components/ui/favorite-button";
 import { FavoritesFilters } from "../../components/ui/favorites-filters";
+import { Breadcrumb } from "../../components/ui/breadcrumb";
+import { ProductPriceOrRequest } from "../../components/ui/product-price-or-request";
 import { useEffect, useState } from "react";
 import type { BestSellerProduct, FeaturedStore } from "../../lib/mock/public";
 import type { ProductRecord } from "../../lib/mock/products";
+import { hasActivePlan } from "../../lib/utils/has-active-plan";
+import { useAuthStore } from "../../lib/store/auth-store";
+import type { SubscriptionSnapshot } from "../../lib/mock/subscriptions";
 
 type FavoriteProduct = BestSellerProduct | ProductRecord;
 
@@ -27,10 +32,42 @@ export function FavoritesClient() {
     category: "all",
     rating: "all",
   });
+  const authSubscription = useAuthStore((state) => state.subscription);
+  const [hasActivePlanState, setHasActivePlanState] = useState(false);
 
   // Subscribe to store changes
   const productIds = useFavoritesStore((state) => state.productIds);
   const storeIds = useFavoritesStore((state) => state.storeIds);
+
+  // Update state when auth store subscription changes (after hydration)
+  useEffect(() => {
+    setHasActivePlanState(hasActivePlan(authSubscription));
+  }, [authSubscription]);
+
+  // Listen for subscription changes and fetch as fallback
+  useEffect(() => {
+    const fetchSubscription = () => {
+      fetch("/api/subscription")
+        .then((res) => res.json())
+        .then((data: { subscription: SubscriptionSnapshot | null }) => {
+          setHasActivePlanState(hasActivePlan(data.subscription));
+        })
+        .catch(() => {
+          setHasActivePlanState(false);
+        });
+    };
+
+    // If no subscription in store after mount, fetch from API
+    if (!authSubscription) {
+      fetchSubscription();
+    }
+
+    window.addEventListener("subscription-changed", fetchSubscription);
+
+    return () => {
+      window.removeEventListener("subscription-changed", fetchSubscription);
+    };
+  }, [authSubscription]);
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -99,14 +136,9 @@ export function FavoritesClient() {
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12">
+      <main className="mx-auto flex w-full max-w-7xl flex-col px-6 pt-8 pb-12">
         <header className="space-y-2">
-          <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl lg:text-5xl">
-            My Favorites
-          </h1>
-          <p className="text-md text-neutral-700 dark:text-neutral-700">
-            Your saved products and stores for quick access.
-          </p>
+          <Breadcrumb />
         </header>
 
         {hasFavorites && (
@@ -145,18 +177,18 @@ export function FavoritesClient() {
             </div>
           </div>
         ) : !hasFilteredResults ? (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-slate-800 bg-slate-900/60 p-12 text-center">
-            <p className="text-lg text-slate-400">
+          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-slate-800 dark:border-slate-800 bg-slate-900/60 dark:bg-slate-900/60 p-12 text-center">
+            <p className="text-lg text-slate-400 dark:text-slate-400">
               No results match your filters
             </p>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-500">
               Try adjusting your filter criteria.
             </p>
           </div>
         ) : (
           <>
             {filteredProducts.length > 0 && (
-              <section className="space-y-6">
+              <section className="space-y-6 mt-10">
                 <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
                   Favorite Products ({filteredProducts.length})
                 </h2>
@@ -205,14 +237,11 @@ export function FavoritesClient() {
                                   </p>
                                 )}
                                 <div className="mt-4 flex items-center gap-2">
-                                  <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
-                                    ${product.price.toFixed(2)}
-                                  </span>
-                                  {product.previousPrice && (
-                                    <span className="text-sm text-neutral-700 dark:text-neutral-700 line-through">
-                                      ${product.previousPrice.toFixed(2)}
-                                    </span>
-                                  )}
+                                  <ProductPriceOrRequest
+                                    product={product}
+                                    hasActivePlan={hasActivePlanState}
+                                    size="md"
+                                  />
                                 </div>
                               </div>
                             </>
@@ -243,7 +272,7 @@ export function FavoritesClient() {
             )}
 
             {filteredStores.length > 0 && (
-              <section className="space-y-6">
+              <section className="space-y-6 mt-10">
                 <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
                   Favorite Stores ({filteredStores.length})
                 </h2>

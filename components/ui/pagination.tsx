@@ -55,15 +55,15 @@ export function Pagination({
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-1 sm:gap-2">
       <button
         type="button"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Previous page"
       >
-        <ChevronLeft className="h-5 w-5" />
+        <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
       </button>
 
       {pageNumbers.map((page, index) => {
@@ -71,7 +71,7 @@ export function Pagination({
           return (
             <span
               key={`ellipsis-${index}`}
-              className="px-2 text-neutral-700 dark:text-neutral-700"
+              className="px-1 sm:px-2 text-neutral-700 dark:text-neutral-700 text-sm"
             >
               ...
             </span>
@@ -86,7 +86,7 @@ export function Pagination({
             key={pageNum}
             type="button"
             onClick={() => onPageChange(pageNum)}
-            className={`flex h-10 w-10 items-center justify-center rounded-lg border transition ${
+            className={`flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg border transition text-sm sm:text-base ${
               isActive
                 ? "border-blue-500 bg-blue-500 text-white"
                 : "border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 text-neutral-700 dark:text-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900"
@@ -103,10 +103,10 @@ export function Pagination({
         type="button"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Next page"
       >
-        <ChevronRight className="h-5 w-5" />
+        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
       </button>
     </div>
   );

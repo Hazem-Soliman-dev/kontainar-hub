@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { Breadcrumb } from '../../../../components/ui/breadcrumb';
 
 type InventoryStatus = 'healthy' | 'low' | 'critical';
 
@@ -179,18 +180,13 @@ export default function TraderInventoryPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col gap-8 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-7xl flex-col gap-3 text-center">
-        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
-          Inventory intelligence
-        </h1>
-        <p className="text-md text-neutral-700 dark:text-neutral-700">
-          Monitor stock positions across suppliers and automate replenishment signals.
-        </p>
+    <main className="flex min-h-screen flex-col bg-neutral-50 dark:bg-neutral-50 px-4 py-8">
+      <header className="mx-auto flex w-full max-w-7xl flex-col">
+        <Breadcrumb />
       </header>
 
       {notifications.length > 0 && (
-        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-emerald-700 dark:border-emerald-700 bg-emerald-950 dark:bg-emerald-950 px-4 py-4 text-sm text-emerald-400 dark:text-emerald-400">
+        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-emerald-700 dark:border-emerald-700 bg-emerald-950 dark:bg-emerald-950 px-4 py-4 text-sm text-emerald-400 dark:text-emerald-400 mb-6">
           <p className="font-semibold">Live updates:</p>
           <div className="mt-2 flex flex-wrap gap-2">
             {notifications.map((note, index) => (
@@ -205,15 +201,15 @@ export default function TraderInventoryPage() {
         </section>
       )}
 
-      <section className="mx-auto grid w-full max-w-7xl gap-4 md:grid-cols-4">
+        <section className="mx-auto grid w-full max-w-7xl gap-4 md:grid-cols-4">
         <MetricCard label="Total units" value={totals.totalStock.toLocaleString()} />
         <MetricCard label="Healthy SKUs" value={totals.healthy.toString()} />
         <MetricCard label="Low stock SKUs" value={totals.low.toString()} />
         <MetricCard label="Critical SKUs" value={totals.critical.toString()} />
       </section>
 
-      <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm text-center">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm text-center mt-6">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex flex-wrap gap-4 text-sm text-neutral-700 dark:text-neutral-700">
             <div>
               Supplier{' '}
@@ -251,7 +247,7 @@ export default function TraderInventoryPage() {
           </p>
         </div>
 
-        <div className="mt-6 overflow-x-auto">
+        <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-200 text-sm text-center ">
             <thead>
               <tr className="text-xs uppercase tracking-wider text-neutral-700 dark:text-neutral-700">

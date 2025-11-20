@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 
 import { SalesChart } from "../../../../components/charts/sales-chart";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 
 interface SalesDataPoint {
   month: string;
@@ -82,18 +83,12 @@ export default function SupplierAnalyticsPage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col gap-8 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-6xl flex-col gap-2 text-center">
-        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
-          Sales performance & customer trends
-        </h1>
-        <p className="text-md text-neutral-700 dark:text-neutral-700">
-          High-level insight into sales velocity, best-performing products, and
-          priority regions.
-        </p>
+    <main className="flex min-h-screen flex-col bg-neutral-50 dark:bg-neutral-50 px-4 pt-8 pb-10">
+      <header className="mx-auto flex w-full max-w-7xl flex-col">
+        <Breadcrumb />
       </header>
 
-      <section className="mx-auto grid w-full max-w-6xl gap-4 md:grid-cols-4">
+      <section className="mx-auto grid w-full max-w-7xl gap-4 md:grid-cols-4 mb-6">
         <MetricCard
           label="Total revenue (6m)"
           value={formatCurrency(totals.totalRevenue)}
@@ -116,7 +111,7 @@ export default function SupplierAnalyticsPage() {
         />
       </section>
 
-      <section className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-2">
+      <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-2 mb-6">
         <AnalyticsPanel
           title="Revenue vs orders"
           subtitle="Track top-line revenue against shipment volume"
@@ -164,7 +159,7 @@ export default function SupplierAnalyticsPage() {
         </AnalyticsPanel>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
+      <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
         <header className="mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col gap-1">
             <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-900">

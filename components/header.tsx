@@ -18,6 +18,7 @@ import {
 import { bestSellerProducts, featuredStores } from "../lib/mock/public";
 import { useAuthStore, type AuthUser } from "../lib/store/auth-store";
 import { ThemeToggle } from "./ui/theme-toggle";
+import { MobileMenu, MobileMenuButton } from "./mobile-menu";
 
 type Panel =
   | "notifications"
@@ -40,6 +41,7 @@ const quickFavorites = featuredStores.slice(0, 3);
 
 export function Header() {
   const [openPanel, setOpenPanel] = useState<Panel | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const dashboardPath = useAuthStore((state) => state.dashboardPath);
@@ -49,20 +51,40 @@ export function Header() {
   };
 
   const closePanel = () => setOpenPanel(null);
+  const openMobileMenu = () => setIsMobileMenuOpen(true);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      // Clear server-side cookie
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (error) {
+      console.error("Logout API call failed", error);
+    }
+
+    // Clear client-side store
     logout();
     closePanel();
-    router.push("/");
+
+    // Notify other components that subscription has changed (cleared)
+    window.dispatchEvent(
+      new CustomEvent("subscription-changed", {
+        detail: null,
+      })
+    );
+
+    // Force full page reload to ensure server components get updated state
+    window.location.href = "/";
   };
 
   return (
-    <header className="relative z-50 border-b border-neutral-200 dark:border-neutral-200 bg-neutral-100/95 dark:bg-neutral-100/95 backdrop-blur">
+    <header className="relative z-50 border-b border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div className="flex items-center gap-16">
+        <div className="flex items-center gap-4 md:gap-16">
+          <MobileMenuButton onClick={openMobileMenu} />
           <Link
             href="/"
-            className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-900"
+            className="text-xl md:text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-900"
             onClick={closePanel}
           >
             TajirJomla Hub
@@ -126,6 +148,8 @@ export function Header() {
           )}
         </div>
       </div>
+
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
 
       {openPanel ? (
         <>

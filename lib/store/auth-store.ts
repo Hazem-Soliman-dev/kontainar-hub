@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 import type { UserRole } from "../mock/db";
 import type { SubscriptionSnapshot } from "../mock/subscriptions";
@@ -23,6 +24,8 @@ interface AuthState {
   isAuthenticated: boolean;
   subscription: SubscriptionSnapshot | null;
   dashboardPath: string | null;
+  _hasHydrated: boolean;
+  setHasHydrated: (hasHydrated: boolean) => void;
   setAuth: (payload: {
     user: AuthUser;
     token: string;
@@ -35,51 +38,74 @@ interface AuthState {
   logout: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
-  isAuthenticated: false,
-  subscription: null,
-  dashboardPath: null,
-  setAuth: ({ user, token, subscription, dashboardPath }) =>
-    set({
-      user,
-      token,
-      isAuthenticated: true,
-      subscription,
-      dashboardPath,
-    }),
-  updateUser: (payload) =>
-    set((state) => {
-      if (!state.user) {
-        return state;
-      }
-
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          ...payload,
-        },
-      };
-    }),
-  updateSubscription: (payload) =>
-    set((state) => ({
-      ...state,
-      subscription: payload,
-    })),
-  setToken: (token) =>
-    set((state) => ({
-      ...state,
-      token,
-      isAuthenticated: Boolean(token && state.user),
-    })),
-  logout: () =>
-    set({
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
       user: null,
       token: null,
       isAuthenticated: false,
       subscription: null,
       dashboardPath: null,
+      _hasHydrated: false,
+      setHasHydrated: (hasHydrated) => set({ _hasHydrated: hasHydrated }),
+      setAuth: ({ user, token, subscription, dashboardPath }) =>
+        set({
+          user,
+          token,
+          isAuthenticated: true,
+          subscription,
+          dashboardPath,
+        }),
+      updateUser: (payload) =>
+        set((state) => {
+          if (!state.user) {
+            return state;
+          }
+
+          return {
+            ...state,
+            user: {
+              ...state.user,
+              ...payload,
+            },
+          };
+        }),
+      updateSubscription: (payload) => {
+        set((state) => ({
+          ...state,
+          subscription: payload,
+        }));
+        // Persist middleware will automatically save to localStorage
+      },
+      setToken: (token) =>
+        set((state) => ({
+          ...state,
+          token,
+          isAuthenticated: Boolean(token && state.user),
+        })),
+      logout: () => {
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+          subscription: null,
+          dashboardPath: null,
+        });
+        // Persist middleware will automatically clear localStorage
+      },
     }),
-}));
+    {
+      name: "kontainar-auth",
+      partialize: (state) => ({
+        subscription: state.subscription,
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
+      skipHydration: true, // Skip automatic hydration to avoid SSR mismatch
+      onRehydrateStorage: () => (state) => {
+        // Set hydration flag when storage is rehydrated
+        state?.setHasHydrated(true);
+      },
+    }
+  )
+);

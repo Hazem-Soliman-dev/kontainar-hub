@@ -13,19 +13,17 @@ import {
 } from "../../../lib/search/ranking";
 import { HeroSearch } from "../../../components/public/hero-search";
 import { SearchFilters } from "../../../components/ui/search-filters";
+import { Breadcrumb } from "../../../components/ui/breadcrumb";
 import { FavoriteButton } from "../../../components/ui/favorite-button";
 import { AddToCartButton } from "../../../components/ui/add-to-cart-button";
+import { ProductPriceOrRequest } from "../../../components/ui/product-price-or-request";
 import { useSearchStore } from "../../../lib/store/search-store";
 import { trackResultClick } from "../../../lib/search/analytics";
 import type { SearchFilters as SearchFiltersType } from "../../../lib/search/types";
 import { featuredCategories } from "../../../lib/mock/public";
-
-function formatCurrency(value: number) {
-  return value.toLocaleString("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
-}
+import { hasActivePlan } from "../../../lib/utils/has-active-plan";
+import { useAuthStore } from "../../../lib/store/auth-store";
+import type { SubscriptionSnapshot } from "../../../lib/mock/subscriptions";
 
 function highlightText(text: string, query: string) {
   if (!query.trim()) return text;
@@ -49,7 +47,47 @@ export default function SearchClient() {
   const query = searchParams.get("q") || "";
   const category = searchParams.get("category") || "";
   const [sortBy, setSortBy] = useState<SortOption>("relevance");
+  const authSubscription = useAuthStore((state) => state.subscription);
+  const [hasActivePlanState, setHasActivePlanState] = useState(false);
   const { addSearch } = useSearchStore();
+
+  // Fetch subscription status from API
+  const fetchSubscription = useCallback(() => {
+    fetch("/api/subscription")
+      .then((res) => res.json())
+      .then((data: { subscription: SubscriptionSnapshot | null }) => {
+        setHasActivePlanState(hasActivePlan(data.subscription));
+      })
+      .catch(() => {
+        setHasActivePlanState(false);
+      });
+  }, []);
+
+  // Update state when auth store subscription changes (after hydration)
+  useEffect(() => {
+    setHasActivePlanState(hasActivePlan(authSubscription));
+  }, [authSubscription]);
+
+  // Listen for subscription changes and fetch as fallback
+  useEffect(() => {
+    // If no subscription in store after mount, fetch from API
+    if (!authSubscription) {
+      fetchSubscription();
+    }
+
+    const handleSubscriptionChange = () => {
+      fetchSubscription();
+    };
+
+    window.addEventListener("subscription-changed", handleSubscriptionChange);
+
+    return () => {
+      window.removeEventListener(
+        "subscription-changed",
+        handleSubscriptionChange
+      );
+    };
+  }, [authSubscription, fetchSubscription]);
 
   // Track search in history
   useEffect(() => {
@@ -172,16 +210,13 @@ export default function SearchClient() {
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col gap-8 pb-24">
+      <main className="flex flex-col gap-6 sm:gap-8 pb-16 sm:pb-24">
         {/* Search Bar */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700">
+        <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700">
           <div className="absolute -left-24 top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
           <div className="absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-purple-400/20 blur-3xl" />
 
-          <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-12 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-              Search Results
-            </h1>
+          <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 py-8 sm:py-12 text-center">
             <div className="w-full max-w-3xl">
               <HeroSearch />
             </div>
@@ -189,35 +224,36 @@ export default function SearchClient() {
         </section>
 
         {/* Results */}
-        <section className="mx-auto w-full max-w-7xl px-6">
+        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+          <Breadcrumb />
           {!hasResults ? (
-            <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
-              <Search className="h-16 w-16 text-neutral-400 dark:text-neutral-400" />
-              <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
+            <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 py-12 sm:py-16 text-center">
+              <Search className="h-12 w-12 sm:h-16 sm:w-16 text-neutral-400 dark:text-neutral-400" />
+              <h2 className="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
                 No results found
               </h2>
-              <p className="text-neutral-700 dark:text-neutral-700">
+              <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-700 px-4">
                 {query
                   ? `We couldn't find anything matching "${query}"`
                   : "Try searching for products, stores, or categories"}
               </p>
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto px-4">
                 <Link
                   href="/"
-                  className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
+                  className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600 text-center"
                 >
                   Browse Categories
                 </Link>
                 <Link
                   href="/stores"
-                  className="rounded-lg border border-neutral-200 dark:border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 dark:text-neutral-700 transition hover:border-blue-500 hover:text-neutral-900 dark:hover:text-neutral-900"
+                  className="rounded-lg border border-neutral-200 dark:border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 dark:text-neutral-700 transition hover:border-blue-500 hover:text-neutral-900 dark:hover:text-neutral-900 text-center"
                 >
                   View All Stores
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="grid gap-6 lg:grid-cols-4">
+            <div className="grid gap-4 sm:gap-6 lg:grid-cols-4">
               {/* Filters Sidebar */}
               <aside className="lg:col-span-1">
                 <div className="sticky top-4">
@@ -229,10 +265,10 @@ export default function SearchClient() {
               </aside>
 
               {/* Results Content */}
-              <div className="lg:col-span-3 space-y-8">
+              <div className="lg:col-span-3 space-y-6 sm:space-y-8">
                 {/* Results Header */}
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="text-sm text-neutral-700 dark:text-neutral-700">
+                <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
                     {query && (
                       <span>
                         Found {results.products.length} products,{" "}
@@ -412,21 +448,18 @@ export default function SearchClient() {
                             </div>
 
                             <div className="mt-auto flex items-center justify-between">
-                              <div className="flex items-end gap-2">
-                                <span className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                                  {formatCurrency(product.price)}
-                                </span>
-                                {product.previousPrice && (
-                                  <span className="text-xs text-neutral-700 dark:text-neutral-700 line-through">
-                                    {formatCurrency(product.previousPrice)}
-                                  </span>
-                                )}
-                              </div>
+                              <ProductPriceOrRequest
+                                product={product}
+                                hasActivePlan={hasActivePlanState}
+                                size="md"
+                              />
                             </div>
                           </Link>
-                          <div className="absolute bottom-4 right-4 z-10">
-                            <AddToCartButton product={product} size="sm" />
-                          </div>
+                          {hasActivePlanState && (
+                            <div className="absolute bottom-4 right-4 z-10">
+                              <AddToCartButton product={product} size="sm" />
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

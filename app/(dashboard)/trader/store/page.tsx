@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 
 interface TraderStore {
   id: string;
@@ -111,15 +112,9 @@ export default function TraderStorePage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col gap-8 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-7xl flex-col gap-3 text-center">
-        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Store setup & management
-        </h1>
-        <p className="text-md text-neutral-700 dark:text-neutral-700">
-          Create sub-stores for each channel, customize assortments, and sync
-          them with supplier inventories.
-        </p>
+    <main className="flex min-h-screen flex-col bg-neutral-50 dark:bg-neutral-50 px-4 py-8">
+      <header className="mx-auto flex w-full max-w-7xl flex-col">
+        <Breadcrumb />
       </header>
 
       <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1.2fr_1.8fr]">

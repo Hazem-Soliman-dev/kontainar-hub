@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Edit2, Save, X } from "lucide-react";
 
 import { TrialBanner } from "../../components/subscription/trial-banner";
+import { Breadcrumb } from "../../components/ui/breadcrumb";
 import {
   useAuthStore,
   type AuthUser,
@@ -319,16 +320,8 @@ export function AccountClient() {
   if (!user) {
     return (
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-        <main className="mx-auto flex w-full max-w-4xl flex-col gap-10 px-6 py-16 text-center">
-          <header className="space-y-4">
-            <h1 className="text-4xl font-semibold text-neutral-900 dark:text-neutral-900">
-              You're browsing as a guest
-            </h1>
-            <p className="text-base text-neutral-700 dark:text-neutral-700">
-              Create a free trial to unlock supplier or trader workspaces, save
-              marketplace activity, and manage analytics in real time.
-            </p>
-          </header>
+        <main className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 pt-8 pb-16 text-center">
+            <Breadcrumb />
 
           <div className="grid gap-4 sm:grid-cols-3">
             <Link
@@ -357,16 +350,10 @@ export function AccountClient() {
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="mx-auto flex w-full max-w-7xl flex-col gap-10 px-6 py-12">
-        <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <main className="mx-auto flex w-full max-w-7xl flex-col px-6 pt-8 pb-12">
+        <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-6">
+          <Breadcrumb />
           <div className="space-y-2">
-            <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
-              Welcome back, {user.fullName}
-            </h1>
-            <p className="max-w-4xl text-md text-neutral-700 dark:text-neutral-700 mt-3">
-              Manage your profile details, monitor subscription status, and keep
-              your workspace running without interruption.
-            </p>
             {formattedJoinedDate ? (
               <p className="text-md text-neutral-700 dark:text-neutral-700">
                 Member since {formattedJoinedDate}
@@ -616,7 +603,7 @@ export function AccountClient() {
           </article>
         </section>
 
-        <section className="rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-6 py-8 text-sm text-neutral-700 dark:text-neutral-700">
+        <section className="rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-6 py-8 text-sm text-neutral-700 dark:text-neutral-700 mt-6">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">Need help?</h2>
           <p className="mt-2">
             Reach out to our team if you need to adjust your plan, add more

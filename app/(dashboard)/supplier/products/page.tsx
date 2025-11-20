@@ -6,6 +6,7 @@ import {
   ProductForm,
   type SupplierProductFormValues,
 } from "../../../../components/dashboard/supplier/product-form";
+import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 
 type ProductStatus = "active" | "draft";
 
@@ -137,15 +138,9 @@ export default function SupplierProductsPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 py-10">
-      <header className="mx-auto flex w-full max-w-7xl flex-col gap-2 text-center">
-        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-900 sm:text-4xl">
-          Product catalogue
-        </h1>
-        <p className="text-md text-neutral-700 dark:text-neutral-700">
-          Manage product details, inventory, and status before publishing to the
-          marketplace.
-        </p>
+    <main className="flex min-h-screen flex-col bg-neutral-50 dark:bg-neutral-50 px-4 pt-8 pb-2">
+      <header className="mx-auto flex w-full max-w-7xl flex-col">
+        <Breadcrumb />
       </header>
 
       <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1fr_1.5fr]">
