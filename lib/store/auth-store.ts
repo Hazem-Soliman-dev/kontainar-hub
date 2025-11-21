@@ -95,7 +95,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "kontainar-auth",
+      name: "tajirjomla-auth",
       partialize: (state) => ({
         subscription: state.subscription,
         user: state.user,

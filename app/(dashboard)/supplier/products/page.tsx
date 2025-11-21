@@ -1,11 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Package, Plus, Filter } from "lucide-react";
 
 import {
   ProductForm,
   type SupplierProductFormValues,
 } from "../../../../components/dashboard/supplier/product-form";
+import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 
 type ProductStatus = "active" | "draft";
@@ -138,108 +140,127 @@ export default function SupplierProductsPage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-neutral-50 dark:bg-neutral-50 px-4 pt-8 pb-2">
-      <header className="mx-auto flex w-full max-w-7xl flex-col">
-        <Breadcrumb />
-      </header>
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+      <MobileDashboardNav role="supplier" />
 
-      <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1fr_1.5fr]">
-        <article className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
-            {editingProduct ? "Edit product" : "Create product"}
-          </h2>
-          <div className="mt-4">
-            <ProductForm
-              initialValues={editingProduct ?? undefined}
-              onSubmit={
-                editingProduct ? handleUpdateProduct : handleCreateProduct
-              }
-              onCancel={() => setEditingProduct(null)}
-              submitLabel={editingProduct ? "Update product" : "Create product"}
-              isSubmitting={isSubmitting}
-            />
+      <main className="flex min-h-screen flex-col gap-6 px-4 sm:px-6 lg:px-8 pt-20 lg:pt-8 pb-10">
+        <header className="mx-auto w-full max-w-7xl">
+          <Breadcrumb />
+          <div className="mt-6">
+            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Products</h1>
+            <p className="mt-1 text-neutral-900 dark:text-neutral-200">Manage your product catalog</p>
           </div>
-        </article>
+        </header>
 
-        <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
-                Product list
+        <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1fr_1.5fr]">
+          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-4">
+              <Package className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+              <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+                {editingProduct ? "Edit Product" : "Create Product"}
               </h2>
-              <p className="text-md text-neutral-700 dark:text-neutral-700">
-                {filteredProducts.length} item(s) • {products.length} total
-              </p>
             </div>
-            <select
-              value={filter}
-              onChange={(event) =>
-                setFilter(event.target.value as ProductStatus | "all")
-              }
-              className="rounded-md border border-neutral-200 dark:border-neutral-200 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            >
-              <option value="all">All statuses</option>
-              <option value="active">Active only</option>
-              <option value="draft">Draft only</option>
-            </select>
-          </div>
+            <div>
+              <ProductForm
+                initialValues={editingProduct ?? undefined}
+                onSubmit={
+                  editingProduct ? handleUpdateProduct : handleCreateProduct
+                }
+                onCancel={() => setEditingProduct(null)}
+                submitLabel={editingProduct ? "Update product" : "Create product"}
+                isSubmitting={isSubmitting}
+              />
+            </div>
+          </article>
 
-          <div className="space-y-4">
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-4 shadow-sm md:flex-row md:items-center md:justify-between"
-              >
-                <div className="max-w-lg space-y-2">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">
-                      {product.name}
-                    </h3>
-                    <span className="rounded-full bg-blue-950 dark:bg-blue-950 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-400 dark:text-blue-400">
-                      {product.status}
-                    </span>
-                    <span className="text-sm text-neutral-700 dark:text-neutral-700">
-                      SKU {product.sku}
-                    </span>
-                  </div>
-                  <p className="text-sm text-neutral-700 dark:text-neutral-700">
-                    {product.description}
-                  </p>
-                  <div className="flex flex-wrap gap-4 text-sm text-neutral-700 dark:text-neutral-700">
-                    <span>Inventory: {product.inventory} units</span>
-                    <span>Category: {product.category}</span>
-                    <span>
-                      Updated {new Date(product.updatedAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-1 items-center justify-end gap-3 md:flex-col md:items-end">
-                  <button
-                    onClick={() => setEditingProduct(product)}
-                    className="w-full rounded-md border border-blue-700 dark:border-blue-700 bg-neutral-50 dark:bg-neutral-50 px-4 py-2 text-sm font-semibold text-blue-400 dark:text-blue-400 hover:bg-blue-950 dark:hover:bg-blue-950 md:w-auto"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteProduct(product.id)}
-                    className="w-full rounded-md border border-red-700 dark:border-red-700 bg-neutral-50 dark:bg-neutral-50 px-4 py-2 text-sm font-semibold text-red-400 dark:text-red-400 hover:bg-red-950 dark:hover:bg-red-950 md:w-auto"
-                  >
-                    Delete
-                  </button>
-                </div>
+          <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+                  Product List
+                </h2>
+                <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
+                  {filteredProducts.length} item(s) • {products.length} total
+                </p>
               </div>
-            ))}
+              <div className="flex items-center gap-2">
+                <Filter className="h-4 w-4 text-neutral-900 dark:text-neutral-200" />
+                <select
+                  value={filter}
+                  onChange={(event) =>
+                    setFilter(event.target.value as ProductStatus | "all")
+                  }
+                  className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                >
+                  <option value="all">All statuses</option>
+                  <option value="active">Active only</option>
+                  <option value="draft">Draft only</option>
+                </select>
+              </div>
+            </div>
 
-            {filteredProducts.length === 0 && (
-              <p className="rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-4 py-6 text-center text-sm text-neutral-700 dark:text-neutral-700">
-                No products match this filter. Adjust the status or create a new
-                product.
-              </p>
-            )}
-          </div>
-        </article>
-      </section>
-    </main>
+            <div className="space-y-3">
+              {filteredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="group rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 hover:shadow-md transition-all"
+                >
+                  <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                    <div className="flex-1 space-y-2">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-200">
+                          {product.name}
+                        </h3>
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                            product.status === "active"
+                              ? "bg-success-50 dark:bg-success-900/50 text-success-700 dark:text-success-400"
+                              : "bg-warning-50 dark:bg-warning-900/50 text-warning-700 dark:text-warning-400"
+                          }`}
+                        >
+                          {product.status}
+                        </span>
+                        <span className="text-sm text-neutral-900 dark:text-neutral-200">
+                          SKU {product.sku}
+                        </span>
+                      </div>
+                      <p className="text-sm text-neutral-900 dark:text-neutral-200">
+                        {product.description}
+                      </p>
+                      <div className="flex flex-wrap gap-4 text-sm text-neutral-900 dark:text-neutral-200">
+                        <span>📦 {product.inventory} units</span>
+                        <span>🏷️ {product.category}</span>
+                        <span>📅 Updated {new Date(product.updatedAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <div className="flex lg:flex-col gap-2">
+                      <button
+                        onClick={() => setEditingProduct(product)}
+                        className="flex-1 lg:flex-none rounded-xl border-2 border-primary-200 dark:border-primary-900/50 px-4 py-2 text-sm font-semibold text-neutral-900 dark:text-neutral-200 hover:bg-primary-500 dark:hover:bg-primary-600/30 transition-all"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteProduct(product.id)}
+                        className="flex-1 lg:flex-none rounded-xl border-2 border-red-200 dark:border-red-900/50 px-4 py-2 text-sm font-semibold text-neutral-900 dark:text-neutral-200 hover:bg-red-500 dark:hover:bg-red-600/30 transition-all"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {filteredProducts.length === 0 && (
+                <p className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 py-8 text-center text-sm text-neutral-900 dark:text-neutral-200">
+                  No products match this filter. Adjust the status or create a new product.
+                </p>
+              )}
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
   );
 }
 

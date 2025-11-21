@@ -45,7 +45,7 @@ export function TrialBanner({
   const countdown = formatCountdown(secondsRemaining);
 
   return (
-    <aside className="rounded-2xl border border-blue-700 dark:border-blue-700 bg-neutral-100 dark:bg-neutral-100 px-4 py-3 text-sm text-blue-400 dark:text-blue-400 shadow-sm mb-6">
+    <aside className="rounded-2xl border border-blue-700 dark:border-blue-700 bg-neutral-100 dark:bg-neutral-500 px-4 py-3 text-sm text-blue-400 dark:text-blue-400 shadow-sm mb-6">
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col">
           <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">

@@ -24,9 +24,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = createMetadata({
-  title: "Kontainar Hub | Global Trade Intelligence",
+  title: "TajirJomla Hub | Global Trade Intelligence",
   description:
-    "Kontainar Hub connects suppliers and traders with real-time analytics, store management, and marketplace insights.",
+    "TajirJomla Hub connects suppliers and traders with real-time analytics, store management, and marketplace insights.",
   path: "/",
   keywords: [
     "global trade",
@@ -41,13 +41,13 @@ export const metadata = createMetadata({
 const organizationStructuredData = [
   buildOrganizationLd({
     sameAs: [
-      "https://www.linkedin.com/company/kontainarhub",
-      "https://twitter.com/kontainarhub",
+      "https://www.linkedin.com/company/tajirjomlahub",
+      "https://twitter.com/tajirjomlahub",
     ],
     contactPoint: [
       {
         contactType: "sales",
-        email: "sales@kontainarhub.com",
+        email: "sales@tajirjomlahub.com",
       },
     ],
   }),

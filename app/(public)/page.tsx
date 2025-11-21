@@ -12,13 +12,16 @@ import {
   Shirt,
   Sparkles,
   Star,
+  TrendingUp,
+  ShieldCheck,
+  Zap,
+  ArrowRight,
 } from "lucide-react";
 
 import {
   bestSellerProducts,
   featuredCategories,
   featuredStores,
-  quickFilters,
 } from "../../lib/mock/public";
 import { FavoriteButton } from "../../components/ui/favorite-button";
 import { AddToCartButton } from "../../components/ui/add-to-cart-button";
@@ -28,6 +31,7 @@ import {
   getUserSubscriptionFromCookies,
   hasActivePlan,
 } from "../../lib/utils/subscription-check";
+import { cn } from "@/lib/utils";
 
 const categoryIconMap: Record<
   (typeof featuredCategories)[number]["icon"],
@@ -52,12 +56,14 @@ export const metadata = createMetadata({
 
 export default function PublicLandingPage() {
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col gap-20 pb-26">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 ">
+      <main className="flex flex-col gap-24 pb-24">
         <HeroSection />
+        <StatsSection />
         <CategoriesSection />
-        <StoresSection />
+        <FeaturedStoresSection />
         <BestSellersSection />
+        <TrustSection />
       </main>
     </div>
   );
@@ -65,60 +71,109 @@ export default function PublicLandingPage() {
 
 function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700">
-      <div className="absolute -left-24 top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-      <div className="absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-purple-400/20 blur-3xl" />
+    <section className="relative overflow-hidden bg-neutral-50 dark:bg-neutral-900 pt-20 pb-32 lg:pt-32 lg:pb-40">
+      {/* Animated Background Gradients */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -left-[10%] -top-[10%] h-[500px] w-[500px] rounded-full bg-primary-600/20 blur-[100px] animate-pulse" />
+        <div className="absolute -right-[10%] top-[20%] h-[600px] w-[600px] rounded-full bg-secondary-500/20 blur-[120px] animate-pulse delay-1000" />
+        <div className="absolute left-[20%] bottom-[10%] h-[400px] w-[400px] rounded-full bg-accent-500/10 blur-[80px] animate-pulse delay-2000" />
+      </div>
 
-      <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 py-12 sm:py-16 text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight text-white lg:text-6xl">
-          Discover Amazing Products
-          <span className="block font-normal text-white/80 text-xl sm:text-2xl md:text-3xl lg:text-5xl mt-2">
-            From Trusted Stores
-          </span>
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 text-center z-10">
+        
+        <h1 className="mx-auto max-w-4xl text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-6xl lg:text-7xl mb-6">
+          Discover Extraordinary Products
         </h1>
+        
+        <p className="mx-auto max-w-2xl text-lg text-neutral-600 dark:text-neutral-400 mb-10 leading-relaxed">
+          Connect with top-tier suppliers and discover unique items from around the world. 
+          Secure payments, verified sellers, and seamless logistics.
+        </p>
 
-        <HeroSearch />
+        <div className="mx-auto max-w-2xl relative">
+          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-primary-500 to-secondary-500 opacity-30 blur-lg" />
+          <div className="relative">
+            <HeroSearch />
+          </div>
+        </div>
+
+        {/* Floating Elements (Decorative) */}
+        <div className="hidden lg:block absolute top-1/2 -translate-y-1/2 left-10 animate-float-slow">
+            <div className="p-4 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-glow">
+                <Laptop className="h-8 w-8 text-primary-400" />
+            </div>
+        </div>
+        <div className="hidden lg:block absolute top-1/3 right-10 animate-float-slower">
+            <div className="p-4 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 shadow-glow">
+                <Shirt className="h-8 w-8 text-secondary-400" />
+            </div>
+        </div>
       </div>
     </section>
   );
 }
 
+function StatsSection() {
+    return (
+        <section className="relative -mt-16 z-20 px-4 sm:px-6">
+            <div className="mx-auto max-w-7xl">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 rounded-3xl bg-neutral-50 dark:bg-neutral-900 p-8 shadow-strong border border-neutral-300 dark:border-neutral-700 text-center">
+                    {[
+                        { label: "Active Users", value: "50K+", icon: TrendingUp, color: "text-primary-500" },
+                        { label: "Verified Sellers", value: "2K+", icon: ShieldCheck, color: "text-secondary-500" },
+                        { label: "Products Listed", value: "100K+", icon: Zap, color: "text-accent-500" },
+                    ].map((stat, i) => (
+                        <div key={i} className="flex items-center gap-4 justify-center">
+                            <div className={cn("p-3 rounded-2xl bg-blue-50 dark:bg-blue-900", stat.color)}>
+                                <stat.icon className="h-8 w-8 text-blue-500 dark:text-blue-400" />
+                            </div>
+                            <div>
+                                <div className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">{stat.value}</div>
+                                <div className="text-sm text-neutral-900 dark:text-neutral-100 font-medium">{stat.label}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}
+
 function CategoriesSection() {
-  // Duplicate categories for seamless infinite scroll
   const duplicatedCategories = [...featuredCategories, ...featuredCategories];
 
   return (
-    <section
-      id="categories"
-      className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 pt-4 text-neutral-900 dark:text-neutral-900"
-    >
-      <div className="flex flex-col gap-2 items-center justify-center">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Featured Categories
-        </h2>
-      </div>
+    <section className="mx-auto w-full max-w-7xl px-4 sm:px-6">
 
-      <div className="overflow-hidden py-4">
-        <div className="flex gap-3 sm:gap-5 animate-infinite-scroll">
+      <div className="relative overflow-hidden py-4 -mx-4 px-4">
+        <div className="flex gap-6 animate-infinite-scroll hover:[animation-play-state:paused]">
           {duplicatedCategories.map((category, index) => {
             const Icon = categoryIconMap[category.icon];
             return (
-              <div
+              <Link
+                href={`/products?category=${category.id}`}
                 key={`${category.id}-${index}`}
-                className="flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60 items-center justify-center min-w-[160px] sm:min-w-[200px] shrink-0"
+                className="group relative flex h-64 w-52 shrink-0 flex-col justify-end overflow-hidden rounded-3xl bg-neutral-100 dark:bg-neutral-800 p-6 transition-all hover:-translate-y-2 hover:shadow-glow"
               >
-                <div className="flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl bg-blue-600/10 text-blue-300">
-                  <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
+                <div className="absolute inset-0 bg-neutral-50/60 dark:bg-neutral-900/60 z-10" />
+                {/* Placeholder for category image if available, using gradient for now */}
+                <div className="absolute inset-0 bg-neutral-300 dark:bg-neutral-700 group-hover:scale-110 transition-transform duration-500" />
+                
+                <div className="relative z-20">
+                    <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-50 dark:bg-neutral-900 backdrop-blur-md text-neutral-900 dark:text-neutral-100 border border-neutral-200 dark:border-neutral-800">
+                        <Icon className="h-6 w-6" />
+                    </div>
+                    <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                        {category.title}
+                    </h3>
+                    <p className="text-sm text-neutral-900 dark:text-neutral-100">
+                        {category.stats}
+                    </p>
                 </div>
-                <div className="items-center justify-center text-center gap-1">
-                  <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                    {category.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                    {category.stats}
-                  </p>
-                </div>
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -127,91 +182,67 @@ function CategoriesSection() {
   );
 }
 
-function StoresSection() {
+function FeaturedStoresSection() {
   return (
-    <section
-      id="stores"
-      className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-4"
-    >
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <div className="items-center justify-center sm:text-left gap-1">
-          <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
+    <section className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+      <div className="flex items-end justify-between mb-10">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-4xl">
             Featured Stores
           </h2>
+          <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+            Shop from our most trusted and top-rated sellers
+          </p>
         </div>
-        <Link
-          href="/stores"
-          className="text-sm sm:text-md font-semibold text-blue-400 hover:text-blue-300"
-        >
-          View All Stores
+        <Link href="/stores" className="hidden sm:flex items-center text-primary-600 dark:text-primary-400 font-semibold hover:underline">
+            View All Stores <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </div>
 
-      <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {featuredStores
-          .map((store) => (
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {featuredStores.slice(0, 3).map((store) => (
             <div
               key={store.name}
-              className="relative flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-soft transition-all hover:shadow-strong hover:-translate-y-1"
             >
-              <div className="absolute right-4 top-4 sm:right-6 sm:top-6 z-10">
-                <FavoriteButton store={store} size={18} className="h-8 w-8" />
+              <div className="relative h-48 w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+                 <Image
+                    src={store.imageUrl}
+                    alt={store.name}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                 />
+                 <div className="absolute top-4 right-4">
+                    <FavoriteButton store={store} size={20} className="h-10 w-10 bg-white/80 dark:bg-black/50 backdrop-blur-sm hover:bg-white dark:hover:bg-black" />
+                 </div>
               </div>
-              <Link
-                href={`/stores/${store.id}?from=home&section=stores`}
-                className="flex flex-col gap-3 sm:gap-4"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="relative h-14 w-14 sm:h-16 sm:w-16 overflow-hidden rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200">
-                    <Image
-                      src={store.imageUrl}
-                      alt={store.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm sm:text-base font-semibold text-neutral-900 dark:text-neutral-900">
-                      {store.name}
-                    </p>
-                    <div className="flex items-center gap-1 text-amber-300">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <Star
-                          key={index}
-                          className="h-3 w-3 sm:h-4 sm:w-4"
-                          strokeWidth={
-                            index < Math.round(store.rating) ? 0 : 1.5
-                          }
-                          fill={
-                            index < Math.round(store.rating)
-                              ? "currentColor"
-                              : "none"
-                          }
-                        />
-                      ))}
-                      <span className="ml-1 sm:ml-2 text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                        ({store.rating.toFixed(1)})
-                      </span>
+              
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+                        {store.name}
+                    </h3>
+                    <div className="flex items-center gap-1 rounded-full bg-amber-100 dark:bg-amber-900/30 px-2 py-1 text-xs font-bold text-amber-700 dark:text-amber-400">
+                        <Star className="h-3 w-3 fill-current" />
+                        {store.rating.toFixed(1)}
                     </div>
-                  </div>
                 </div>
-
-                <p className="text-xs sm:text-sm leading-relaxed text-neutral-700 dark:text-neutral-700">
-                  {store.description}
+                
+                <p className="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2 mb-6">
+                    {store.description}
                 </p>
 
-                <div className="flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-wide text-neutral-700 dark:text-neutral-700">
-                    {store.domain}
-                  </span>
-                  <span className="rounded-full bg-blue-500 px-3 sm:px-4 py-1.5 sm:py-2 text-xs uppercase tracking-wide text-white transition hover:bg-blue-600">
-                    Enter Store
-                  </span>
+                <div className="mt-auto flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800">
+                    <span className="text-xs font-medium text-neutral-500 dark:text-neutral-500 uppercase tracking-wider">
+                        {store.domain}
+                    </span>
+                    <Link href={`/stores/${store.id}`} className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300">
+                        Visit Store
+                    </Link>
                 </div>
-              </Link>
+              </div>
             </div>
-          ))
-          .slice(0, 3)}
+        ))}
       </div>
     </section>
   );
@@ -222,77 +253,92 @@ async function BestSellersSection() {
   const userHasActivePlan = hasActivePlan(subscription);
 
   return (
-    <section
-      id="deals"
-      className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900"
-    >
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <section className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+      <div className="flex items-end justify-between mb-10">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
+          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-4xl">
             Best Sellers
           </h2>
+          <p className="mt-2 text-neutral-600 dark:text-neutral-400">
+            Top-rated products flying off the shelves
+          </p>
         </div>
-        <Link
-          href="/top-products"
-          className="text-sm sm:text-md font-semibold text-blue-400 hover:text-blue-300"
-        >
-          View All Products
+        <Link href="/top-products" className="hidden sm:flex items-center text-primary-600 dark:text-primary-400 font-semibold hover:underline">
+            View All Products <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </div>
 
-      <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {bestSellerProducts.map((product) => (
           <div
             key={product.name}
-            className="relative flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-3 sm:p-4 shadow-sm transition hover:-translate-y-1 hover:border-purple-500/60"
+            className="group relative flex flex-col overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-soft transition-all hover:shadow-strong hover:-translate-y-1"
           >
-            <div className="absolute right-4 top-4 sm:right-6 sm:top-6 z-10">
-              <FavoriteButton product={product} size={18} className="h-8 w-8" />
-            </div>
-            <Link
-              href={`/products/${product.id}?from=home&section=best-sellers`}
-              className="flex flex-col gap-3 sm:gap-4"
-            >
-              <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-200/40 dark:bg-neutral-200/40">
+            <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
                 <Image
                   src={product.imageUrl}
                   alt={product.name}
-                  width={360}
-                  height={220}
-                  className="h-36 sm:h-44 w-full object-cover transition duration-500 hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                {product.tag ? (
-                  <span className="absolute left-2 sm:left-3 top-2 sm:top-3 rounded-full bg-rose-500 px-2 py-1 text-xs font-bold text-white">
-                    {product.tag}
-                  </span>
-                ) : null}
-              </div>
+                {product.tag && (
+                    <span className="absolute left-4 top-4 rounded-full bg-rose-500 px-3 py-1 text-xs font-bold text-white shadow-sm">
+                        {product.tag}
+                    </span>
+                )}
+                <div className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <FavoriteButton product={product} size={18} className="h-9 w-9 bg-white shadow-sm" />
+                </div>
+            </div>
 
-              <div className="flex flex-col gap-1 sm:gap-2">
-                <h3 className="text-sm sm:text-base font-semibold text-neutral-900 dark:text-neutral-900 line-clamp-2">
-                  {product.name}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                  {product.brand}
-                </p>
-              </div>
-
-              <div className="mt-auto flex items-center justify-between">
-                <ProductPriceOrRequest
-                  product={product}
-                  hasActivePlan={userHasActivePlan}
-                  size="md"
-                />
-              </div>
-            </Link>
-            {userHasActivePlan && (
-              <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 z-10">
-                <AddToCartButton product={product} size="sm" />
-              </div>
-            )}
+            <div className="flex flex-1 flex-col p-5">
+                <div className="mb-2">
+                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-500">
+                        {product.brand}
+                    </p>
+                    <Link href={`/products/${product.id}`} className="block mt-1">
+                        <h3 className="font-bold text-neutral-900 dark:text-neutral-200 line-clamp-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                            {product.name}
+                        </h3>
+                    </Link>
+                </div>
+                
+                <div className="mt-auto flex items-center justify-between">
+                    <ProductPriceOrRequest
+                        product={product}
+                        hasActivePlan={userHasActivePlan}
+                        size="lg"
+                    />
+                    {userHasActivePlan && (
+                        <AddToCartButton product={product} size="sm" className="rounded-full" />
+                    )}
+                </div>
+            </div>
           </div>
         ))}
       </div>
     </section>
   );
 }
+
+function TrustSection() {
+    return (
+        <section className="bg-neutral-900 py-24 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 relative z-10 text-center">
+                <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-4xl mb-12">
+                    Trusted by Businesses Worldwide
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                    {/* Placeholders for partner logos */}
+                    {['Acme Corp', 'Global Tech', 'Logistics Pro', 'Trade Union'].map((partner, i) => (
+                        <div key={i} className="flex items-center justify-center h-16 border border-neutral-200 dark:border-neutral-800 rounded-xl bg-neutral-100 dark:bg-neutral-800">
+                            <span className="text-xl font-bold text-neutral-900 dark:text-neutral-200">{partner}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}
+

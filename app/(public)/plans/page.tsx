@@ -15,7 +15,7 @@ import { PlanComparisonClient } from "./plan-comparison-client";
 export const metadata = createMetadata({
   title: "Subscription Plans",
   description:
-    "Compare Kontainar Hub's free and paid plans. Activate trials or subscribe to unlock analytics, store management, and supplier tools.",
+    "Compare TajirJomla Hub's free and paid plans. Activate trials or subscribe to unlock analytics, store management, and supplier tools.",
   path: "/plans",
 });
 
@@ -54,7 +54,7 @@ export default async function PlansPage({
       name: plan.name,
       description: plan.description,
       price: plan.pricePerMonth,
-      url: `https://kontainarhub.com/plans#${plan.id}`,
+      url: `https://tajirjomlahub.com/plans#${plan.id}`,
       eligibleDuration: plan.trialDays
         ? { value: plan.trialDays, unitCode: "DAY" }
         : undefined,
@@ -73,7 +73,8 @@ export default async function PlansPage({
   }
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 sm:px-6 py-6 sm:py-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+      <main className="mx-auto flex w-full max-w-6xl flex-col px-4 sm:px-6 py-6 sm:py-8">
       <JsonLd data={structuredData} id="plans-json-ld" />
       <Breadcrumb />
 
@@ -84,5 +85,6 @@ export default async function PlansPage({
         requestedProductName={decodedProductName}
       />
     </main>
+    </div>
   );
 }

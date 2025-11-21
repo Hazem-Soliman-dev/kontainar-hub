@@ -50,7 +50,7 @@ const plans: SubscriptionPlan[] = [
     name: "Free Preview",
     pricePerMonth: 0,
     description:
-      "Browse public marketplace teasers and evaluate Kontainar Hub before subscribing.",
+      "Browse public marketplace teasers and evaluate TajirJomla Hub before subscribing.",
     bestFor: "Exploring the platform",
     features: [
       "Access to public landing pages",

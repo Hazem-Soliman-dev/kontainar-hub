@@ -33,14 +33,14 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
   ).sort();
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4">
+    <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 p-4 text-neutral-900 dark:text-neutral-200">
       <div className="flex items-center justify-between">
-        <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900 mx-1">Filters</h3>
+        <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-200 mx-1">Filters</h3>
         {hasActiveFilters && (
           <button
             type="button"
             onClick={clearFilters}
-            className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 mx-2"
+            className="flex items-center gap-1 text-sm text-blue-400 dark:text-blue-300 hover:text-blue-300 dark:hover:text-blue-400 mx-2"
           >
             <X className="h-3 w-3" />
             Clear all
@@ -51,7 +51,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
       <div className="space-y-4">
         {/* Category Filter */}
         <div className="flex flex-col gap-1">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
             Category
           </label>
           <select
@@ -66,7 +66,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
                 category: newCategory,
               });
             }}
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:outline-none"
           >
             <option value="">All Categories</option>
             {featuredCategories.map((category) => (
@@ -79,7 +79,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
 
         {/* Price Range */}
         <div className="flex flex-col gap-2">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
             Price Range
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -95,7 +95,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
                     : undefined,
                 })
               }
-              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 placeholder:text-neutral-500 dark:placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-500 dark:placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none"
             />
             <input
               type="number"
@@ -109,14 +109,14 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
                     : undefined,
                 })
               }
-              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 placeholder:text-neutral-500 dark:placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-500 dark:placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none"
             />
           </div>
         </div>
 
         {/* Store Rating */}
         <div className="flex flex-col gap-1">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
             Minimum Store Rating
           </label>
           <select
@@ -129,7 +129,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
                   : undefined,
               })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:outline-none"
           >
             <option value="">All Ratings</option>
             <option value="4.5">4.5+ Stars</option>
@@ -141,7 +141,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
 
         {/* Product Momentum */}
         <div className="flex flex-col gap-1">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
             Product Momentum
           </label>
           <select
@@ -153,7 +153,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
                   undefined) as "surging" | "steady" | "emerging" | undefined,
               })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:outline-none"
           >
             <option value="">All Momentum</option>
             <option value="surging">Surging</option>
@@ -164,7 +164,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
 
         {/* Region */}
         <div className="flex flex-col gap-1">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
             Region
           </label>
           <select
@@ -175,7 +175,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
                 region: e.target.value || undefined,
               })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:outline-none"
           >
             <option value="">All Regions</option>
             {allRegions.map((region) => (
@@ -188,7 +188,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
 
         {/* Brand */}
         <div className="flex flex-col gap-1">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
             Brand
           </label>
           <select
@@ -199,7 +199,7 @@ export function SearchFilters({ filters, onFilterChange }: SearchFiltersProps) {
                 brand: e.target.value || undefined,
               })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:outline-none"
           >
             <option value="">All Brands</option>
             {brands.map((brand) => (

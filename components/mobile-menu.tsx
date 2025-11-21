@@ -79,7 +79,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       {isOpen && (
         <button
           type="button"
-          className="fixed inset-0 z-40 bg-neutral-900/50 transition-opacity md:hidden"
+          className="fixed inset-0 z-40 bg-neutral-50 dark:bg-neutral-900/80 transition-opacity md:hidden"
           onClick={onClose}
           aria-label="Close menu"
         />
@@ -87,24 +87,26 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 z-50 h-full w-80 max-w-[85vw] transform bg-neutral-900/50 dark:bg-neutral-900/50 shadow-xl transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed left-0 top-0 z-50 w-80 max-w-[85vw] h-screen transform bg-neutral-50 dark:bg-neutral-900 shadow-md transition-transform duration-300 ease-in-out md:hidden ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex h-full flex-col">
+        <div className="flex h-screen flex-col">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800 px-6 py-4">
             <Link
               href="/"
-              className="text-xl font-semibold text-neutral-900 dark:text-neutral-900"
+              className="flex items-center gap-2"
               onClick={handleLinkClick}
             >
-              TajirJomla Hub
+              <span className="text-lg font-bold text-neutral-900 dark:text-neutral-300">
+                TajirJomla Hub
+              </span>
             </Link>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-2 text-neutral-900 dark:text-neutral-900 transition hover:bg-neutral-100 dark:hover:bg-neutral-100"
+              className="rounded-full p-2 text-neutral-600 dark:text-neutral-400 transition hover:bg-neutral-100 dark:hover:bg-neutral-800"
               aria-label="Close menu"
             >
               <X className="h-6 w-6" />
@@ -112,24 +114,24 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
 
           {/* User Section */}
-          <div className="border-b border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-6 py-4">
+          <div className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-6 py-4 flex-1 overflow-y-auto">
             {user ? (
               <div className="space-y-3">
-                <div className="rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-4">
+                <div className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 dark:from-primary-900/50 dark:to-secondary-900/50 text-primary-700 dark:text-primary-300">
                       <UserRound className="h-5 w-5" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-semibold text-neutral-900 dark:text-neutral-900">
+                      <p className="font-semibold text-neutral-900 dark:text-neutral-300">
                         {user.fullName}
                       </p>
-                      <p className="text-xs text-neutral-600 dark:text-neutral-600">
+                      <p className="text-xs text-neutral-600 dark:text-neutral-400">
                         {user.email}
                       </p>
                     </div>
                   </div>
-                  <p className="mt-2 inline-flex items-center rounded-full bg-blue-500 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+                  <p className="mt-2 inline-flex items-center rounded-full bg-primary-100 dark:bg-primary-900/30 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-300">
                     {user.role} access
                   </p>
                 </div>
@@ -137,7 +139,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/favorites"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-300 dark:border-neutral-300 bg-neutral-100 dark:bg-neutral-100 px-4 py-2.5 text-sm font-medium text-neutral-900 dark:text-neutral-900 transition hover:bg-neutral-50 dark:hover:bg-neutral-50 hover:border-blue-500"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-primary-500"
                   >
                     <Heart className="h-4 w-4" />
                     <span className="hidden sm:inline">Favorites</span>
@@ -145,7 +147,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/cart"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-300 dark:border-neutral-300 bg-neutral-100 dark:bg-neutral-100 px-4 py-2.5 text-sm font-medium text-neutral-900 dark:text-neutral-900 transition hover:bg-neutral-50 dark:hover:bg-neutral-50 hover:border-blue-500"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-primary-500"
                   >
                     <ShoppingCart className="h-4 w-4" />
                     <span className="hidden sm:inline">Cart</span>
@@ -154,16 +156,16 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </div>
             ) : (
               <div className="space-y-3">
-                <div className="rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-4">
+                <div className="rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 p-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-300 dark:bg-neutral-300 text-neutral-900 dark:text-neutral-900">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
                       <UserRound className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="font-semibold text-neutral-900 dark:text-neutral-900">
+                      <p className="font-semibold text-neutral-900 dark:text-neutral-300">
                         Guest User
                       </p>
-                      <p className="text-xs text-neutral-900 dark:text-neutral-900">
+                      <p className="text-xs text-neutral-600 dark:text-neutral-400">
                         Sign in to access all features
                       </p>
                     </div>
@@ -173,7 +175,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/login"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-semibold text-neutral-100 dark:text-neutral-100 transition hover:bg-blue-600"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-semibold text-neutral-200 transition hover:bg-primary-500"
                   >
                     <LogIn className="h-4 w-4" />
                     Sign In
@@ -181,7 +183,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/register"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-300 dark:border-neutral-300 bg-neutral-100 dark:bg-neutral-100 px-4 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-50 dark:hover:bg-neutral-50"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800"
                   >
                     Register
                   </Link>
@@ -191,9 +193,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1 overflow-y-auto px-6 py-4 bg-neutral-100 dark:bg-neutral-100">
+          <nav className="flex-1 overflow-y-auto px-6 py-4 bg-neutral-50 dark:bg-neutral-800 h-full">
             <div className="mb-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 px-2">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 px-2">
                 Pages
               </h3>
             </div>
@@ -205,7 +207,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     <Link
                       href={link.href}
                       onClick={handleLinkClick}
-                      className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-100 dark:hover:bg-neutral-100 hover:text-blue-600 dark:hover:text-blue-600 hover:shadow-sm"
+                      className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
                     >
                       <Icon className="h-5 w-5" />
                       <span>{link.label}</span>
@@ -216,9 +218,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             </ul>
 
             {user && (
-              <div className="mt-6 space-y-1 border-t border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 pt-4">
+              <div className="mt-6 space-y-1 border-t border-neutral-200 dark:border-neutral-800 pt-4">
                 <div className="mb-3 mt-2">
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 px-2">
+                  <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 px-2">
                     Account
                   </h3>
                 </div>
@@ -230,7 +232,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       : "/trader/dashboard")
                   }
                   onClick={handleLinkClick}
-                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-100 dark:hover:bg-neutral-100 hover:text-blue-600 dark:hover:text-blue-600 hover:shadow-sm"
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
                 >
                   <LayoutDashboard className="h-5 w-5" />
                   <span>Dashboard</span>
@@ -238,7 +240,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <Link
                   href="/account"
                   onClick={handleLinkClick}
-                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-100 dark:hover:bg-neutral-100 hover:text-blue-600 dark:hover:text-blue-600 hover:shadow-sm"
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
                 >
                   <User className="h-5 w-5" />
                   <span>Account</span>
@@ -246,7 +248,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 <Link
                   href="/settings"
                   onClick={handleLinkClick}
-                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-100 dark:hover:bg-neutral-100 hover:text-blue-600 dark:hover:text-blue-600 hover:shadow-sm"
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
                 >
                   <SettingsIcon className="h-5 w-5" />
                   <span>Settings</span>
@@ -256,9 +258,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </nav>
 
           {/* Footer */}
-          <div className="border-t border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-6 py-4">
-            <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-100 dark:bg-neutral-100 px-3 py-2">
-              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-700">
+          <div className="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800 px-6 py-4">
+            <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-50 dark:bg-neutral-800 px-3 py-2 border border-neutral-200 dark:border-neutral-700">
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 Theme
               </span>
               <ThemeToggle />
@@ -267,7 +269,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 dark:border-red-200 bg-red-50 dark:bg-red-50 px-4 py-3 text-sm font-semibold text-red-600 dark:text-red-600 transition hover:bg-red-100 dark:hover:bg-red-100 hover:border-red-300"
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm font-semibold text-red-600 dark:text-red-400 transition hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-800"
               >
                 <LogOut className="h-4 w-4" />
                 Log Out
@@ -285,7 +287,7 @@ export function MobileMenuButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full p-2 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 md:hidden"
+      className="rounded-full p-2 text-neutral-600 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 md:hidden"
       aria-label="Open menu"
     >
       <Menu className="h-6 w-6" />

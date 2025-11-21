@@ -30,14 +30,14 @@ export function MarketSignals({ signals, momentum }: MarketSignalsProps) {
       )}
 
       <div>
-        <h2 className="mb-3 text-xl font-semibold text-neutral-900 dark:text-neutral-900">
+        <h2 className="mb-3 text-xl font-semibold text-neutral-900 dark:text-neutral-200">
           Market Signals
         </h2>
         <ul className="space-y-2">
           {signals.map((signal, index) => (
             <li
               key={index}
-              className="flex items-start gap-2 text-sm text-neutral-900 dark:text-neutral-900"
+              className="flex items-start gap-2 text-sm text-neutral-900 dark:text-neutral-200"
             >
               <span className="mt-1.5 inline-block h-2 w-2 flex-shrink-0 rounded-full bg-blue-500 dark:bg-blue-500" />
               <span>{signal}</span>

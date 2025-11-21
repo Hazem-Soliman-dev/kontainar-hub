@@ -1,253 +1,152 @@
-import { createMetadata } from "../../../lib/seo/metadata";
-import { Breadcrumb } from "../../../components/ui/breadcrumb";
-import {
-  Truck,
-  Package,
-  Clock,
-  MapPin,
-  Shield,
-  DollarSign,
-} from "lucide-react";
+import { createMetadata } from "@/lib/seo/metadata";
+import { PageHeader } from "@/components/ui/page-header";
+import { ContentSection } from "@/components/ui/content-section";
+import { Truck, Globe, Clock, MapPin, PackageCheck } from "lucide-react";
 
 export const metadata = createMetadata({
   title: "Shipping Information",
   description:
-    "Learn about shipping options, delivery times, tracking, and shipping policies at Kontainar Hub.",
+    "Learn about TajirJomla Hub's shipping policies, delivery times, and international shipping options.",
   path: "/shipping-info",
-  keywords: ["shipping", "delivery", "tracking", "shipping policy", "logistics"],
+  keywords: ["shipping", "delivery", "logistics", "international shipping"],
 });
 
 export default function ShippingInfoPage() {
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col pb-16 sm:pb-26">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-6">
-          <Breadcrumb />
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+      <PageHeader
+        title="Shipping & Delivery"
+        description="Everything you need to know about how we get your products to you."
+      />
+
+      <ContentSection>
+        <div className="grid gap-8 md:grid-cols-3 mb-16">
+            <FeatureCard
+                icon={Truck}
+                title="Fast Delivery"
+                description="We partner with top-tier logistics providers to ensure your orders arrive on time, every time."
+            />
+            <FeatureCard
+                icon={Globe}
+                title="Global Shipping"
+                description="We ship to over 50 countries worldwide with reliable tracking and customs handling."
+            />
+            <FeatureCard
+                icon={PackageCheck}
+                title="Secure Packaging"
+                description="All items are carefully packaged to ensure they arrive in perfect condition."
+            />
         </div>
 
-        <HeroSection />
-        <ShippingOptionsSection />
-        <DeliveryTimesSection />
-        <TrackingSection />
-        <ShippingPoliciesSection />
-      </main>
+        <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 mb-8 text-center">
+                Shipping Methods & Rates
+            </h2>
+            <div className="overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-neutral-50 dark:bg-neutral-800/50 text-neutral-900 dark:text-neutral-200">
+                            <tr>
+                                <th className="px-6 py-4 font-semibold text-neutral-900 dark:text-neutral-200">Method</th>
+                                <th className="px-6 py-4 font-semibold text-neutral-900 dark:text-neutral-200">Delivery Time</th>
+                                <th className="px-6 py-4 font-semibold text-neutral-900 dark:text-neutral-200">Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                            <tr>
+                                <td className="px-6 py-4 font-medium text-neutral-900 dark:text-neutral-200">Standard Shipping</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">5-7 Business Days</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">Free on orders over $50</td>
+                            </tr>
+                            <tr>
+                                <td className="px-6 py-4 font-medium text-neutral-900 dark:text-neutral-200">Express Shipping</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">2-3 Business Days</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">$15.00</td>
+                            </tr>
+                            <tr>
+                                <td className="px-6 py-4 font-medium text-neutral-900 dark:text-neutral-200">Overnight Shipping</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">Next Business Day</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">$35.00</td>
+                            </tr>
+                             <tr>
+                                <td className="px-6 py-4 font-medium text-neutral-900 dark:text-neutral-200">International Standard</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">7-14 Business Days</td>
+                                <td className="px-6 py-4 text-neutral-900 dark:text-neutral-200">Calculated at checkout</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </ContentSection>
+
+      <ContentSection className="bg-neutral-100/50 dark:bg-neutral-900/50">
+        <div className="max-w-3xl mx-auto">
+             <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 mb-8 text-center">
+                How It Works
+            </h2>
+            <div className="space-y-8">
+                <TimelineItem
+                    step="1"
+                    title="Order Processing"
+                    description="Once you place your order, our suppliers confirm availability and prepare your items for shipment. This usually takes 1-2 business days."
+                    icon={Clock}
+                />
+                <TimelineItem
+                    step="2"
+                    title="Quality Check"
+                    description="Items undergo a quality inspection to ensure they meet our standards before being packed."
+                    icon={PackageCheck}
+                />
+                <TimelineItem
+                    step="3"
+                    title="Shipped & Tracked"
+                    description="Your package is handed over to the carrier. You'll receive a tracking number via email to monitor its journey."
+                    icon={Truck}
+                />
+                <TimelineItem
+                    step="4"
+                    title="Delivery"
+                    description="The carrier delivers your package to your doorstep or specified delivery location."
+                    icon={MapPin}
+                />
+            </div>
+        </div>
+      </ContentSection>
     </div>
   );
 }
 
-function HeroSection() {
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900">
-      <div className="flex flex-col items-center justify-center text-center mb-5 sm:mb-0">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Shipping Information
-        </h1>
-        <p className="text-base sm:text-lg text-neutral-700 dark:text-neutral-700 max-w-3xl mt-3">
-          Everything you need to know about shipping, delivery, and tracking
-          your orders.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function ShippingOptionsSection() {
-  const options = [
-    {
-      icon: Truck,
-      title: "Standard Shipping",
-      description: "Regular delivery within 5-7 business days",
-      price: "Free on orders over $50",
-      color: "blue",
-    },
-    {
-      icon: Clock,
-      title: "Express Shipping",
-      description: "Fast delivery within 2-3 business days",
-      price: "Starting at $15",
-      color: "indigo",
-    },
-    {
-      icon: Package,
-      title: "Overnight Shipping",
-      description: "Next business day delivery",
-      price: "Starting at $30",
-      color: "purple",
-    },
-  ];
-
-  const colorClasses = {
-    blue: "bg-blue-600/10 text-blue-300 border-blue-500/40",
-    indigo: "bg-indigo-600/10 text-indigo-300 border-indigo-500/40",
-    purple: "bg-purple-600/10 text-purple-300 border-purple-500/40",
-  };
-
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Shipping Options
-        </h2>
-      </div>
-      <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-3">
-        {options.map((option) => {
-          const Icon = option.icon;
-          const colorClass =
-            colorClasses[option.color as keyof typeof colorClasses];
-          return (
-            <div
-              key={option.title}
-              className="flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
-            >
-              <div
-                className={`flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl ${colorClass} border`}
-              >
-                <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
-              </div>
-              <div className="flex flex-col gap-1 sm:gap-2">
-                <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                  {option.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                  {option.description}
-                </p>
-                <p className="text-xs sm:text-sm font-semibold text-blue-400 mt-2">
-                  {option.price}
-                </p>
-              </div>
+function FeatureCard({ icon: Icon, title, description }: any) {
+    return (
+        <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+            <div className="mb-4 p-3 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-neutral-200">
+                <Icon className="h-6 w-6" />
             </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function DeliveryTimesSection() {
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Delivery Times
-        </h2>
-      </div>
-      <div className="rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 sm:p-8 shadow-sm">
-        <ul className="space-y-4 text-base sm:text-lg text-neutral-700 dark:text-neutral-700">
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>Processing Time:</strong> Orders are typically processed
-              within 1-2 business days
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>Business Days:</strong> We ship Monday through Friday,
-              excluding holidays
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>International Shipping:</strong> Delivery times vary by
-              destination, typically 7-14 business days
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>Delays:</strong> Weather conditions or carrier issues may
-              cause delays. We'll notify you if there are any issues
-            </span>
-          </li>
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-function TrackingSection() {
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Track Your Order
-        </h2>
-      </div>
-      <div className="rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 sm:p-8 shadow-sm">
-        <p className="text-base sm:text-lg text-neutral-700 dark:text-neutral-700 mb-4">
-          Once your order ships, you'll receive a tracking number via email.
-          You can use this number to track your package in real-time.
-        </p>
-        <ul className="space-y-3 text-sm sm:text-base text-neutral-700 dark:text-neutral-700">
-          <li className="flex items-start gap-3">
-            <MapPin className="h-5 w-5 text-blue-400 mt-0.5" />
-            <span>
-              Track your order from your account dashboard under "Orders"
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <Shield className="h-5 w-5 text-blue-400 mt-0.5" />
-            <span>
-              Receive email notifications at each stage of the shipping process
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <Package className="h-5 w-5 text-blue-400 mt-0.5" />
-            <span>
-              Contact support if you have any questions about your shipment
-            </span>
-          </li>
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-function ShippingPoliciesSection() {
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12 mb-8 sm:mb-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Shipping Policies
-        </h2>
-      </div>
-      <div className="rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 sm:p-8 shadow-sm">
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-neutral-900 mb-3">
-              Shipping Costs
-            </h3>
-            <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-700">
-              Shipping costs are calculated at checkout based on your location,
-              order weight, and selected shipping method. Free shipping is
-              available on orders over $50 for standard shipping.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-neutral-900 mb-3">
-              International Shipping
-            </h3>
-            <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-700">
-              We ship to most countries worldwide. International orders may be
-              subject to customs fees and import duties, which are the
-              responsibility of the recipient.
-            </p>
-          </div>
-          <div>
-            <h3 className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-neutral-900 mb-3">
-              Damaged or Lost Packages
-            </h3>
-            <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-700">
-              If your package arrives damaged or is lost in transit, please
-              contact our support team immediately. We'll work with you to
-              resolve the issue quickly.
-            </p>
-          </div>
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-neutral-200 mb-2">{title}</h3>
+            <p className="text-neutral-900 dark:text-neutral-200 text-sm leading-relaxed">{description}</p>
         </div>
-      </div>
-    </section>
-  );
+    );
 }
 
+function TimelineItem({ step, title, description, icon: Icon }: any) {
+    return (
+        <div className="flex gap-4 md:gap-6">
+            <div className="flex flex-col items-center">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-600 text-neutral-100 dark:text-neutral-900 font-bold shadow-md z-10">
+                    {step}
+                </div>
+                <div className="w-0.5 flex-1 bg-neutral-900 dark:bg-neutral-200 my-2"></div>
+            </div>
+            <div className="pb-8 pt-1">
+                <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-lg font-bold text-neutral-900 dark:text-neutral-200">{title}</h3>
+                    <Icon className="h-4 w-4 text-neutral-900 dark:text-neutral-200" />
+                </div>
+                <p className="text-neutral-900 dark:text-neutral-200 leading-relaxed">
+                    {description}
+                </p>
+            </div>
+        </div>
+    );
+}

@@ -14,12 +14,12 @@ export function ProductDescription({ product, isBestSeller }: ProductDescription
 
   return (
     <div className="space-y-1">
-      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-900">Description</h2>
-      <p className="text-neutral-900 dark:text-neutral-900 leading-relaxed">{description}</p>
+      <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-200">Description</h2>
+      <p className="text-neutral-900 dark:text-neutral-200 leading-relaxed">{description}</p>
       
       {!isBestSeller && "supplier" in product && (
-        <div className="mt-4 rounded-lg border border-neutral-900 dark:border-neutral-900 bg-neutral-900/40 p-4">
-          <p className="text-sm text-neutral-900 dark:text-neutral-900">
+        <div className="mt-4 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
+          <p className="text-sm text-neutral-900 dark:text-neutral-200">
             <span className="font-semibold text-neutral-900 dark:text-neutral-900">Supplier:</span> {product.supplier}
           </p>
           {"availability" in product && (

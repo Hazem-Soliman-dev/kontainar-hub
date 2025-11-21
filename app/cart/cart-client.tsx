@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useMemo, useEffect } from "react";
-import { Trash2, Plus, Minus } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 
 import { useCartStore, type CartItem } from "../../lib/store/cart-store";
 import { CartFilters } from "../../components/ui/cart-filters";
@@ -80,27 +80,49 @@ export function CartClient() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-        <main className="mx-auto flex w-full max-w-7xl flex-col px-6 pt-8 pb-12">
-          <header className="space-y-2">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+        <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-4">
             <Breadcrumb />
-          </header>
+          </div>
+        </div>
 
-          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-12 text-center">
-            <p className="text-lg text-neutral-700 dark:text-neutral-700">
-              Your cart is empty
-            </p>
-            <p className="text-sm text-neutral-700 dark:text-neutral-700">
-              Browse our products and add items to your cart.
-            </p>
-            <div className="mt-4">
-              <Link
-                href="/best-sellers"
-                className="rounded-full bg-blue-500 px-6 py-2 text-sm font-semibold text-neutral-50 dark:text-neutral-50 transition hover:bg-blue-600 dark:hover:bg-blue-600"
-              >
-                Browse Products
-              </Link>
+        {/* Hero Section */}
+        <div className="relative bg-neutral-900 dark:bg-neutral-900 py-16 sm:py-20 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 via-transparent to-secondary-900/20" />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-3 mb-4">
+              <ShoppingBag className="h-8 w-8 text-primary-400" />
+              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200">
+                Shopping Cart
+              </h1>
             </div>
+            <p className="text-lg text-neutral-900 dark:text-neutral-200 max-w-2xl">
+              Review your selected items and proceed to checkout
+            </p>
+          </div>
+        </div>
+
+        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pb-24">
+          <div className="flex flex-col items-center justify-center gap-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-12 sm:p-16 text-center shadow-xl">
+            <div className="rounded-full bg-neutral-100 dark:bg-neutral-900 p-6">
+              <ShoppingBag className="h-12 w-12 text-neutral-900 dark:text-neutral-200" />
+            </div>
+            <div>
+              <p className="text-xl font-semibold text-neutral-900 dark:text-neutral-200 mb-2">
+                Your cart is empty
+              </p>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Browse our products and add items to your cart
+              </p>
+            </div>
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary-600 to-primary-500 px-8 py-3 text-sm font-semibold text-neutral-900 dark:text-neutral-200 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+            >
+              Browse Products
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </main>
       </div>
@@ -108,14 +130,31 @@ export function CartClient() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="mx-auto flex w-full max-w-7xl flex-col px-6 pt-8 pb-12">
-        <header className="space-y-2">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+      <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-4">
           <Breadcrumb />
-        </header>
+        </div>
+      </div>
+      {/* Hero Section */}
+      <div className="relative bg-neutral-900 dark:bg-neutral-900 py-10 sm:py-10 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 via-transparent to-secondary-900/20" />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3 mb-4">
+            <ShoppingBag className="h-8 w-8 text-neutral-900 dark:text-neutral-200" />
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200">
+              Shopping Cart
+            </h1>
+          </div>
+          <p className="text-lg text-neutral-900 dark:text-neutral-200 max-w-2xl">
+            {items.length} {items.length === 1 ? "item" : "items"} in your cart
+          </p>
+        </div>
+      </div>
 
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pb-24">
         {items.length > 0 && (
-          <div>
+          <div className="mb-8">
             <CartFilters
               filters={filters}
               onFilterChange={setFilters}
@@ -125,152 +164,181 @@ export function CartClient() {
         )}
 
         {filteredItems.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-12 text-center">
-            <p className="text-lg text-neutral-700 dark:text-neutral-700">
+          <div className="flex flex-col items-center justify-center gap-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-12 text-center shadow-xl">
+            <p className="text-lg font-semibold text-neutral-900 dark:text-neutral-200">
               No items match your filters
             </p>
-            <p className="text-sm text-neutral-700 dark:text-neutral-700">
-              Try adjusting your filter criteria.
+            <p className="text-neutral-900 dark:text-neutral-200">
+              Try adjusting your filter criteria
             </p>
           </div>
         ) : (
-          <>
-            <div className="text-sm text-neutral-700 dark:text-neutral-700 mt-10">
-              Showing {paginatedItems.length} of {filteredItems.length} items
-              {items.length !== filteredItems.length &&
-                ` (${items.length} total in cart)`}
-            </div>
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Cart Items */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="text-sm text-neutral-900 dark:text-neutral-200 mb-4">
+                Showing {paginatedItems.length} of {filteredItems.length} items
+                {items.length !== filteredItems.length &&
+                  ` (${items.length} total in cart)`}
+              </div>
 
-            <section className="space-y-4 mt-6">
               {paginatedItems.map((item) => (
                 <article
                   key={item.id}
-                  className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-5 shadow-sm md:flex-row md:items-center md:justify-between"
+                  className="group rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 sm:p-6 shadow-sm hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
                 >
-                  <Link
-                    href={`/products/${item.id}?from=cart`}
-                    className="flex flex-1 gap-4"
-                  >
-                    {item.imageUrl && (
-                      <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-200">
-                        <Image
-                          src={item.imageUrl}
-                          alt={item.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <h2 className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                        {item.name}
-                      </h2>
-                      <p className="text-sm text-neutral-700 dark:text-neutral-700">
-                        {item.brand}
-                      </p>
-                      <p className="mt-1 text-xs text-neutral-700 dark:text-neutral-700">
-                        {item.category}
-                      </p>
-                      <p className="mt-2 text-sm font-semibold text-neutral-900 dark:text-neutral-900">
-                        {formatCurrency(item.price)} each
-                      </p>
-                    </div>
-                  </Link>
-
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-50 dark:bg-neutral-50 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900"
-                        aria-label="Decrease quantity"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </button>
-                      <span className="min-w-[2rem] text-center text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                        {item.quantity}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
-                        className="flex h-8 w-8 items-center justify-center rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-50 dark:bg-neutral-50 text-neutral-700 dark:text-neutral-700 transition hover:bg-neutral-200 dark:hover:bg-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-900"
-                        aria-label="Increase quantity"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
-                    </div>
-
-                    <div className="min-w-[6rem] text-right">
-                      <p className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                        {formatCurrency(item.price * item.quantity)}
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => removeFromCart(item.id)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500/50 bg-red-500/10 text-red-400 transition hover:bg-red-500/20"
-                      aria-label="Remove from cart"
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Link
+                      href={`/products/${item.id}?from=cart`}
+                      className="flex flex-1 gap-4"
                     >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                      {item.imageUrl && (
+                        <div className="relative h-24 w-24 sm:h-28 sm:w-28 flex-shrink-0 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 hover:shadow-sm transition-all duration-200 hover:-translate-y-1">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.name}
+                            fill
+                            className="object-cover transition-transform duration-200 group-hover:scale-105"
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h2 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-200 line-clamp-2 mb-1">
+                          {item.name}
+                        </h2>
+                        <p className="text-sm text-neutral-900 dark:text-neutral-200 mb-1">
+                          {item.brand}
+                        </p>
+                        <p className="text-xs text-neutral-900 dark:text-neutral-200 mb-2">
+                          {item.category}
+                        </p>
+                        <p className="text-sm font-semibold text-primary-500 dark:text-primary-400">
+                          {formatCurrency(item.price)} each
+                        </p>
+                      </div>
+                    </Link>
+
+                    <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-4">
+                      {/* Quantity Controls */}
+                      <div className="flex items-center gap-2 bg-neutral-100 dark:bg-neutral-800 rounded-xl p-1">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-neutral-200 transition-all hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:scale-105 active:scale-95"
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <span className="min-w-[2.5rem] text-center text-base font-bold text-neutral-900 dark:text-neutral-200">
+                          {item.quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-900 dark:text-neutral-200 transition-all hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:scale-105 active:scale-95"
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      {/* Price and Remove */}
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <p className="text-lg font-bold text-neutral-900 dark:text-neutral-200">
+                            {formatCurrency(item.price * item.quantity)}
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => removeFromCart(item.id)}
+                          className="flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 transition-all hover:bg-red-100 dark:hover:bg-red-950/50 hover:scale-105 active:scale-95"
+                          aria-label="Remove from cart"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </article>
               ))}
-            </section>
 
-            {totalPages > 1 && (
-              <div className="mt-10">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
-              </div>
-            )}
+              {totalPages > 1 && (
+                <div className="mt-8">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                </div>
+              )}
+            </div>
 
-            <section className="rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 text-sm text-neutral-700 dark:text-neutral-700 mt-10">
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
-                  Subtotal
-                </span>
-                <span className="text-lg font-bold text-neutral-900 dark:text-neutral-900">
-                  {formatCurrency(subtotal)}
-                </span>
-              </div>
-              <p className="mt-3 text-sm text-neutral-700 dark:text-neutral-700">
-                Taxes and final shipping costs are calculated once suppliers
-                confirm your request.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/checkout"
-                  className="rounded-sm bg-blue-500 px-4 py-2 font-semibold text-neutral-50 dark:text-neutral-50 transition hover:bg-blue-600 dark:hover:bg-blue-600"
-                >
-                  Proceed to checkout
-                </Link>
-                <Link
-                  href="/favorites"
-                  className="rounded-sm border border-blue-400/50 px-4 py-2 font-semibold text-blue-400 dark:text-blue-400 transition hover:bg-blue-400/10 dark:hover:bg-blue-400/10"
-                >
-                  Move to favorites
-                </Link>
-                {items.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={clearCart}
-                    className="rounded-sm border border-red-400/50 px-4 py-2 font-semibold text-red-400 dark:text-red-400 transition hover:bg-red-400/10 dark:hover:bg-red-400/10"
+            {/* Order Summary */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-24 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-900/50 p-6 sm:p-8 shadow-xl backdrop-blur-sm">
+                <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200 mb-6">
+                  Order Summary
+                </h2>
+
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-neutral-900 dark:text-neutral-200">
+                      Items ({filteredItems.length})
+                    </span>
+                    <span className="font-semibold text-neutral-900 dark:text-neutral-200">
+                      {formatCurrency(subtotal)}
+                    </span>
+                  </div>
+                  <div className="border-t border-neutral-200 dark:border-neutral-800 pt-4">
+                    <div className="flex justify-between items-baseline">
+                      <span className="text-lg font-semibold text-neutral-900 dark:text-neutral-200">
+                        Subtotal
+                      </span>
+                      <span className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+                        {formatCurrency(subtotal)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-neutral-900 dark:text-neutral-200 mb-6 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800">
+                  Taxes and shipping costs are calculated at checkout based on
+                  supplier confirmation
+                </p>
+
+                <div className="space-y-3">
+                  <Link
+                    href="/checkout"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 dark:bg-primary-600 px-6 py-3.5 text-base font-semibold text-neutral-900 dark:text-neutral-200 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    Clear cart
-                  </button>
-                )}
+                    Proceed to Checkout
+                    <ArrowRight className="h-5 w-5" />
+                  </Link>
+                  <Link
+                    href="/favorites"
+                    className="w-full inline-flex items-center justify-center rounded-xl border-2 border-primary-200 dark:border-primary-900/50 px-6 py-3 text-sm font-semibold text-neutral-900 dark:text-neutral-200 transition-all hover:bg-primary-500 dark:hover:bg-primary-600/30"
+                  >
+                    Move to Favorites
+                  </Link>
+                  {items.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={clearCart}
+                      className="w-full inline-flex items-center justify-center rounded-xl border-2 border-red-200 dark:border-red-900/50 px-6 py-3 text-sm font-semibold text-neutral-900 dark:text-neutral-200 transition-all hover:bg-red-500 dark:hover:bg-red-600/30"
+                    >
+                      Clear Cart
+                    </button>
+                  )}
+                </div>
               </div>
-            </section>
-          </>
+            </div>
+          </div>
         )}
       </main>
     </div>

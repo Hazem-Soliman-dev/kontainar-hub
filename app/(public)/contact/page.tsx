@@ -1,175 +1,142 @@
-import {
-  Mail,
-  Phone,
-  MessageSquare,
-  Handshake,
-  Facebook,
-  Twitter,
-  Instagram,
-} from "lucide-react";
-import Link from "next/link";
-
-import { metadata } from "./metadata";
-export { metadata };
+import type { Metadata } from "next";
+import { Mail, MapPin, Phone, Clock, MessageSquare } from "lucide-react";
 
 import { ContactClient } from "./contact-client";
 import { Breadcrumb } from "../../../components/ui/breadcrumb";
 
+export const metadata: Metadata = {
+  title: "Contact Us | TajirJomla Hub",
+  description:
+    "Get in touch with our team for support, sales inquiries, or general questions.",
+};
+
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col pb-16 sm:pb-26">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-6 sm:pt-8">
-          <Breadcrumb />
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+      {/* Hero Section */}
+      <section className="relative bg-neutral-900 py-24 sm:py-32 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-[50%] -right-[20%] w-[80%] h-[200%] bg-gradient-to-bl from-primary-900/40 via-purple-900/20 to-transparent -rotate-12 blur-3xl opacity-60" />
+          <div className="absolute -bottom-[50%] -left-[20%] w-[80%] h-[200%] bg-gradient-to-tr from-secondary-900/40 via-blue-900/20 to-transparent rotate-12 blur-3xl opacity-60" />
         </div>
-        <ContactInfoSection />
-        <ContactFormSection />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 mb-6">
+            Get in Touch
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-neutral-400 mb-10">
+            Have questions about our marketplace? Our team is ready to assist
+            you.
+          </p>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <main className="relative -mt-20 z-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-24">
+          {/* Breadcrumb */}
+          <div className="mb-8">
+            <Breadcrumb />
+          </div>
+
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Contact Info Cards */}
+            <div className="lg:col-span-1">
+              <div className="space-y-6">
+                <ContactInfoCard
+                  icon={Mail}
+                  title="Email Us"
+                  content="support@tajirjomlahub.com"
+                  subContent="We'll respond within 24 hours."
+                  href="mailto:support@tajirjomlahub.com"
+                />
+                <ContactInfoCard
+                  icon={Phone}
+                  title="Call Us"
+                  content="+1 (555) 123-4567"
+                  subContent="Mon-Fri from 8am to 5pm EST."
+                  href="tel:+15551234567"
+                />
+                <ContactInfoCard
+                  icon={MapPin}
+                  title="Visit Us"
+                  content="123 Market Street"
+                  subContent="San Francisco, CA 94105"
+                  href="https://maps.google.com"
+                />
+                <ContactInfoCard
+                  icon={Clock}
+                  title="Business Hours"
+                  content="Monday - Friday"
+                  subContent="9:00 AM - 6:00 PM"
+                />
+              </div>
+            </div>
+
+            {/* Right Column - Contact Form */}
+            <div className="lg:col-span-2">
+              <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-sm border border-neutral-200 dark:border-neutral-800 p-8 sm:p-10">
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+                    Send us a message
+                  </h2>
+                  <p className="text-neutral-500 dark:text-neutral-400">
+                    Fill out the form below and we'll get back to you as soon as
+                    possible.
+                  </p>
+                </div>
+                <ContactClient />
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );
 }
 
-function HeroSection() {
-  return (
-    <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700">
-      <div className="absolute -left-24 top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-      <div className="absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-purple-400/20 blur-3xl" />
-
-      <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-16 text-center"></div>
-    </section>
-  );
-}
-
-function ContactInfoSection() {
-  const contactCards = [
-    {
-      icon: Mail,
-      title: "General Support",
-      description: "For general inquiries and account questions",
-      email: "support@kontainarhub.com",
-      hours: "24/7 Support",
-      color: "blue",
-    },
-    {
-      icon: Phone,
-      title: "Sales",
-      description: "Interested in our plans or enterprise solutions?",
-      email: "sales@kontainarhub.com",
-      phone: "+1 (555) 123-4567",
-      color: "indigo",
-    },
-    {
-      icon: MessageSquare,
-      title: "Technical Support",
-      description: "Need help with technical issues?",
-      email: "tech@kontainarhub.com",
-      responseTime: "Response within 24 hours",
-      color: "purple",
-    },
-    {
-      icon: Handshake,
-      title: "Partnerships",
-      description: "Let's explore partnership opportunities",
-      email: "partners@kontainarhub.com",
-      color: "emerald",
-    },
-  ];
-
-  const colorClasses = {
-    blue: "bg-blue-600/10 text-blue-300 border-blue-500/40",
-    indigo: "bg-indigo-600/10 text-indigo-300 border-indigo-500/40",
-    purple: "bg-purple-600/10 text-purple-300 border-purple-500/40",
-    emerald: "bg-emerald-600/10 text-emerald-300 border-emerald-500/40",
-  };
-
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900">
-      <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
-        {contactCards.map((card) => {
-          const Icon = card.icon;
-          const colorClass =
-            colorClasses[card.color as keyof typeof colorClasses];
-          return (
-            <div
-              key={card.title}
-              className="flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
-            >
-              <div
-                className={`flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl ${colorClass} border`}
-              >
-                <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
-              </div>
-              <div className="flex flex-col gap-1 sm:gap-2">
-                <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                  {card.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                  {card.description}
-                </p>
-              </div>
-              <div className="space-y-2 text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                <div>
-                  <p className="text-xs text-neutral-700 dark:text-neutral-700 uppercase tracking-wide">
-                    Email
-                  </p>
-                  <a
-                    href={`mailto:${card.email}`}
-                    className="text-blue-400 hover:text-blue-300 transition"
-                  >
-                    {card.email}
-                  </a>
-                </div>
-                {card.phone && (
-                  <div>
-                    <p className="text-xs text-neutral-700 dark:text-neutral-700 uppercase tracking-wide">
-                      Phone
-                    </p>
-                    <a
-                      href={`tel:${card.phone}`}
-                      className="text-blue-400 hover:text-blue-300 transition"
-                    >
-                      {card.phone}
-                    </a>
-                  </div>
-                )}
-                {card.hours && (
-                  <div>
-                    <p className="text-xs text-neutral-700 dark:text-neutral-700 uppercase tracking-wide">
-                      Hours
-                    </p>
-                    <p className="text-neutral-700 dark:text-neutral-700">
-                      {card.hours}
-                    </p>
-                  </div>
-                )}
-                {card.responseTime && (
-                  <div>
-                    <p className="text-xs text-neutral-700 dark:text-neutral-700 uppercase tracking-wide">
-                      Response Time
-                    </p>
-                    <p className="text-neutral-700 dark:text-neutral-700">
-                      {card.responseTime}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
+function ContactInfoCard({
+  icon: Icon,
+  title,
+  content,
+  subContent,
+  href,
+}: {
+  icon: any;
+  title: string;
+  content: string;
+  subContent?: string;
+  href?: string;
+}) {
+  const CardContent = (
+    <div className="flex items-start gap-4 p-6 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+      <div className="shrink-0 h-12 w-12 rounded-xl bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-primary-600 dark:text-primary-400">
+        <Icon className="h-6 w-6" />
       </div>
-    </section>
-  );
-}
-
-function ContactFormSection() {
-  return (
-    <section className="mx-auto w-full max-w-3xl px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-10">
-      <div className="flex flex-col gap-2 items-center justify-center mb-6 sm:mb-8">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Send us a Message
-        </h2>
+      <div className="flex-1 min-w-0">
+        <h3 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-1">
+          {title}
+        </h3>
+        <p className="text-base font-medium text-neutral-700 dark:text-neutral-300">
+          {content}
+        </p>
+        {subContent && (
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+            {subContent}
+          </p>
+        )}
       </div>
-      <ContactClient />
-    </section>
+    </div>
   );
+
+  if (href) {
+    return (
+      <a href={href} className="block">
+        {CardContent}
+      </a>
+    );
+  }
+
+  return CardContent;
 }

@@ -48,10 +48,10 @@ export function AddToCartButton({
       disabled={isDisabled}
       className={`flex items-center justify-center rounded-full transition-colors ${
         isDisabled
-          ? "bg-gray-400 text-white cursor-not-allowed opacity-60"
+          ? "bg-neutral-400 dark:bg-neutral-500 text-neutral-900 dark:text-neutral-200 cursor-not-allowed opacity-60"
           : inCart
-            ? "bg-green-500 text-white hover:bg-green-600"
-            : "bg-blue-500 text-white hover:bg-blue-600"
+            ? "bg-green-500 dark:bg-green-600 text-neutral-900 dark:text-neutral-200 hover:bg-green-600"
+            : "bg-primary-500 dark:bg-primary-600 text-neutral-900 dark:text-neutral-200 hover:bg-primary-600"
       } ${sizeClasses[size]} ${className}`}
       aria-label={inCart ? "Item in cart - Add more" : "Add to cart"}
       title={isDisabled ? "Please login to add to cart" : inCart ? "Item in cart - Click to add more" : "Add to cart"}

@@ -111,7 +111,7 @@ function seedInitialUsers() {
   }> = [
     {
       fullName: "Aurora Commodities Lead",
-      email: "supplier.demo@kontainarhub.com",
+      email: "supplier.demo@tajirjomlahub.com",
       phone: "+15550001111",
       password: "Supplier#2025",
       role: "supplier",
@@ -120,7 +120,7 @@ function seedInitialUsers() {
     },
     {
       fullName: "Northwind Trading Ops",
-      email: "trader.demo@kontainarhub.com",
+      email: "trader.demo@tajirjomlahub.com",
       phone: "+15550002222",
       password: "Trader#2025",
       role: "trader",

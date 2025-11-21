@@ -1,194 +1,168 @@
-import { createMetadata } from "../../../lib/seo/metadata";
-import { Breadcrumb } from "../../../components/ui/breadcrumb";
-import { Building2, Users, Target, Award } from "lucide-react";
+import { createMetadata } from "@/lib/seo/metadata";
+import { Building2, Users, Target, Award, CheckCircle2, Globe2, ShieldCheck, Zap } from "lucide-react";
+import Image from "next/image";
 
 export const metadata = createMetadata({
   title: "About Us",
   description:
-    "Learn about Kontainar Hub, your trusted multi-vendor marketplace connecting buyers with quality stores worldwide.",
+    "Learn about TajirJomla Hub, your trusted multi-vendor marketplace connecting buyers with quality stores worldwide.",
   path: "/about",
   keywords: ["about", "company", "marketplace", "mission", "vision"],
 });
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col pb-16 sm:pb-26">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-6">
-          <Breadcrumb />
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+      {/* Hero Section */}
+      <div className="relative bg-neutral-900 py-24 sm:py-32 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-[50%] -right-[20%] w-[80%] h-[200%] bg-gradient-to-bl from-primary-900/40 via-purple-900/20 to-transparent -rotate-12 blur-3xl opacity-60" />
+          <div className="absolute -bottom-[50%] -left-[20%] w-[80%] h-[200%] bg-gradient-to-tr from-secondary-900/40 via-blue-900/20 to-transparent rotate-12 blur-3xl opacity-60" />
         </div>
+        
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 mb-6">
+            Building the Future of Global Trade
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-neutral-900 dark:text-neutral-200 mb-10">
+            We're revolutionizing the way businesses discover and connect with suppliers and traders worldwide.
+          </p>
+        </div>
+      </div>
 
-        <HeroSection />
-        <MissionSection />
-        <ValuesSection />
-        <TeamSection />
+      <main className="relative z-10">
+        {/* Mission Section */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+            <div className="space-y-8">
+              <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-4xl">
+                Connecting the World Through Commerce
+              </h2>
+              <div className="space-y-6 text-lg text-neutral-900 dark:text-neutral-200">
+                <p>
+                  Founded with a vision to simplify global commerce, TajirJomla Hub has grown into a trusted ecosystem where businesses of all sizes can thrive. We believe that geography shouldn't be a barrier to growth.
+                </p>
+                <p>
+                  Our platform combines cutting-edge technology with human-centric support to create seamless connections between buyers and sellers. Whether you're a local artisan or a multinational distributor, we provide the tools you need to succeed.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-6 pt-4">
+                <div className="p-4 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+                  <div className="text-3xl font-bold text-primary-700 dark:text-primary-400 mb-1">50+</div>
+                  <div className="text-sm font-medium text-neutral-900 dark:text-neutral-200">Countries Served</div>
+                </div>
+                <div className="p-4 rounded-2xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+                  <div className="text-3xl font-bold text-secondary-700 dark:text-secondary-400 mb-1">10k+</div>
+                  <div className="text-sm font-medium text-neutral-900 dark:text-neutral-200">Active Businesses</div>
+                </div>
+              </div>
+            </div>
+            <div className="relative aspect-square lg:aspect-[4/3] overflow-hidden rounded-3xl bg-neutral-100 dark:bg-neutral-800 shadow-2xl border border-neutral-200 dark:border-neutral-800">
+               <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-secondary-500/10 flex items-center justify-center">
+                  <Globe2 className="h-32 w-32 text-neutral-300 dark:text-neutral-700 opacity-50" />
+               </div>
+               {/* In a real app, use <Image /> here */}
+            </div>
+          </div>
+        </section>
+
+        {/* Values Section */}
+        <section className="bg-neutral-50 dark:bg-neutral-900/50 py-20 sm:py-24 border-y border-neutral-200 dark:border-neutral-800">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-4xl mb-4">
+                Our Mission & Values
+              </h2>
+              <p className="text-lg text-neutral-900 dark:text-neutral-200">
+                We are driven by a shared purpose to make trade accessible, secure, and profitable for everyone.
+              </p>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+              <ValueCard
+                icon={Target}
+                title="Trust & Transparency"
+                description="We prioritize honesty in every transaction, ensuring you have the information needed to make confident decisions."
+                color="blue"
+              />
+              <ValueCard
+                icon={Users}
+                title="Customer First"
+                description="Your success is our success. We continuously evolve our platform based on your feedback and needs."
+                color="indigo"
+              />
+              <ValueCard
+                icon={Zap}
+                title="Innovation"
+                description="Leveraging AI and data analytics to provide smarter search, real-time insights, and seamless logistics."
+                color="purple"
+              />
+              <ValueCard
+                icon={Award}
+                title="Excellence"
+                description="We strive for perfection in user experience, support, and platform reliability."
+                color="emerald"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Why Choose Us Section */}
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-4xl mb-4">
+              Why Choose TajirJomla Hub?
+            </h2>
+            <p className="text-lg text-neutral-900 dark:text-neutral-200">
+              Join thousands of businesses that trust us for their sourcing and selling needs.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[
+              { title: "Global Reach", desc: "Connect with partners in over 50 countries.", icon: Globe2 },
+              { title: "Verified Partners", desc: "Strict vetting process for all suppliers.", icon: ShieldCheck },
+              { title: "Secure Payments", desc: "Escrow protection for peace of mind.", icon: CheckCircle2 },
+              { title: "24/7 Support", desc: "Round-the-clock assistance in multiple languages.", icon: Users },
+              { title: "Smart Analytics", desc: "Data-driven insights to grow your business.", icon: Target },
+              { title: "Fast Shipping", desc: "Integrated logistics for reliable delivery.", icon: Zap },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-4 p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+                <div className="flex-shrink-0 mt-1 rounded-xl bg-primary-50 dark:bg-primary-900/20 p-2 text-primary-700 dark:text-primary-400">
+                  <item.icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-neutral-900 dark:text-neutral-200 text-lg mb-1">{item.title}</h3>
+                  <p className="text-neutral-900 dark:text-neutral-200 text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
   );
 }
 
-function HeroSection() {
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900">
-      <div className="flex flex-col items-center justify-center text-center mb-5 sm:mb-0">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-neutral-900 dark:text-neutral-900">
-          About Kontainar Hub
-        </h1>
-        <p className="text-base sm:text-lg text-neutral-700 dark:text-neutral-700 max-w-3xl mt-3">
-          Your trusted multi-vendor marketplace connecting buyers with quality
-          stores worldwide. We're revolutionizing the way businesses discover and
-          connect with suppliers and traders.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function MissionSection() {
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Our Mission
-        </h2>
-      </div>
-      <div className="rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 sm:p-8 shadow-sm">
-        <p className="text-base sm:text-lg text-neutral-700 dark:text-neutral-700 leading-relaxed">
-          To create a seamless, transparent, and efficient marketplace that
-          empowers businesses of all sizes to discover, connect, and transact
-          with trusted suppliers and traders. We believe in making global trade
-          accessible, secure, and profitable for everyone.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function ValuesSection() {
-  const values = [
-    {
-      icon: Target,
-      title: "Trust & Transparency",
-      description:
-        "We prioritize trust and transparency in every transaction, ensuring all parties have the information they need to make informed decisions.",
-      color: "blue",
-    },
-    {
-      icon: Users,
-      title: "Customer First",
-      description:
-        "Our customers are at the heart of everything we do. We continuously improve our platform based on your feedback and needs.",
-      color: "indigo",
-    },
-    {
-      icon: Building2,
-      title: "Innovation",
-      description:
-        "We leverage cutting-edge technology to provide the best marketplace experience, from advanced search to real-time analytics.",
-      color: "purple",
-    },
-    {
-      icon: Award,
-      title: "Excellence",
-      description:
-        "We strive for excellence in every aspect of our platform, from user experience to customer support and platform reliability.",
-      color: "emerald",
-    },
-  ];
-
-  const colorClasses = {
-    blue: "bg-blue-600/10 text-blue-300 border-blue-500/40",
-    indigo: "bg-indigo-600/10 text-indigo-300 border-indigo-500/40",
-    purple: "bg-purple-600/10 text-purple-300 border-purple-500/40",
-    emerald: "bg-emerald-600/10 text-emerald-300 border-emerald-500/40",
+function ValueCard({ icon: Icon, title, description, color }: { icon: any, title: string, description: string, color: string }) {
+  const colorStyles = {
+    blue: "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400",
+    indigo: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400",
+    purple: "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400",
+    emerald: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400",
   };
 
   return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Our Values
-        </h2>
+    <div className="group relative overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
+      <div className={`mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl ${colorStyles[color as keyof typeof colorStyles]}`}>
+        <Icon className="h-7 w-7" />
       </div>
-      <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2">
-        {values.map((value) => {
-          const Icon = value.icon;
-          const colorClass =
-            colorClasses[value.color as keyof typeof colorClasses];
-          return (
-            <div
-              key={value.title}
-              className="flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
-            >
-              <div
-                className={`flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl ${colorClass} border`}
-              >
-                <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
-              </div>
-              <div className="flex flex-col gap-1 sm:gap-2">
-                <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                  {value.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                  {value.description}
-                </p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
+      <h3 className="mb-3 text-xl font-bold text-neutral-900 dark:text-neutral-200">{title}</h3>
+      <p className="text-neutral-900 dark:text-neutral-200 leading-relaxed">
+        {description}
+      </p>
+    </div>
   );
 }
 
-function TeamSection() {
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12 mb-8 sm:mb-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Why Choose Us
-        </h2>
-      </div>
-      <div className="rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 sm:p-8 shadow-sm">
-        <ul className="space-y-4 text-base sm:text-lg text-neutral-700 dark:text-neutral-700">
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>Global Reach:</strong> Connect with suppliers and traders
-              from around the world
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>Verified Partners:</strong> All stores and suppliers are
-              verified for quality and reliability
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>Advanced Tools:</strong> Powerful analytics and inventory
-              management tools for traders and suppliers
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>24/7 Support:</strong> Round-the-clock customer support to
-              assist you whenever you need help
-            </span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-blue-400 font-bold">•</span>
-            <span>
-              <strong>Secure Transactions:</strong> Your data and transactions
-              are protected with industry-leading security measures
-            </span>
-          </li>
-        </ul>
-      </div>
-    </section>
-  );
-}
 

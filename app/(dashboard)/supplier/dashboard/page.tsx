@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { TrendingUp, Package, ShoppingBag, DollarSign, ArrowRight } from "lucide-react";
 
 import { SalesChart } from "../../../../components/charts/sales-chart";
 import { DashboardGate } from "../../../../components/dashboard/dashboard-gate";
+import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
 
 type DashboardOrderStatus = "pending" | "processing" | "fulfilled";
@@ -110,18 +112,24 @@ export default function SupplierDashboardPage() {
         label: "Total Products",
         value: totalProducts,
         description: "Across all active categories",
+        icon: Package,
+        color: "from-blue-500 to-blue-600",
       },
       {
         id: "metric-pending",
         label: "Pending Orders",
         value: pendingOrders,
         description: "Awaiting confirmation",
+        icon: ShoppingBag,
+        color: "from-amber-500 to-amber-600",
       },
       {
         id: "metric-processing",
         label: "In Processing",
         value: processingOrders,
         description: "Being prepared or shipped",
+        icon: TrendingUp,
+        color: "from-violet-500 to-violet-600",
       },
       {
         id: "metric-revenue",
@@ -132,6 +140,8 @@ export default function SupplierDashboardPage() {
           maximumFractionDigits: 0,
         }).format(revenue),
         description: "From fulfilled orders",
+        icon: DollarSign,
+        color: "from-emerald-500 to-emerald-600",
       },
     ];
   }, [orders]);
@@ -149,193 +159,215 @@ export default function SupplierDashboardPage() {
 
   return (
     <DashboardGate requiredPlan="supplier">
-      <main className="flex min-h-screen flex-col gap-6 bg-neutral-50 dark:bg-neutral-50 px-4 pt-8 pb-10">
-        <header className="mx-auto flex w-full max-w-7xl flex-col md:f">
-          <Breadcrumb />
-          <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
-            <div className="flex gap-3 mb-4">
-              <Link
-                href="/supplier/products"
-                className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-neutral-50 dark:text-neutral-50 shadow-sm hover:bg-blue-700 dark:hover:bg-blue-700"
-              >
-                Add new product
-              </Link>
-              <Link
-                href="/supplier/orders"
-                className="inline-flex items-center rounded-lg border border-blue-700 dark:border-blue-700 bg-neutral-50 dark:bg-neutral-50 px-4 py-2 text-sm font-semibold text-blue-400 dark:text-blue-400 hover:bg-blue-950 dark:hover:bg-blue-950"
-              >
-                Review orders
-              </Link>
-            </div>
-          </div>
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+        <MobileDashboardNav role="supplier" />
 
-          {notifications.length > 0 && (
-            <aside className="flex flex-col gap-2 rounded-2xl border border-blue-700 dark:border-blue-700 bg-neutral-50 dark:bg-neutral-50 px-4 py-4 text-sm text-blue-400 dark:text-blue-400 md:flex-row md:items-center">
-              <span className="font-semibold text-md text-neutral-900 dark:text-neutral-900 text-center">Live order updates:</span>
-              <div className="flex flex-wrap gap-2">
-                {notifications.map((note, index) => (
-                  <span
-                    key={`${note}-${index}`}
-                    className="rounded-full bg-blue-950 dark:bg-blue-950 px-3 py-1 text-md font-medium text-blue-400 dark:text-blue-400"
-                  >
-                    {note}
-                  </span>
-                ))}
-              </div>
-            </aside>
-          )}
-        </header>
-
-        <section className="mx-auto grid w-full max-w-7xl gap-4 md:grid-cols-4">
-          {metrics.map((metric) => (
-            <article
-              key={metric.id}
-              className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-5 shadow-sm text-center"
-            >
-              <p className="text-sm font-semibold uppercase tracking-wide text-neutral-700 dark:text-neutral-700">
-                {metric.label}
-              </p>
-              <p className="mt-3 text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-                {metric.value}
-              </p>
-              <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-700">
-                {metric.description}
-              </p>
-            </article>
-          ))}
-        </section>
-
-        <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[2fr_1fr]">
-          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
-            <header className="flex items-center justify-between">
+        <main className="flex min-h-screen flex-col gap-6 px-4 sm:px-6 lg:px-8 pt-20 lg:pt-8 pb-10">
+          <header className="mx-auto w-full max-w-7xl">
+            <Breadcrumb />
+            
+            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
-                  Sales trend
+                <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Supplier Dashboard</h1>
+                <p className="mt-1 text-neutral-900 dark:text-neutral-200">Manage your products and orders</p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/supplier/products"
+                  className="inline-flex items-center gap-2 rounded-xl bg-primary-500 dark:bg-primary-600 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-200 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                >
+                  <Package className="h-4 w-4" />
+                  Add Product
+                </Link>
+                <Link
+                  href="/supplier/orders"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-primary-200 dark:border-primary-900/50 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-200 transition-all hover:bg-primary-500 dark:hover:bg-primary-600/30"
+                >
+                  Review Orders
+                </Link>
+              </div>
+            </div>
+
+            {notifications.length > 0 && (
+              <aside className="mt-6 rounded-2xl border border-primary-200 dark:border-primary-900/50 bg-primary-50 dark:bg-primary-950/30 px-4 sm:px-6 py-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                  <span className="font-semibold text-sm text-primary-900 dark:text-primary-300">Live order updates:</span>
+                  <div className="flex flex-wrap gap-2">
+                    {notifications.map((note, index) => (
+                      <span
+                        key={`${note}-${index}`}
+                        className="rounded-full bg-primary-100 dark:bg-primary-900/50 px-3 py-1 text-xs font-medium text-primary-700 dark:text-primary-300"
+                      >
+                        {note}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </aside>
+            )}
+          </header>
+
+          <section className="mx-auto grid w-full max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {metrics.map((metric) => {
+              const Icon = metric.icon;
+              return (
+                <article
+                  key={metric.id}
+                  className="group relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`rounded-xl bg-gradient-to-br ${metric.color} p-3`}>
+                      <Icon className="h-5 w-5 text-neutral-900 dark:text-neutral-200" />
+                    </div>
+                  </div>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-neutral-200">
+                    {metric.label}
+                  </p>
+                  <p className="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-200">
+                    {metric.value}
+                  </p>
+                  <p className="mt-1 text-xs text-neutral-900 dark:text-neutral-200">
+                    {metric.description}
+                  </p>
+                </article>
+              );
+            })}
+          </section>
+
+          <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[2fr_1fr]">
+            <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+              <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+                    Sales Trend
+                  </h2>
+                  <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
+                    Revenue and shipment volume (last 6 months)
+                  </p>
+                </div>
+                <Link
+                  href="/supplier/analytics"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-primary-500 dark:text-primary-400 hover:underline"
+                >
+                  View Analytics
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </header>
+              <div className="h-72">
+                <SalesChart
+                  data={SALES_TREND}
+                  dataKey="revenue"
+                  xKey="month"
+                  series={[
+                    { name: "revenue", color: "#2563eb" },
+                    { name: "volume", color: "#0ea5e9" },
+                  ]}
+                  currency
+                />
+              </div>
+            </article>
+
+            <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+              <header>
+                <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+                  Product Health
                 </h2>
-                <p className="text-sm text-neutral-700 dark:text-neutral-700">
-                  Revenue and shipment volume (last 6 months)
+                <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
+                  Quick view of catalog readiness
+                </p>
+              </header>
+              <ul className="space-y-3">
+                {INITIAL_PRODUCTS.map((product) => (
+                  <li
+                    key={product.id}
+                    className="flex items-center justify-between rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 p-4"
+                  >
+                    <div className="flex-1">
+                      <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-200 block">
+                        {product.name}
+                      </span>
+                      <span className="text-xs text-neutral-900 dark:text-neutral-200">
+                        Status: <span className="capitalize">{product.status}</span>
+                      </span>
+                    </div>
+                    <Link
+                      href="/supplier/products"
+                      className="text-xs font-semibold uppercase tracking-wide text-primary-500 dark:text-primary-400 hover:underline"
+                    >
+                      Manage
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </section>
+
+          <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+            <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+                  Recent Orders
+                </h2>
+                <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
+                  Monitor progress and next fulfillment steps
                 </p>
               </div>
               <Link
-                href="/supplier/analytics"
-                className="text-sm font-semibold text-blue-400 hover:underline"
+                href="/supplier/orders"
+                className="inline-flex items-center gap-1 text-sm font-semibold text-primary-500 dark:text-primary-400 hover:underline"
               >
-                View analytics →
+                View All Orders
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </header>
-            <div className="mt-6 h-72">
-              <SalesChart
-                data={SALES_TREND}
-                dataKey="revenue"
-                xKey="month"
-                series={[
-                  { name: "revenue", color: "#2563eb" },
-                  { name: "volume", color: "#0ea5e9" },
-                ]}
-                currency
-              />
-            </div>
-          </article>
 
-          <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
-            <header>
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
-                Product health
-              </h2>
-              <p className="text-sm text-neutral-700 dark:text-neutral-700">
-                Quick view of catalog readiness
-              </p>
-            </header>
-            <ul className="space-y-3">
-              {INITIAL_PRODUCTS.map((product) => (
-                <li
-                  key={product.id}
-                  className="flex items-center justify-between"
-                >
-                  <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-900">
-                      {product.name}
-                    </span>
-                    <span className="text-sm text-neutral-700 dark:text-neutral-700">
-                      Status: {product.status}
-                    </span>
-                  </div>
-                  <Link
-                    href="/supplier/products"
-                    className="text-xs font-semibold uppercase tracking-wide text-blue-400"
-                  >
-                    Manage
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </article>
-        </section>
-
-        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 p-6 shadow-sm">
-          <header className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-neutral-900">
-                Recent orders
-              </h2>
-              <p className="text-sm text-neutral-700 dark:text-neutral-700">
-                Monitor progress and next fulfillment steps
-              </p>
-            </div>
-            <Link
-              href="/supplier/orders"
-              className="text-sm font-semibold text-blue-400 hover:underline"
-            >
-              View all orders
-            </Link>
-          </header>
-
-          <div className="mt-6 overflow-x-auto">
-            <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-200 text-center text-sm">
-              <thead>
-                <tr className="text-xs uppercase tracking-wider text-neutral-700 dark:text-neutral-700">
-                  <th className="py-3 pr-6">Order</th>
-                  <th className="py-3 pr-6">Customer</th>
-                  <th className="py-3 pr-6">Total</th>
-                  <th className="py-3 pr-6">Status</th>
-                  <th className="py-3">Placed</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200 dark:divide-neutral-200">
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="text-sm text-neutral-700 dark:text-neutral-700">
-                    <td className="py-3 pr-6 font-semibold text-neutral-900 dark:text-neutral-900">
-                      {order.id}
-                    </td>
-                    <td className="py-3 pr-6">{order.customer}</td>
-                    <td className="py-3 pr-6">
-                      {order.total.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </td>
-                    <td className="py-3 pr-6">
-                      <StatusBadge status={order.status} />
-                    </td>
-                    <td className="py-3 text-neutral-700 dark:text-neutral-700">
-                      {new Date(order.placedAt).toLocaleString()}
-                    </td>
+            <div className="overflow-x-auto -mx-6 px-6">
+              <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm">
+                <thead>
+                  <tr className="text-left">
+                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Order</th>
+                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Customer</th>
+                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Total</th>
+                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Status</th>
+                    <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Placed</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </main>
+                </thead>
+                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                  {recentOrders.map((order) => (
+                    <tr key={order.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
+                      <td className="py-3 pr-6 font-semibold text-neutral-900 dark:text-neutral-200">
+                        {order.id}
+                      </td>
+                      <td className="py-3 pr-6 text-neutral-900 dark:text-neutral-200">{order.customer}</td>
+                      <td className="py-3 pr-6 text-neutral-900 dark:text-neutral-200">
+                        {order.total.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })}
+                      </td>
+                      <td className="py-3 pr-6">
+                        <StatusBadge status={order.status} />
+                      </td>
+                      <td className="py-3 text-neutral-900 dark:text-neutral-200 text-xs">
+                        {new Date(order.placedAt).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
     </DashboardGate>
   );
 }
 
 function StatusBadge({ status }: { status: DashboardOrderStatus }) {
   const config: Record<DashboardOrderStatus, string> = {
-    pending: "bg-amber-100 dark:bg-amber-100 text-amber-800 dark:text-amber-800 border-amber-200 dark:border-amber-200",
-    processing: "bg-blue-100 dark:bg-blue-100 text-blue-800 dark:text-blue-800 border-blue-200 dark:border-blue-200",
-    fulfilled: "bg-emerald-100 dark:bg-emerald-100 text-emerald-800 dark:text-emerald-800 border-emerald-200 dark:border-emerald-200",
+    pending: "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/50",
+    processing: "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/50",
+    fulfilled: "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/50",
   };
 
   const label: Record<DashboardOrderStatus, string> = {
@@ -346,7 +378,7 @@ function StatusBadge({ status }: { status: DashboardOrderStatus }) {
 
   return (
     <span
-      className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${config[status]}`}
+      className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${config[status]}`}
     >
       {label[status]}
     </span>

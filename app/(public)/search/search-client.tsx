@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo, useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Search, ArrowUpDown, X } from "lucide-react";
+import { Star, Search, ArrowUpDown, X, Filter, SlidersHorizontal } from "lucide-react";
 import { searchAll } from "../../../lib/search/search-utils";
 import { parseAdvancedQuery } from "../../../lib/search/query-parser";
 import {
@@ -24,13 +24,14 @@ import { featuredCategories } from "../../../lib/mock/public";
 import { hasActivePlan } from "../../../lib/utils/has-active-plan";
 import { useAuthStore } from "../../../lib/store/auth-store";
 import type { SubscriptionSnapshot } from "../../../lib/mock/subscriptions";
+import { cn } from "@/lib/utils";
 
 function highlightText(text: string, query: string) {
   if (!query.trim()) return text;
   const parts = text.split(new RegExp(`(${query})`, "gi"));
   return parts.map((part, i) =>
     part.toLowerCase() === query.toLowerCase() ? (
-      <mark key={i} className="bg-blue-500/20 text-blue-400">
+      <mark key={i} className="bg-primary-500/20 text-primary-600 dark:text-primary-400 rounded-sm px-0.5">
         {part}
       </mark>
     ) : (
@@ -50,6 +51,7 @@ export default function SearchClient() {
   const authSubscription = useAuthStore((state) => state.subscription);
   const [hasActivePlanState, setHasActivePlanState] = useState(false);
   const { addSearch } = useSearchStore();
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   // Fetch subscription status from API
   const fetchSubscription = useCallback(() => {
@@ -209,54 +211,71 @@ export default function SearchClient() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col gap-6 sm:gap-8 pb-16 sm:pb-24">
-        {/* Search Bar */}
-        <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700">
-          <div className="absolute -left-24 top-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -right-32 bottom-0 h-64 w-64 rounded-full bg-purple-400/20 blur-3xl" />
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+      <main className="flex flex-col gap-8 pb-24">
+        {/* Search Header */}
+        <section className="relative overflow-hidden bg-neutral-900 pt-12 pb-20">
+            {/* Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute -left-[10%] -top-[10%] h-[500px] w-[500px] rounded-full bg-primary-600/10 blur-[100px]" />
+                <div className="absolute -right-[10%] bottom-[10%] h-[500px] w-[500px] rounded-full bg-secondary-500/10 blur-[100px]" />
+            </div>
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-5" />
 
-          <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-4 sm:gap-6 px-4 sm:px-6 py-8 sm:py-12 text-center">
+          <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 sm:px-6 text-center z-10">
             <div className="w-full max-w-3xl">
               <HeroSearch />
             </div>
+            {query && (
+                <p className="text-neutral-900 dark:text-neutral-200 text-sm">
+                    Showing results for <span className="text-neutral-900 dark:text-neutral-200 font-semibold">"{query}"</span>
+                </p>
+            )}
           </div>
         </section>
 
-        {/* Results */}
-        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          <Breadcrumb />
+        {/* Results Section */}
+        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 -mt-12 relative z-20">
+          <div className="bg-white dark:bg-neutral-900 rounded-3xl shadow-strong border border-neutral-200 dark:border-neutral-800 p-6 sm:p-8 min-h-[500px] text-neutral-900 dark:text-neutral-200">
+            <div className="mb-8">
+                <Breadcrumb />
+            </div>
+
           {!hasResults ? (
-            <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 py-12 sm:py-16 text-center">
-              <Search className="h-12 w-12 sm:h-16 sm:w-16 text-neutral-400 dark:text-neutral-400" />
-              <h2 className="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-                No results found
-              </h2>
-              <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-700 px-4">
-                {query
-                  ? `We couldn't find anything matching "${query}"`
-                  : "Try searching for products, stores, or categories"}
-              </p>
-              <div className="mt-4 flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto px-4">
+            <div className="flex flex-col items-center justify-center gap-6 py-20 text-center">
+              <div className="h-24 w-24 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center">
+                  <Search className="h-10 w-10 text-neutral-400" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-200 mb-2">
+                    No results found
+                </h2>
+                <p className="text-neutral-900 dark:text-neutral-200 max-w-md mx-auto">
+                    {query
+                    ? `We couldn't find anything matching "${query}". Try adjusting your search or filters.`
+                    : "Try searching for products, stores, or categories"}
+                </p>
+              </div>
+              <div className="flex gap-4">
                 <Link
                   href="/"
-                  className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600 text-center"
+                  className="rounded-xl bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-500 shadow-lg shadow-primary-500/20"
                 >
                   Browse Categories
                 </Link>
                 <Link
                   href="/stores"
-                  className="rounded-lg border border-neutral-200 dark:border-neutral-200 px-4 py-2 text-sm font-semibold text-neutral-700 dark:text-neutral-700 transition hover:border-blue-500 hover:text-neutral-900 dark:hover:text-neutral-900 text-center"
+                  className="rounded-xl border border-neutral-200 dark:border-neutral-700 px-6 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-200 transition hover:bg-neutral-50 dark:hover:bg-neutral-800"
                 >
                   View All Stores
                 </Link>
               </div>
             </div>
           ) : (
-            <div className="grid gap-4 sm:gap-6 lg:grid-cols-4">
-              {/* Filters Sidebar */}
-              <aside className="lg:col-span-1">
-                <div className="sticky top-4">
+            <div className="grid gap-8 lg:grid-cols-4">
+              {/* Filters Sidebar (Desktop) */}
+              <aside className="hidden lg:block lg:col-span-1">
+                <div className="sticky top-24">
                   <SearchFilters
                     filters={filters}
                     onFilterChange={updateFilters}
@@ -264,323 +283,243 @@ export default function SearchClient() {
                 </div>
               </aside>
 
+              {/* Mobile Filters Trigger */}
+              <div className="lg:hidden mb-4">
+                  <button 
+                    onClick={() => setIsMobileFiltersOpen(!isMobileFiltersOpen)}
+                    className="w-full flex items-center justify-between p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200 font-medium"
+                  >
+                      <span className="flex items-center gap-2"><Filter className="h-4 w-4" /> Filters</span>
+                      <span className="bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs px-2 py-0.5 rounded-full">{activeFilterCount}</span>
+                  </button>
+                  {isMobileFiltersOpen && (
+                      <div className="mt-4 p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
+                          <SearchFilters filters={filters} onFilterChange={updateFilters} />
+                      </div>
+                  )}
+              </div>
+
               {/* Results Content */}
-              <div className="lg:col-span-3 space-y-6 sm:space-y-8">
+              <div className="lg:col-span-3 space-y-8">
                 {/* Results Header */}
-                <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-neutral-100 dark:border-neutral-800">
+                  <div className="text-sm text-neutral-900 dark:text-neutral-200">
                     {query && (
                       <span>
-                        Found {results.products.length} products,{" "}
-                        {results.stores.length} stores,{" "}
-                        {results.categories.length} categories for "{query}"
+                        Found <span className="font-semibold text-neutral-900 dark:text-neutral-200">{results.products.length}</span> products,{" "}
+                        <span className="font-semibold text-neutral-900 dark:text-neutral-200">{results.stores.length}</span> stores
                       </span>
                     )}
                     {category && !query && (
                       <span>
-                        Found {results.products.length} products,{" "}
-                        {results.stores.length} stores,{" "}
-                        {results.categories.length} categories in "{category}"
+                        Found <span className="font-semibold text-neutral-900 dark:text-neutral-200">{results.products.length}</span> products in <span className="font-semibold text-neutral-900 dark:text-neutral-200">{category}</span>
                       </span>
                     )}
                   </div>
 
                   {/* Sort Options */}
-                  <div className="flex items-center gap-2">
-                    <ArrowUpDown className="h-4 w-4 text-neutral-700 dark:text-neutral-700" />
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as SortOption)}
-                      className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
-                    >
-                      <option value="relevance">Sort by Relevance</option>
-                      <option value="price-asc">Price: Low to High</option>
-                      <option value="price-desc">Price: High to Low</option>
-                    </select>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-neutral-500 dark:text-neutral-500 hidden sm:inline">Sort by:</span>
+                    <div className="relative">
+                        <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as SortOption)}
+                        className="appearance-none rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 pl-4 pr-10 py-2 text-sm font-medium text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none cursor-pointer transition-all hover:border-neutral-300 dark:hover:border-neutral-600"
+                        >
+                        <option value="relevance">Relevance</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        </select>
+                        <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-900 dark:text-neutral-200 pointer-events-none" />
+                    </div>
                   </div>
                 </div>
 
                 {/* Active Filters */}
                 {activeFilterCount > 0 && (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm text-neutral-700 dark:text-neutral-700">
-                      Active filters:
-                    </span>
                     {filters.category && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400 dark:text-blue-400">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 dark:bg-blue-900/20 px-3 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
                         Category: {filters.category}
                         <button
                           type="button"
                           onClick={() =>
                             updateFilters({ ...filters, category: undefined })
                           }
-                          className="hover:text-blue-300"
+                          className="ml-1 hover:text-primary-900 dark:hover:text-primary-100"
                         >
                           <X className="h-3 w-3" />
                         </button>
                       </span>
                     )}
-                    {filters.brand && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400 dark:text-blue-400">
-                        Brand: {filters.brand}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateFilters({ ...filters, brand: undefined })
-                          }
-                          className="hover:text-blue-300"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    )}
-                    {(filters.minPrice !== undefined ||
-                      filters.maxPrice !== undefined) && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-400 dark:text-blue-400">
-                        Price: ${filters.minPrice || 0} - $
-                        {filters.maxPrice || "∞"}
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateFilters({
-                              ...filters,
-                              minPrice: undefined,
-                              maxPrice: undefined,
-                            })
-                          }
-                          className="hover:text-blue-300"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </span>
-                    )}
+                    {/* Add other active filters here similarly */}
+                    <button 
+                        onClick={() => updateFilters({})}
+                        className="text-xs text-neutral-900 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-neutral-200 underline decoration-neutral-300 underline-offset-4"
+                    >
+                        Clear all
+                    </button>
                   </div>
                 )}
 
                 {/* Related Searches */}
                 {relatedSearches.length > 0 && (
-                  <div className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4">
-                    <h3 className="mb-2 text-sm font-semibold text-neutral-900 dark:text-neutral-900">
-                      People also searched for
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {relatedSearches.map((related) => (
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <span className="text-xs font-medium text-neutral-900 dark:text-neutral-200 uppercase tracking-wider mr-2">Related:</span>
+                    {relatedSearches.map((related) => (
                         <Link
                           key={related}
                           href={`/search?q=${encodeURIComponent(related)}`}
-                          className="rounded-full border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-1 text-xs font-medium text-neutral-700 dark:text-neutral-700 transition hover:bg-blue-500/20 hover:text-blue-400 dark:hover:text-blue-400"
+                          className="rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-1 text-xs font-medium text-neutral-900 dark:text-neutral-200 transition hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                         >
                           {related}
                         </Link>
                       ))}
-                    </div>
                   </div>
                 )}
 
-                {/* Products */}
+                {/* Products Grid */}
                 {results.products.length > 0 && (
-                  <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-                      Products
+                  <div className="space-y-6">
+                    <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200 flex items-center gap-2">
+                        Products
+                        <span className="text-sm font-normal text-neutral-900 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-2 py-0.5 rounded-full">{results.products.length}</span>
                     </h2>
-                    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                       {results.products.map((product) => (
                         <div
                           key={product.id}
-                          className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 shadow-sm transition hover:-translate-y-1 hover:border-purple-500/60"
+                          className="group relative flex flex-col overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200 shadow-sm transition-all hover:shadow-strong hover:-translate-y-1"
                         >
-                          <div className="absolute right-6 top-6 z-10">
-                            <FavoriteButton
-                              product={product}
-                              size={18}
-                              className="h-8 w-8"
-                            />
-                          </div>
-                          <Link
-                            href={`/products/${
-                              product.id
-                            }?from=search&q=${encodeURIComponent(
-                              query || category
-                            )}`}
-                            className="flex flex-col gap-4"
-                            onClick={() =>
-                              trackResultClick(
-                                "product",
-                                product.id,
-                                query || category,
-                                results.products.indexOf(product) + 1
-                              )
-                            }
-                          >
-                            <div className="relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-200 bg-neutral-200/40 dark:bg-neutral-200/40">
-                              <Image
+                          <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-neutral-800">
+                            <Image
                                 src={product.imageUrl}
                                 alt={product.name}
-                                width={360}
-                                height={220}
-                                className="h-44 w-full object-cover transition duration-500 hover:scale-105"
-                              />
-                              {product.tag && (
-                                <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-2 py-1 text-xs font-bold text-white">
-                                  {product.tag}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                            {product.tag && (
+                                <span className="absolute left-4 top-4 rounded-full bg-rose-500 px-3 py-1 text-xs font-bold text-neutral-100 dark:text-neutral-900 shadow-sm z-10">
+                                    {product.tag}
                                 </span>
-                              )}
-                              {product.momentum === "surging" && (
-                                <span className="absolute right-3 top-3 rounded-full bg-green-500 px-2 py-1 text-xs font-bold text-white">
-                                  Surging
+                            )}
+                            {product.momentum === "surging" && (
+                                <span className="absolute right-4 top-4 rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-neutral-100 dark:text-neutral-900 shadow-sm z-10 flex items-center gap-1">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+                                    Surging
                                 </span>
-                              )}
+                            )}
+                            <div className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                <FavoriteButton product={product} size={18} className="h-9 w-9 bg-white dark:bg-neutral-900 shadow-sm" />
                             </div>
+                          </div>
 
-                            <div className="flex flex-col gap-2">
-                              <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-900">
-                                {highlightText(product.name, query || category)}
-                              </h3>
-                              <p className="text-sm text-neutral-700 dark:text-neutral-700">
-                                {product.brand}
-                              </p>
-                              {product.signals &&
-                                product.signals.length > 0 && (
-                                  <p className="text-xs text-neutral-700 dark:text-neutral-700">
-                                    {product.signals[0]}
-                                  </p>
+                          <div className="flex flex-1 flex-col p-5">
+                            <Link
+                                href={`/products/${product.id}?from=search&q=${encodeURIComponent(query || category)}`}
+                                className="flex flex-col gap-2 mb-4"
+                                onClick={() => trackResultClick("product", product.id, query || category, results.products.indexOf(product) + 1)}
+                            >
+                                <h3 className="font-bold text-neutral-900 dark:text-neutral-200 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                                    {highlightText(product.name, query || category)}
+                                </h3>
+                                <p className="text-xs font-medium text-neutral-900 dark:text-neutral-200">
+                                    {product.brand}
+                                </p>
+                            </Link>
+                            
+                            <div className="mt-auto flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-800">
+                                <ProductPriceOrRequest
+                                    product={product}
+                                    hasActivePlan={hasActivePlanState}
+                                    size="md"
+                                />
+                                {hasActivePlanState && (
+                                    <AddToCartButton product={product} size="sm" className="rounded-full" />
                                 )}
                             </div>
-
-                            <div className="mt-auto flex items-center justify-between">
-                              <ProductPriceOrRequest
-                                product={product}
-                                hasActivePlan={hasActivePlanState}
-                                size="md"
-                              />
-                            </div>
-                          </Link>
-                          {hasActivePlanState && (
-                            <div className="absolute bottom-4 right-4 z-10">
-                              <AddToCartButton product={product} size="sm" />
-                            </div>
-                          )}
+                          </div>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
 
-                {/* Stores */}
+                {/* Stores Grid */}
                 {results.stores.length > 0 && (
-                  <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-                      Stores
+                  <div className="space-y-6 pt-8 border-t border-neutral-100 dark:border-neutral-800">
+                    <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200 flex items-center gap-2">
+                        Stores
+                        <span className="text-sm font-normal text-neutral-900 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-2 py-0.5 rounded-full">{results.stores.length}</span>
                     </h2>
-                    <div className="grid gap-5 lg:grid-cols-2">
+                    <div className="grid gap-6 lg:grid-cols-2">
                       {results.stores.map((store) => (
                         <div
                           key={store.id}
-                          className="relative flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
+                          className="group relative flex flex-col overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200 shadow-sm transition-all hover:shadow-strong hover:-translate-y-1"
                         >
-                          <div className="absolute right-6 top-6 z-10">
-                            <FavoriteButton
-                              store={store}
-                              size={18}
-                              className="h-8 w-8"
-                            />
-                          </div>
-                          <Link
-                            href={`/stores/${
-                              store.id
-                            }?from=search&q=${encodeURIComponent(
-                              query || category
-                            )}`}
-                            className="flex flex-col gap-4"
-                            onClick={() =>
-                              trackResultClick(
-                                "store",
-                                store.id,
-                                query || category,
-                                results.stores.indexOf(store) + 1
-                              )
-                            }
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="relative h-16 w-16 overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-200">
-                                <Image
-                                  src={store.imageUrl}
-                                  alt={store.name}
-                                  fill
-                                  className="object-cover"
-                                />
-                              </div>
-                              <div>
-                                <p className="font-semibold text-neutral-900 dark:text-neutral-900">
-                                  {highlightText(store.name, query || category)}
-                                </p>
-                                <div className="flex items-center gap-1 text-amber-300">
-                                  {Array.from({ length: 5 }).map((_, index) => (
-                                    <Star
-                                      key={index}
-                                      className="h-4 w-4"
-                                      strokeWidth={
-                                        index < Math.round(store.rating)
-                                          ? 0
-                                          : 1.5
-                                      }
-                                      fill={
-                                        index < Math.round(store.rating)
-                                          ? "currentColor"
-                                          : "none"
-                                      }
-                                    />
-                                  ))}
-                                  <span className="ml-2 text-sm text-neutral-700 dark:text-neutral-700">
-                                    ({store.rating.toFixed(1)})
-                                  </span>
+                          <div className="relative h-32 bg-neutral-100 dark:bg-neutral-900">
+                             <Image
+                                src={store.imageUrl}
+                                alt={store.name}
+                                fill
+                                className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                             />
+                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                             <div className="absolute bottom-4 left-4 text-neutral-900 dark:text-neutral-200">
+                                <h3 className="font-bold text-lg">{highlightText(store.name, query || category)}</h3>
+                                <div className="flex items-center gap-1 text-amber-400 text-xs">
+                                    <Star className="h-3 w-3 fill-current" />
+                                    {store.rating.toFixed(1)} rating
                                 </div>
-                              </div>
-                            </div>
-
-                            <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-700">
-                              {store.description}
-                            </p>
-
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs uppercase tracking-wide text-neutral-700 dark:text-neutral-700">
-                                {store.domain}
-                              </span>
-                              <span className="rounded-full bg-blue-500 px-4 py-2 text-xs uppercase tracking-wide text-white transition hover:bg-blue-600">
-                                Enter Store
-                              </span>
-                            </div>
-                          </Link>
+                             </div>
+                             <div className="absolute top-4 right-4">
+                                <FavoriteButton store={store} size={18} className="h-8 w-8 bg-white/20 backdrop-blur-sm text-neutral-900 dark:text-neutral-100 hover:bg-white hover:text-red-500 border-none" />
+                             </div>
+                          </div>
+                          
+                          <div className="p-5 flex flex-col gap-4">
+                             <p className="text-sm text-neutral-900 dark:text-neutral-200 line-clamp-2">
+                                {store.description}
+                             </p>
+                             <div className="flex items-center justify-between mt-auto">
+                                <span className="text-xs font-medium text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">{store.domain}</span>
+                                <Link
+                                    href={`/stores/${store.id}?from=search`}
+                                    className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline"
+                                >
+                                    Visit Store
+                                </Link>
+                             </div>
+                          </div>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
 
-                {/* Categories */}
+                {/* Categories Grid */}
                 {results.categories.length > 0 && (
-                  <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-                      Categories
+                  <div className="space-y-6 pt-8 border-t border-neutral-100 dark:border-neutral-800">
+                    <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+                        Categories
                     </h2>
-                    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {results.categories.map((category) => (
                         <Link
                           key={category.id}
-                          href={`/search?category=${encodeURIComponent(
-                            category.title
-                          )}`}
-                          className="flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60 items-center justify-center text-center"
+                          href={`/search?category=${encodeURIComponent(category.title)}`}
+                          className="flex items-center gap-4 p-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200 hover:border-primary-500 hover:shadow-md transition-all"
                         >
-                          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600/10 text-blue-300">
-                            <span className="text-2xl">📦</span>
+                          <div className="h-12 w-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-2xl text-blue-500 dark:text-blue-400">
+                            📦
                           </div>
-                          <div className="items-center justify-center text-center gap-1">
-                            <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                              {category.title}
+                          <div>
+                            <h3 className="font-semibold text-neutral-900 dark:text-neutral-200">
+                                {category.title}
                             </h3>
-                            <p className="text-sm text-neutral-700 dark:text-neutral-700">
-                              {category.stats}
+                            <p className="text-xs text-neutral-900 dark:text-neutral-200">
+                                {category.stats}
                             </p>
                           </div>
                         </Link>
@@ -591,6 +530,7 @@ export default function SearchClient() {
               </div>
             </div>
           )}
+          </div>
         </section>
       </main>
     </div>

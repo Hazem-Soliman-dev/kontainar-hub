@@ -63,11 +63,11 @@ export function ProductPriceOrRequest({
   if (hasActivePlanState) {
     return (
       <div className={`flex items-end gap-2 ${className}`}>
-        <span className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
+        <span className="text-md font-semibold text-neutral-900 dark:text-neutral-200">
           {formatCurrency(product.price)}
         </span>
         {product.previousPrice ? (
-          <span className="text-xs text-neutral-700 dark:text-neutral-700 line-through">
+          <span className="text-xs text-neutral-700 dark:text-neutral-200 line-through">
             {formatCurrency(product.previousPrice)}
           </span>
         ) : null}

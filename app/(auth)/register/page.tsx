@@ -2,10 +2,13 @@
 
 import { ChangeEvent, FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { ArrowRight, Loader2, Mail, Lock, User, Phone, Building2, Briefcase } from "lucide-react";
 
 import { useAuthStore } from "../../../lib/store/auth-store";
 import { Breadcrumb } from "../../../components/ui/breadcrumb";
 import type { AuthSuccessBody } from "../../../lib/auth-response";
+import { cn } from "@/lib/utils";
 
 type FormState = {
   firstName: string;
@@ -29,12 +32,14 @@ export default function RegisterPage() {
 
 function RegisterFallback() {
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col justify-center px-4 py-12">
-      <div className="mb-6 h-10 w-2/3 animate-pulse rounded bg-slate-200" />
-      <div className="space-y-4">
-        <div className="h-40 rounded bg-slate-200" />
-        <div className="h-40 rounded bg-slate-200" />
-        <div className="h-16 rounded bg-slate-200" />
+    <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-950 px-4">
+      <div className="w-full max-w-xl space-y-8 rounded-3xl bg-white dark:bg-neutral-900 p-8 shadow-lg">
+        <div className="h-8 w-1/2 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800 mx-auto" />
+        <div className="space-y-4">
+          <div className="h-32 rounded-xl bg-neutral-200 dark:bg-neutral-800" />
+          <div className="h-32 rounded-xl bg-neutral-200 dark:bg-neutral-800" />
+          <div className="h-12 rounded-xl bg-neutral-200 dark:bg-neutral-800" />
+        </div>
       </div>
     </div>
   );
@@ -107,113 +112,146 @@ function RegisterPageContent() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-6 px-6 text-neutral-900 dark:text-neutral-900">
-      <div className="pt-8 md:pb-6">
+    <div className="min-h-screen bg-neutral-100 dark:bg-neutral-900 flex flex-col relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -right-[10%] -top-[10%] h-[600px] w-[600px] rounded-full bg-primary-500/10 blur-[120px]" />
+        <div className="absolute -left-[10%] bottom-[10%] h-[600px] w-[600px] rounded-full bg-secondary-500/10 blur-[120px]" />
+      </div>
+
+      <div className="w-full max-w-7xl mx-auto px-6 pt-8 z-10">
         <Breadcrumb />
       </div>
 
-      <div className="flex flex-1 items-center justify-center mb-10 md:mb-30">
-        <div className="w-full max-w-md">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="First Name"
-                value={formState.firstName}
-                onChange={handleChange("firstName")}
-                placeholder="John"
-                required
-              />
-              <Input
-                label="Last Name"
-                value={formState.lastName}
-                onChange={handleChange("lastName")}
-                placeholder="Doe"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="Email"
-                type="email"
-                value={formState.email}
-                onChange={handleChange("email")}
-                placeholder="john.doe@example.com"
-                required
-              />
-              <Input
-                label="Phone"
-                value={formState.phone}
-                onChange={handleChange("phone")}
-                placeholder="+201234567890"
-                required
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="Password"
-                type="password"
-                value={formState.password}
-                onChange={handleChange("password")}
-                placeholder="********"
-                required
-              />
-              <Input
-                label="Confirm Password"
-                type="password"
-                value={formState.confirmPassword}
-                onChange={handleChange("confirmPassword")}
-                placeholder="********"
-                required
-              />
-            </div>
-            <Select
-              label="Role"
-              value={formState.role}
-              onChange={handleChange("role")}
-              options={[
-                { value: "supplier", label: "Supplier" },
-                { value: "trader", label: "Trader" },
-              ]}
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="Business Name"
-                value={formState.businessName}
-                onChange={handleChange("businessName")}
-                required
-              />
-              <Input
-                label="Business Type"
-                value={formState.businessType}
-                onChange={handleChange("businessType")}
-                required
-              />
-            </div>
+      <div className="flex-1 flex items-center justify-center px-4 py-8 z-10">
+        <div className="w-full max-w-xl">
+          <div className="rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900/80 backdrop-blur-xl p-8 shadow-strong">
 
-            {error && (
-              <p className="rounded-md bg-red-100 px-3 py-2 text-md text-red-600">
-                {error}
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="First Name"
+                  value={formState.firstName}
+                  onChange={handleChange("firstName")}
+                  placeholder="John"
+                  required
+                  icon={User}
+                />
+                <Input
+                  label="Last Name"
+                  value={formState.lastName}
+                  onChange={handleChange("lastName")}
+                  placeholder="Doe"
+                  required
+                  icon={User}
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Email"
+                  type="email"
+                  value={formState.email}
+                  onChange={handleChange("email")}
+                  placeholder="john@example.com"
+                  required
+                  icon={Mail}
+                />
+                <Input
+                  label="Phone"
+                  value={formState.phone}
+                  onChange={handleChange("phone")}
+                  placeholder="+1234567890"
+                  required
+                  icon={Phone}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Password"
+                  type="password"
+                  value={formState.password}
+                  onChange={handleChange("password")}
+                  placeholder="••••••••"
+                  required
+                  icon={Lock}
+                />
+                <Input
+                  label="Confirm Password"
+                  type="password"
+                  value={formState.confirmPassword}
+                  onChange={handleChange("confirmPassword")}
+                  placeholder="••••••••"
+                  required
+                  icon={Lock}
+                />
+              </div>
+
+              <Select
+                label="I want to"
+                value={formState.role}
+                onChange={handleChange("role")}
+                options={[
+                  { value: "supplier", label: "Sell Products (Supplier)" },
+                  { value: "trader", label: "Buy Products (Trader)" },
+                ]}
+              />
+
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Business Name"
+                  value={formState.businessName}
+                  onChange={handleChange("businessName")}
+                  required
+                  icon={Building2}
+                />
+                <Input
+                  label="Business Type"
+                  value={formState.businessType}
+                  onChange={handleChange("businessType")}
+                  required
+                  icon={Briefcase}
+                />
+              </div>
+
+              {error && (
+                <div className="rounded-xl bg-red-100 dark:bg-red-900/20 px-4 py-3 text-sm text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/30">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="group relative w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 dark:bg-blue-500 px-4 py-3 text-sm font-semibold text-neutral-100 dark:text-neutral-900 shadow-lg shadow-primary-500/20 transition-all hover:bg-blue-500 hover:shadow-primary-500/30 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Creating account...
+                  </>
+                ) : (
+                  <>
+                    Register
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-center">
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-500 transition-colors"
+                >
+                  Sign in
+                </Link>
               </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full rounded-sm bg-blue-600 px-3 py-1 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isSubmitting ? "Creating account..." : "Register"}
-            </button>
-          </form>
-
-          <p className="mt-6 text-center text-md text-slate-600">
-            Already have an account?{" "}
-            <a
-              href="/login"
-              className="font-semibold text-blue-600 hover:underline"
-            >
-              Log in
-            </a>
-          </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -227,6 +265,7 @@ type InputProps = {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   placeholder?: string;
+  icon?: any;
 };
 
 function Input({
@@ -236,21 +275,32 @@ function Input({
   onChange,
   required,
   placeholder,
+  icon: Icon,
 }: InputProps) {
   return (
-    <label className="block">
-      <span className="mb-1 block text-sm font-medium text-neutral-700 dark:text-neutral-700">
+    <div className="space-y-1.5">
+      <label className="block text-xs font-medium text-neutral-900 dark:text-neutral-100 uppercase tracking-wide ml-1">
         {label}
-      </span>
-      <input
-        className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-        type={type}
-        value={value}
-        onChange={onChange}
-        required={required}
-        placeholder={placeholder}
-      />
-    </label>
+      </label>
+      <div className="relative group">
+        {Icon && (
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-600 dark:text-neutral-400 group-focus-within:text-blue-500 transition-colors">
+            <Icon className="h-4 w-4" />
+          </div>
+        )}
+        <input
+          className={cn(
+            "w-full rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900/50 px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none",
+            Icon && "pl-10"
+          )}
+          type={type}
+          value={value}
+          onChange={onChange}
+          required={required}
+          placeholder={placeholder}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -263,21 +313,26 @@ type SelectProps = {
 
 function Select({ label, value, onChange, options }: SelectProps) {
   return (
-    <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-700">
+    <div className="space-y-1.5">
+      <label className="block text-xs font-medium text-neutral-900 dark:text-neutral-100 uppercase tracking-wide ml-1">
         {label}
-      </span>
-      <select
-        className="w-full rounded-md border border-neutral-400 dark:border-neutral-400 bg-neutral-50 dark:bg-neutral-50 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-        value={value}
-        onChange={onChange}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
+      </label>
+      <div className="relative">
+        <select
+          className="w-full appearance-none rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900/50 px-4 py-3 text-sm text-neutral-900 dark:text-neutral-100 focus:ring-4 focus:ring-blue-500/10 transition-all outline-none"
+          value={value}
+          onChange={onChange}
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-600 dark:text-neutral-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+      </div>
+    </div>
   );
 }

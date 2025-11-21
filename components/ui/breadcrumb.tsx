@@ -228,8 +228,8 @@ export function Breadcrumb({ currentPageName }: BreadcrumbProps) {
   }
 
   return (
-    <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-700">
+    <nav aria-label="Breadcrumb" className="mb-4">
+      <ol className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
         {items.map((item, index) => (
           <li
             key={`${item.href || item.label}-${index}`}
@@ -238,29 +238,29 @@ export function Breadcrumb({ currentPageName }: BreadcrumbProps) {
             {index === 0 ? (
               <Link
                 href={item.href || "/"}
-                className="inline-flex items-center gap-1 transition hover:text-blue-400 dark:hover:text-blue-400"
+                className="inline-flex items-center gap-1 transition hover:text-primary-600 dark:hover:text-primary-400"
               >
                 <Home className="h-4 w-4" />
                 <span>{item.label}</span>
               </Link>
             ) : item.isLast ? (
-              <span className="text-neutral-900 dark:text-neutral-900 font-medium">
+              <span className="text-neutral-900 dark:text-neutral-200 font-medium">
                 {item.label}
               </span>
             ) : item.isClickable && item.href ? (
               <Link
                 href={item.href}
-                className="transition hover:text-blue-400 dark:hover:text-blue-400"
+                className="transition hover:text-primary-600 dark:hover:text-primary-400"
               >
                 {item.label}
               </Link>
             ) : (
-              <span className="text-neutral-700 dark:text-neutral-700">
+              <span className="text-neutral-900 dark:text-neutral-100">
                 {item.label}
               </span>
             )}
             {!item.isLast && (
-              <ChevronRight className="h-4 w-4 text-neutral-500 dark:text-neutral-500" />
+              <ChevronRight className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />
             )}
           </li>
         ))}

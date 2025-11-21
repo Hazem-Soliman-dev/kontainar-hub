@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { MapPin, Globe, Star, ShieldCheck, Mail, ArrowRight } from "lucide-react";
 
 import { getStoreById } from "../../../../lib/mock/public";
 import { bestSellerProducts } from "../../../../lib/mock/public";
@@ -29,77 +31,128 @@ export default async function StoreDetailsPage({
   );
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="mx-auto flex w-full max-w-7xl flex-col px-4 sm:px-6 py-6 sm:py-8">
-        <Breadcrumb currentPageName={store.name} />
-
-        <StoreHero store={store} />
-
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2 order-2 lg:order-1">
-            <div className="space-y-4 sm:space-y-6">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-semibold text-neutral-900 dark:text-neutral-900">About</h2>
-                <p className="mt-2 text-sm sm:text-base text-neutral-700 dark:text-neutral-700 leading-relaxed">
-                  {store.description}
-                </p>
-              </div>
-
-              {storeProducts.length > 0 && (
-                <StoreProducts
-                  products={storeProducts}
-                  storeName={store.name}
-                />
-              )}
-            </div>
-          </div>
-
-          <div className="space-y-4 sm:space-y-6 order-1 lg:order-2">
-            <div className="rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-neutral-900">Store Info</h3>
-                <FavoriteButton store={store} size={20} className="h-10 w-10" />
-              </div>
-
-              <div className="space-y-3 text-xs sm:text-sm">
-                <div>
-                  <span className="text-neutral-700 dark:text-neutral-700">Domain:</span>
-                  <p className="mt-1 font-semibold text-neutral-900 dark:text-neutral-900">
-                    {store.domain}
-                  </p>
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+      <main className="pb-24">
+        {/* Hero Section */}
+        <div className="relative h-[300px] sm:h-[400px] w-full overflow-hidden">
+            <Image
+                src={store.imageUrl}
+                alt={store.name}
+                fill
+                className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/60 to-transparent" />
+            
+            <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-12">
+                <div className="mx-auto max-w-7xl w-full flex flex-col sm:flex-row items-end sm:items-center justify-between gap-6">
+                    <div className="flex items-end gap-6">
+                        <div className="h-24 w-24 sm:h-32 sm:w-32 rounded-2xl border-4 border-neutral-900 dark:border-neutral-900 bg-white dark:bg-neutral-800 shadow-xl overflow-hidden relative -mb-12 sm:-mb-16 z-10">
+                            <Image
+                                src={store.imageUrl}
+                                alt={store.name}
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                        <div className="mb-2">
+                            <h1 className="text-3xl sm:text-5xl font-bold text-neutral-900 dark:text-neutral-200 mb-2">{store.name}</h1>
+                            <div className="flex items-center gap-4 text-neutral-900 dark:text-neutral-200 text-sm sm:text-base">
+                                <div className="flex items-center gap-1">
+                                    <Star className="h-4 w-4 text-amber-400 fill-current" />
+                                    <span className="font-bold text-neutral-900 dark:text-neutral-200">{store.rating}</span>
+                                    <span className="opacity-80">(1.2k reviews)</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <MapPin className="h-4 w-4" />
+                                    <span>New York, USA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 mb-2">
+                        <FavoriteButton store={store} size={20} className="h-12 w-12 bg-white/10 backdrop-blur-md text-neutral-900 dark:text-neutral-200 hover:bg-white hover:text-red-500 border-neutral-900/20" />
+                        <Link
+                            href="/contact"
+                            className="rounded-xl bg-white text-neutral-900 dark:text-neutral-200 px-6 py-3 font-bold hover:bg-neutral-100 transition-colors"
+                        >
+                            Contact Store
+                        </Link>
+                    </div>
                 </div>
-                <div>
-                  <span className="text-neutral-700 dark:text-neutral-700">Rating:</span>
-                  <p className="mt-1 font-semibold text-neutral-900 dark:text-neutral-900">
-                    {store.rating.toFixed(1)} / 5.0
-                  </p>
-                </div>
-                {storeProducts.length > 0 && (
-                  <div>
-                    <span className="text-neutral-700 dark:text-neutral-700">Products:</span>
-                    <p className="mt-1 font-semibold text-neutral-900 dark:text-neutral-900">
-                      {storeProducts.length} featured
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-4 sm:mt-6 flex flex-col gap-2 sm:gap-3">
-                <Link
-                  href={`/login?redirect=/stores/${store.id}`}
-                  className="rounded-lg bg-blue-500 px-4 py-2.5 sm:py-3 text-center text-sm font-semibold text-neutral-50 dark:text-neutral-50 transition hover:bg-blue-600 dark:hover:bg-blue-600"
-                >
-                  Enter Store
-                </Link>
-                <Link
-                  href="/contact"
-                  className="rounded-lg border border-blue-400/50 px-4 py-2.5 sm:py-3 text-center text-sm font-semibold text-blue-400 dark:text-blue-400 transition hover:bg-blue-400/10 dark:hover:bg-blue-400/10"
-                >
-                  Request Intro
-                </Link>
-              </div>
             </div>
-          </div>
+        </div>
+
+        {/* Content */}
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-20 sm:pt-24">
+            <div className="grid gap-12 lg:grid-cols-12">
+                {/* Left Column: Main Content */}
+                <div className="lg:col-span-8 space-y-12">
+                    {/* About */}
+                    <section>
+                        <h2 className="text-2xl font-bold mb-4 text-neutral-900 dark:text-neutral-200">About {store.name}</h2>
+                        <p className="text-lg text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                            {store.description}
+                        </p>
+                    </section>
+
+                    {/* Products */}
+                    {storeProducts.length > 0 && (
+                        <section>
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-neutral-900 dark:text-neutral-200">Featured Products</h2>
+                                <Link href={`/search?store=${store.id}`} className="text-primary-600 dark:text-primary-400 font-semibold hover:underline flex items-center gap-1">
+                                    View all <ArrowRight className="h-4 w-4" />
+                                </Link>
+                            </div>
+                            <StoreProducts
+                                products={storeProducts}
+                                storeName={store.name}
+                            />
+                        </section>
+                    )}
+                </div>
+
+                {/* Right Column: Sidebar */}
+                <div className="lg:col-span-4 space-y-6">
+                    <div className="rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+                        <h3 className="text-lg font-bold mb-4 text-neutral-900 dark:text-neutral-200">Store Information</h3>
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+                                <Globe className="h-5 w-5 text-neutral-500" />
+                                <div>
+                                    <p className="text-xs text-neutral-500 font-medium uppercase">Website</p>
+                                    <a href={`https://${store.domain}`} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline">
+                                        {store.domain}
+                                    </a>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+                                <ShieldCheck className="h-5 w-5 text-neutral-500" />
+                                <div>
+                                    <p className="text-xs text-neutral-500 font-medium uppercase">Verification</p>
+                                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Verified Seller</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/50">
+                                <Star className="h-5 w-5 text-neutral-500" />
+                                <div>
+                                    <p className="text-xs text-neutral-500 font-medium uppercase">Rating</p>
+                                    <p className="text-sm font-semibold text-neutral-900 dark:text-neutral-200">{store.rating} / 5.0</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="mt-6 pt-6 border-t border-neutral-100 dark:border-neutral-800">
+                            <Link
+                                href={`/login?redirect=/stores/${store.id}`}
+                                className="flex items-center justify-center gap-2 w-full rounded-xl bg-neutral-900 dark:bg-white text-neutral-900 dark:text-neutral-200 py-3 font-bold hover:opacity-90 transition-opacity"
+                            >
+                                <Mail className="h-4 w-4" /> Send Message
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
       </main>
     </div>

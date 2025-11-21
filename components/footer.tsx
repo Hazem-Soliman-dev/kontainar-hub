@@ -1,9 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Twitter, Instagram } from "lucide-react";
+import { Facebook, Twitter, Instagram, ArrowRight, Mail } from "lucide-react";
 
 const HELP_LINKS = [
   { name: "Customer Support", href: "/customer-support" },
+  { name: "Contact", href: "/contact" },
   { name: "Shipping Info", href: "/shipping-info" },
   { name: "FAQs", href: "/faq" },
 ];
@@ -33,167 +36,127 @@ const PAYMENT_METHODS = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-200 dark:border-neutral-200 bg-neutral-100/80 dark:bg-neutral-100/80">
-      <div className="mx-auto grid w-full max-w-7xl gap-6 md:gap-10 px-6 py-12 text-md text-neutral-700 dark:text-neutral-700 grid-cols-2 md:grid-cols-4 justify-center">
-        {/* Brand Section - Full width on mobile, 1 column on desktop */}
-        <div className="space-y-5 col-span-2 md:col-span-1">
-          <p className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-            TajirJomla Hub
-          </p>
-          <p>
-            Your trusted multi-vendor marketplace connecting buyers with quality
-            stores worldwide.
-          </p>
-          <div className="flex gap-3">
-            <Link
-              href="https://www.facebook.com/kontainarhub"
-              target="_blank"
-              className="hover:text-neutral-900 dark:hover:text-neutral-900 bg-gray-500/10 rounded-full p-3"
-            >
-              <Facebook className="h-5 w-5" />
-            </Link>
-            <Link
-              href="https://www.twitter.com/kontainarhub"
-              target="_blank"
-              className="hover:text-neutral-900 dark:hover:text-neutral-900 bg-gray-500/10 rounded-full p-3"
-            >
-              <Twitter className="h-5 w-5" />
-            </Link>
-            <Link
-              href="https://www.instagram.com/kontainarhub"
-              target="_blank"
-              className="hover:text-neutral-900 dark:hover:text-neutral-900 bg-gray-500/10 rounded-full p-3"
-            >
-              <Instagram className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
+    <footer className="bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 border-t border-neutral-200 dark:border-neutral-800">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid gap-12 lg:grid-cols-12 mb-12 lg:mb-16">
+          {/* Brand & Newsletter */}
+          <div className="lg:col-span-5 space-y-8">
+            <div className="space-y-4">
+              <Link href="/" className="flex items-center gap-2">
+                <span className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200">
+                  TajirJomla Hub
+                </span>
+              </Link>
+              <p className="max-w-md text-base leading-relaxed text-neutral-600 dark:text-neutral-400">
+                Your trusted multi-vendor marketplace connecting buyers with
+                quality stores worldwide. Experience the future of B2B commerce.
+              </p>
+            </div>
 
-        {/* Company & Help Center - Stacked on mobile in left column, single column on desktop */}
-        <div className="space-y-6 md:space-y-5 md:col-span-1">
-          <div className="space-y-4">
-            <p className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-              Company
-            </p>
-            <ul className="space-y-2 mt-2">
-              <li>
-                <Link
-                  href="/about"
-                  className="hover:text-neutral-900 dark:hover:text-neutral-900"
-                >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/services"
-                  className="hover:text-neutral-900 dark:hover:text-neutral-900"
-                >
-                  Services
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="pt-2 md:pt-4 space-y-4">
-            <p className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-              Help Center
-            </p>
-            <ul className="space-y-2 mt-2">
-              {HELP_LINKS.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    className="hover:text-neutral-900 dark:hover:text-neutral-900"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Policies - Right column on mobile, single column on desktop */}
-        <div className="space-y-4 md:col-span-1">
-          <p className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-            Policies
-          </p>
-          <ul className="space-y-2">
-            {POLICY_LINKS.map((item) => (
-              <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className="hover:text-neutral-900 dark:hover:text-neutral-900"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Language & Payment Methods - Full width on mobile, 1 column on desktop */}
-        <div className="space-y-4 col-span-2 md:col-span-1">
-          <p className="text-md font-semibold text-neutral-900 dark:text-neutral-900">
-            Language
-          </p>
-          <div className="relative">
-            <label htmlFor="language-select" className="sr-only">
-              Language
-            </label>
-            <select
-              id="language-select"
-              className="w-full rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-100 px-3 py-2 text-sm text-neutral-700 dark:text-neutral-700 focus:border-blue-500 focus:outline-none"
-            >
-              <option>English (US)</option>
-              <option>Deutsch</option>
-              <option>Français</option>
-            </select>
-          </div>
-          <div className="hidden md:block pt-4">
-            <p className="text-md font-semibold text-neutral-900 dark:text-neutral-900 mb-3">
-              Payment Methods
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {PAYMENT_METHODS.map((method) => (
-                <div
-                  key={method.name}
-                  className="relative h-6 w-auto"
-                  title={method.name}
-                >
-                  <Image
-                    src={method.image}
-                    alt={method.name}
-                    width={120}
-                    height={60}
-                    className="h-6 w-auto object-contain"
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider">
+                Subscribe to our newsletter
+              </h3>
+              <form
+                className="flex gap-2 max-w-md"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <div className="relative flex-1">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-600 dark:text-neutral-400" />
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="w-full rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 py-3 pl-10 pr-4 text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
                   />
                 </div>
-              ))}
+                <button className="rounded-xl bg-primary-600 dark:bg-primary-500 text-neutral-100 dark:text-neutral-900 px-4 py-3 font-bold text-sm hover:bg-primary-500 dark:hover:bg-primary-400 transition-colors">
+                  Subscribe
+                </button>
+              </form>
+            </div>
+
+            <div className="flex gap-4">
+              <SocialLink
+                href="https://facebook.com"
+                icon={Facebook}
+                label="Facebook"
+              />
+              <SocialLink
+                href="https://twitter.com"
+                icon={Twitter}
+                label="Twitter"
+              />
+              <SocialLink
+                href="https://instagram.com"
+                icon={Instagram}
+                label="Instagram"
+              />
+            </div>
+          </div>
+
+          {/* Links Section */}
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider mb-6">
+                Company
+              </h3>
+              <ul className="space-y-4">
+                <li>
+                  <FooterLink href="/about">About Us</FooterLink>
+                </li>
+                <li>
+                  <FooterLink href="/services">Services</FooterLink>
+                </li>
+                <li>
+                  <FooterLink href="/careers">Careers</FooterLink>
+                </li>
+                <li>
+                  <FooterLink href="/press">Press</FooterLink>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider mb-6">
+                Help Center
+              </h3>
+              <ul className="space-y-4">
+                {HELP_LINKS.map((link) => (
+                  <li key={link.name}>
+                    <FooterLink href={link.href}>{link.name}</FooterLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-200 uppercase tracking-wider mb-6">
+                Legal
+              </h3>
+              <ul className="space-y-4">
+                {POLICY_LINKS.map((link) => (
+                  <li key={link.name}>
+                    <FooterLink href={link.href}>{link.name}</FooterLink>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Payment Methods for Mobile - Bottom of Footer */}
-      <div className="md:hidden border-t border-neutral-200 dark:border-neutral-200 pt-4 px-6 pb-4">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-md font-semibold text-neutral-900 dark:text-neutral-900 mb-4">
-            Payment Methods
+        {/* Bottom Section */}
+        <div className="pt-8 border-t border-neutral-200 dark:border-neutral-800 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            &copy; {new Date().getFullYear()} TajirJomla Hub. All rights
+            reserved.
           </p>
-          <div className="flex flex-wrap gap-3">
+
+          <div className="flex flex-wrap justify-center gap-4 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
             {PAYMENT_METHODS.map((method) => (
-              <div
-                key={method.name}
-                className="relative h-10 w-auto"
-                title={method.name}
-              >
+              <div key={method.name} className="relative h-6 w-10">
                 <Image
                   src={method.image}
                   alt={method.name}
-                  width={120}
-                  height={60}
-                  className="h-6 w-auto object-contain"
+                  fill
+                  className="object-contain"
                 />
               </div>
             ))}
@@ -201,5 +164,47 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function SocialLink({
+  href,
+  icon: Icon,
+  label,
+}: {
+  href: string;
+  icon: any;
+  label: string;
+}) {
+  return (
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="h-10 w-10 rounded-full bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-neutral-200 transition-all duration-200 border border-neutral-200 dark:border-neutral-700"
+      aria-label={label}
+    >
+      <Icon className="h-5 w-5" />
+    </Link>
+  );
+}
+
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors flex items-center gap-1 group"
+    >
+      <span className="w-0 overflow-hidden transition-all duration-200 group-hover:w-3 text-primary-600 dark:text-primary-400">
+        <ArrowRight className="h-3 w-3" />
+      </span>
+      {children}
+    </Link>
   );
 }

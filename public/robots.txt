@@ -7,7 +7,7 @@ User-agent: *
 Disallow: /api/
 
 # Host
-Host: https://kontainarhub.com
+Host: https://tajirjomlahub.com
 
 # Sitemaps
-Sitemap: https://kontainarhub.com/sitemap.xml
+Sitemap: https://tajirjomlahub.com/sitemap.xml

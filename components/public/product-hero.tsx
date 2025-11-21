@@ -13,7 +13,7 @@ export function ProductHero({ product, isBestSeller }: ProductHeroProps) {
 
   return (
     <div className="relative">
-      <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-slate-900/60">
+      <div className="relative overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
         <Image
           src={imageUrl}
           alt={product.name}
@@ -23,7 +23,7 @@ export function ProductHero({ product, isBestSeller }: ProductHeroProps) {
           priority
         />
         {isBestSeller && "tag" in product && product.tag && (
-          <span className="absolute left-4 top-4 rounded-full bg-rose-500 px-3 py-1 text-sm font-bold text-white">
+          <span className="absolute left-4 top-4 rounded-full bg-accent-500 dark:bg-accent-600 px-3 py-1 text-sm font-bold text-neutral-900 dark:text-neutral-200 shadow-lg">
             {product.tag}
           </span>
         )}
@@ -31,4 +31,3 @@ export function ProductHero({ product, isBestSeller }: ProductHeroProps) {
     </div>
   );
 }
-

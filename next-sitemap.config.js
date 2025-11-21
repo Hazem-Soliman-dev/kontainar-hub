@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 const config = {
-  siteUrl: 'https://kontainarhub.com',
+  siteUrl: 'https://tajirjomlahub.com',
   generateRobotsTxt: true,
   robotsTxtOptions: {
     policies: [

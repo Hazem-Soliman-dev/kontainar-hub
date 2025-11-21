@@ -2,9 +2,9 @@
 @import "../styles/design-tokens.css";
 
 :root {
-  /* Light mode */
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light mode base colors */
+  --background: #0f172a;
+  --foreground: #ffffff;
 }
 
 @theme inline {
@@ -15,30 +15,113 @@
 }
 
 .dark {
-  /* Dark mode */
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  /* Dark mode base colors */
+  --background: #ffffff;
+  --foreground: #0f172a;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Smooth transitions for theme switching */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Prevent transitions on page load */
+.no-transitions * {
+  transition: none !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--color-neutral-200);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-400);
+  border-radius: 6px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-400);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-500);
+}
+
+/* Focus visible styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Animation for smooth infinite scroll */
 @keyframes infinite-scroll {
-  0% {
+  from {
     transform: translateX(0);
   }
-  100% {
-    transform: translateX(calc(-50% - 10px));
+  to {
+    transform: translateX(-50%);
   }
 }
 
 .animate-infinite-scroll {
-  animation: infinite-scroll 60s linear infinite;
+  animation: infinite-scroll 40s linear infinite;
 }
 
-.animate-infinite-scroll:hover {
-  animation-play-state: paused;
+/* Float animations for decorative elements */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes float-slower {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-slower {
+  animation: float-slower 8s ease-in-out infinite;
+}
+
+/* Selection colors */
+::selection {
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-900);
+}
+
+.dark ::selection {
+  background-color: var(--color-primary-800);
+  color: var(--color-primary-100);
 }

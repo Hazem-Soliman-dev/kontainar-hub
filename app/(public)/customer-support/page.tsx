@@ -1,5 +1,4 @@
-import { createMetadata } from "../../../lib/seo/metadata";
-import { Breadcrumb } from "../../../components/ui/breadcrumb";
+import { createMetadata } from "@/lib/seo/metadata";
 import {
   Mail,
   Phone,
@@ -7,255 +6,213 @@ import {
   Clock,
   HelpCircle,
   FileText,
+  Search,
+  ArrowRight,
+  LifeBuoy,
 } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = createMetadata({
   title: "Customer Support",
   description:
-    "Get help with your Kontainar Hub account, orders, products, and more. Contact our 24/7 customer support team.",
+    "Get help with your TajirJomla Hub account, orders, products, and more. Contact our 24/7 customer support team.",
   path: "/customer-support",
   keywords: ["support", "customer service", "help", "contact", "assistance"],
 });
 
 export default function CustomerSupportPage() {
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-50 text-neutral-900 dark:text-neutral-900">
-      <main className="flex flex-col pb-16 sm:pb-26">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 pt-6">
-          <Breadcrumb />
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+      {/* Hero Section */}
+      <div className="relative bg-neutral-900 py-24 sm:py-32 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-[50%] -right-[20%] w-[80%] h-[200%] bg-gradient-to-bl from-primary-900/40 via-purple-900/20 to-transparent -rotate-12 blur-3xl opacity-60" />
+          <div className="absolute -bottom-[50%] -left-[20%] w-[80%] h-[200%] bg-gradient-to-tr from-secondary-900/40 via-blue-900/20 to-transparent rotate-12 blur-3xl opacity-60" />
         </div>
+        
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 mb-6">
+            How can we help you?
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-neutral-900 dark:text-neutral-200 mb-10">
+            Search our help center or contact our support team for assistance.
+          </p>
+          
+          <div className="relative mx-auto max-w-xl">
+            <div className="relative group">
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-primary-600 to-secondary-600 opacity-50 blur transition duration-500 group-hover:opacity-100" />
+              <div className="relative">
+                <Search className="absolute left-4 top-3.5 h-5 w-5 text-neutral-900 dark:text-neutral-200" />
+                <input
+                  type="text"
+                  placeholder="Search for help..."
+                  className="h-12 w-full rounded-full border border-neutral-800 bg-neutral-900/90 pl-12 pr-4 text-neutral-900 dark:text-neutral-200 placeholder-neutral-900 dark:placeholder-neutral-200 shadow-xl focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-all"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <HeroSection />
-        <ContactMethodsSection />
-        <CommonIssuesSection />
-        <ResourcesSection />
+      <main className="relative z-10 -mt-20 pb-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Contact Cards */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-20">
+            <ContactCard
+              icon={Mail}
+              title="Email Support"
+              description="Send us an email and we'll respond within 24 hours"
+              contact="support@tajirjomlahub.com"
+              action="mailto:support@tajirjomlahub.com"
+              color="blue"
+            />
+            <ContactCard
+              icon={Phone}
+              title="Phone Support"
+              description="Call us for immediate assistance during business hours"
+              contact="+1 (555) 123-4567"
+              action="tel:+15551234567"
+              color="indigo"
+            />
+            <ContactCard
+              icon={MessageSquare}
+              title="Live Chat"
+              description="Chat with our support team in real-time"
+              contact="Available 24/7"
+              action="#"
+              color="purple"
+            />
+            <ContactCard
+              icon={Clock}
+              title="Response Times"
+              description="We aim to respond to all inquiries quickly"
+              contact="Within 24 hours"
+              action={null}
+              color="emerald"
+            />
+          </div>
+
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-3xl mb-6">
+                Common Questions
+              </h2>
+              <div className="space-y-4">
+                {[
+                  { q: "How do I create an account?", a: "Click on the 'Register' button in the top navigation, fill in your details, and verify your email address." },
+                  { q: "How do I reset my password?", a: "Go to the login page and click 'Forgot Password'. Enter your email address and follow the instructions sent to your inbox." },
+                  { q: "How do I place an order?", a: "Browse products, add items to your cart, and proceed to checkout. You'll need an active subscription plan to complete purchases." },
+                  { q: "How do I track my order?", a: "Go to your account dashboard and navigate to the 'Orders' section. You'll find tracking information for all your orders there." },
+                ].map((item, i) => (
+                  <div key={i} className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="font-bold text-neutral-900 dark:text-neutral-200 mb-2">{item.q}</h3>
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">{item.a}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8">
+                <Link href="/faq" className="inline-flex items-center text-primary-700 hover:text-primary-700 font-bold group">
+                  View all FAQs <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 sm:text-3xl mb-6">
+                Helpful Resources
+              </h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <ResourceCard
+                  icon={HelpCircle}
+                  title="FAQs"
+                  description="Find answers to frequently asked questions"
+                  link="/faq"
+                  color="blue"
+                />
+                <ResourceCard
+                  icon={FileText}
+                  title="Shipping Info"
+                  description="Learn about our shipping policies and options"
+                  link="/shipping-info"
+                  color="indigo"
+                />
+                <ResourceCard
+                  icon={FileText}
+                  title="Returns & Refunds"
+                  description="Understand our return policy and process"
+                  link="/returns-refunds"
+                  color="purple"
+                />
+                <ResourceCard
+                  icon={FileText}
+                  title="Seller Agreement"
+                  description="Read our terms for selling on TajirJomla Hub"
+                  link="/seller-agreement"
+                  color="emerald"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   );
 }
 
-function HeroSection() {
+function ContactCard({ icon: Icon, title, description, contact, action, color }: any) {
+  const colorStyles = {
+    blue: "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400",
+    indigo: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400",
+    purple: "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400",
+    emerald: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400",
+  };
+
+  const Component = action ? Link : "div";
+  const href = action || "";
+
   return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900">
-      <div className="flex flex-col items-center justify-center text-center mb-5 sm:mb-0">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Customer Support
-        </h1>
-        <p className="text-base sm:text-lg text-neutral-700 dark:text-neutral-700 max-w-3xl mt-3">
-          We're here to help! Get assistance with your account, orders,
-          products, or any questions you may have.
-        </p>
+    <Component
+      href={href}
+      className={`flex flex-col gap-4 rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm transition-all ${action ? 'hover:shadow-xl hover:-translate-y-1 cursor-pointer' : ''}`}
+    >
+      <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl ${colorStyles[color as keyof typeof colorStyles]}`}>
+        <Icon className="h-6 w-6" />
       </div>
-    </section>
+      <div>
+        <h3 className="font-bold text-neutral-900 dark:text-neutral-200 text-lg">{title}</h3>
+        <p className="mt-1 text-sm text-neutral-900 dark:text-neutral-200">{description}</p>
+        {contact && (
+          <p className="mt-3 text-sm font-bold text-primary-700 dark:text-primary-400">
+            {contact}
+          </p>
+        )}
+      </div>
+    </Component>
   );
 }
 
-function ContactMethodsSection() {
-  const contactMethods = [
-    {
-      icon: Mail,
-      title: "Email Support",
-      description: "Send us an email and we'll respond within 24 hours",
-      contact: "support@kontainarhub.com",
-      action: "mailto:support@kontainarhub.com",
-      color: "blue",
-    },
-    {
-      icon: Phone,
-      title: "Phone Support",
-      description: "Call us for immediate assistance",
-      contact: "+1 (555) 123-4567",
-      action: "tel:+15551234567",
-      color: "indigo",
-    },
-    {
-      icon: MessageSquare,
-      title: "Live Chat",
-      description: "Chat with our support team in real-time",
-      contact: "Available 24/7",
-      action: "#",
-      color: "purple",
-    },
-    {
-      icon: Clock,
-      title: "Response Times",
-      description: "We aim to respond to all inquiries quickly",
-      contact: "Within 24 hours",
-      action: null,
-      color: "emerald",
-    },
-  ];
-
-  const colorClasses = {
-    blue: "bg-blue-600/10 text-blue-300 border-blue-500/40",
-    indigo: "bg-indigo-600/10 text-indigo-300 border-indigo-500/40",
-    purple: "bg-purple-600/10 text-purple-300 border-purple-500/40",
-    emerald: "bg-emerald-600/10 text-emerald-300 border-emerald-500/40",
+function ResourceCard({ icon: Icon, title, description, link, color }: any) {
+  const colorStyles = {
+    blue: "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400",
+    indigo: "bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400",
+    purple: "bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400",
+    emerald: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400",
   };
 
   return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Contact Us
-        </h2>
+    <Link
+      href={link}
+      className="flex items-start gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm transition-all hover:shadow-lg hover:border-primary-500/30 hover:-translate-y-0.5"
+    >
+      <div className={`mt-1 inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl ${colorStyles[color as keyof typeof colorStyles]}`}>
+        <Icon className="h-5 w-5" />
       </div>
-      <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        {contactMethods.map((method) => {
-          const Icon = method.icon;
-          const colorClass =
-            colorClasses[method.color as keyof typeof colorClasses];
-          const Component = method.action ? Link : "div";
-          return (
-            <Component
-              key={method.title}
-              href={method.action || ""}
-              className="flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
-            >
-              <div
-                className={`flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl ${colorClass} border`}
-              >
-                <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
-              </div>
-              <div className="flex flex-col gap-1 sm:gap-2">
-                <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                  {method.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                  {method.description}
-                </p>
-                {method.contact && (
-                  <p className="text-xs sm:text-sm text-blue-400 hover:text-blue-300 transition mt-2">
-                    {method.contact}
-                  </p>
-                )}
-              </div>
-            </Component>
-          );
-        })}
+      <div>
+        <h3 className="font-bold text-neutral-900 dark:text-neutral-200">{title}</h3>
+        <p className="mt-1 text-xs text-neutral-900 dark:text-neutral-200 line-clamp-2">{description}</p>
       </div>
-    </section>
+    </Link>
   );
 }
 
-function CommonIssuesSection() {
-  const issues = [
-    {
-      question: "How do I create an account?",
-      answer:
-        "Click on the 'Register' button in the top navigation, fill in your details, and verify your email address.",
-    },
-    {
-      question: "How do I reset my password?",
-      answer:
-        "Go to the login page and click 'Forgot Password'. Enter your email address and follow the instructions sent to your inbox.",
-    },
-    {
-      question: "How do I place an order?",
-      answer:
-        "Browse products, add items to your cart, and proceed to checkout. You'll need an active subscription plan to complete purchases.",
-    },
-    {
-      question: "How do I track my order?",
-      answer:
-        "Go to your account dashboard and navigate to the 'Orders' section. You'll find tracking information for all your orders there.",
-    },
-  ];
-
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Common Questions
-        </h2>
-      </div>
-      <div className="space-y-4">
-        {issues.map((issue, index) => (
-          <div
-            key={index}
-            className="rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm"
-          >
-            <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900 mb-2">
-              {issue.question}
-            </h3>
-            <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-              {issue.answer}
-            </p>
-          </div>
-        ))}
-      </div>
-      <div className="text-center mt-6">
-        <Link
-          href="/faq"
-          className="text-blue-400 hover:text-blue-300 transition font-semibold"
-        >
-          View All FAQs →
-        </Link>
-      </div>
-    </section>
-  );
-}
-
-function ResourcesSection() {
-  const resources = [
-    {
-      icon: HelpCircle,
-      title: "FAQs",
-      description: "Find answers to frequently asked questions",
-      link: "/faq",
-      color: "blue",
-    },
-    {
-      icon: FileText,
-      title: "Shipping Info",
-      description: "Learn about our shipping policies and options",
-      link: "/shipping-info",
-      color: "indigo",
-    },
-  ];
-
-  const colorClasses = {
-    blue: "bg-blue-600/10 text-blue-300 border-blue-500/40",
-    indigo: "bg-indigo-600/10 text-indigo-300 border-indigo-500/40",
-  };
-
-  return (
-    <section className="mx-auto w-full max-w-7xl space-y-4 sm:space-y-6 px-4 sm:px-6 text-neutral-900 dark:text-neutral-900 mt-8 sm:mt-12 mb-8 sm:mb-12">
-      <div className="flex flex-col items-center justify-center text-center mb-5">
-        <h2 className="text-2xl sm:text-3xl font-semibold text-neutral-900 dark:text-neutral-900">
-          Helpful Resources
-        </h2>
-      </div>
-      <div className="grid gap-4 sm:gap-5 grid-cols-1 md:grid-cols-2">
-        {resources.map((resource) => {
-          const Icon = resource.icon;
-          const colorClass =
-            colorClasses[resource.color as keyof typeof colorClasses];
-          return (
-            <Link
-              key={resource.title}
-              href={resource.link}
-              className="flex flex-col gap-3 sm:gap-4 rounded-2xl sm:rounded-3xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4 sm:p-6 shadow-sm transition hover:-translate-y-1 hover:border-blue-500/60"
-            >
-              <div
-                className={`flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl ${colorClass} border`}
-              >
-                <Icon className="h-6 w-6 sm:h-8 sm:w-8" />
-              </div>
-              <div className="flex flex-col gap-1 sm:gap-2">
-                <h3 className="text-sm sm:text-md font-semibold text-neutral-900 dark:text-neutral-900">
-                  {resource.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-700">
-                  {resource.description}
-                </p>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
 

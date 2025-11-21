@@ -49,14 +49,14 @@ export function FavoritesFilters({
   };
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 p-4">
+    <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-900 mx-1">Filters</h3>
+        <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-200 mx-1">Filters</h3>
         {hasActiveFilters && (
           <button
             type="button"
             onClick={clearFilters}
-            className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 mx-2"
+            className="flex items-center gap-1 text-sm text-primary-500 dark:text-primary-400 hover:text-primary-600 dark:hover:text-primary-500 mx-2"
           >
             <X className="h-3 w-3" />
             Clear all
@@ -66,7 +66,7 @@ export function FavoritesFilters({
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div className="flex flex-col gap-1">
-          <label className="block text-sm font-medium text-slate-400">
+          <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
             Type
           </label>
           <select
@@ -74,7 +74,7 @@ export function FavoritesFilters({
             onChange={(e) =>
               onFilterChange({ ...filters, type: e.target.value })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
           >
             <option value="all">All Types</option>
             <option value="products">Products Only</option>
@@ -84,7 +84,7 @@ export function FavoritesFilters({
 
         {filters.type !== "stores" && categories.length > 0 && (
           <div className="flex flex-col gap-1">
-            <label className="block text-sm font-medium text-slate-400">
+            <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
               Category
             </label>
             <select
@@ -92,7 +92,7 @@ export function FavoritesFilters({
               onChange={(e) =>
                 onFilterChange({ ...filters, category: e.target.value })
               }
-              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
             >
               <option value="all">All Categories</option>
               {categories.map((category) => (
@@ -106,7 +106,7 @@ export function FavoritesFilters({
 
         {filters.type !== "products" && (
           <div className="flex flex-col gap-1">
-            <label className="block text-sm font-medium text-slate-400">
+            <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
               Minimum Rating
             </label>
             <select
@@ -114,7 +114,7 @@ export function FavoritesFilters({
               onChange={(e) =>
                 onFilterChange({ ...filters, rating: e.target.value })
               }
-              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-900 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
             >
               <option value="all">All Ratings</option>
               <option value="4.5">4.5+ Stars</option>

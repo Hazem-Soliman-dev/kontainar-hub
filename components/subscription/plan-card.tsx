@@ -60,31 +60,31 @@ export function PlanCard({
     <article
       id={plan.id}
       className={[
-        "flex h-full flex-col gap-4 rounded-2xl border bg-neutral-100/60 dark:bg-neutral-100/60 p-6 shadow-sm transition",
+        "flex h-full flex-col gap-4 rounded-2xl border bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm transition",
         recommended
-          ? "border-blue-700"
-          : "border-neutral-200 dark:border-neutral-200",
+          ? "border-primary-500 ring-2 ring-primary-500/20"
+          : "border-neutral-200 dark:border-neutral-800",
       ].join(" ")}
     >
       <header className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">{plan.name}</h3>
+          <h3 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{plan.name}</h3>
           <PlanBadge
             status={status}
             isCurrent={isCurrent}
             isTrialActive={isTrialActive}
           />
         </div>
-        <p className="text-sm text-neutral-700 dark:text-neutral-700">{plan.description}</p>
-        <span className="text-2xl font-semibold text-white">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">{plan.description}</p>
+        <span className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
           {formattedPrice}
         </span>
       </header>
 
-      <ul className="flex flex-1 flex-col gap-3 text-sm text-neutral-700 dark:text-neutral-700">
+      <ul className="flex flex-1 flex-col gap-3 text-sm text-neutral-700 dark:text-neutral-100">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-center gap-2">
-            <span aria-hidden className="mt-1 text-blue-500">
+            <span aria-hidden className="mt-1 text-primary-600 dark:text-primary-400">
               •
             </span>
             <span>{feature}</span>
@@ -92,9 +92,9 @@ export function PlanCard({
         ))}
       </ul>
 
-      <div className="flex flex-col gap-3 text-sm text-neutral-700 dark:text-neutral-700">
+      <div className="flex flex-col gap-3 text-sm text-neutral-700 dark:text-blue-400">
         {isTrialActive && trialEndsAt && (
-          <div className="rounded-lg border border-blue-700 bg-blue-950 px-3 py-2 text-xs text-blue-400">
+          <div className="rounded-lg border border-primary-200 dark:border-blue-400/50 bg-primary-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-primary-700 dark:text-blue-400">
             Trial active • Ends {formatRelativeTime(trialEndsAt)}{" "}
             {typeof trialSecondsRemaining === "number" &&
               trialSecondsRemaining > 0 && (
@@ -104,7 +104,7 @@ export function PlanCard({
         )}
 
         {isFreePlan ? (
-          <span className="rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 px-4 py-2 text-center font-semibold text-neutral-700 dark:text-neutral-700">
+          <span className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 px-4 py-2 text-center font-semibold text-neutral-700 dark:text-neutral-100">
             Included for all accounts
           </span>
         ) : (
@@ -116,10 +116,10 @@ export function PlanCard({
                 disabled || !canStartTrial || processingAction === "activate"
               }
               className={[
-                "inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+                "inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
                 canStartTrial
-                  ? "bg-blue-600 text-white hover:bg-blue-700 disabled:bg-blue-300"
-                  : "cursor-not-allowed bg-neutral-100/60 dark:bg-neutral-100/60 text-neutral-700 dark:text-neutral-700",
+                  ? "bg-primary-600 text-neutral-900 dark:text-neutral-100 hover:bg-primary-500 disabled:bg-primary-300 disabled:text-neutral-900 dark:disabled:text-neutral-100"
+                  : "cursor-not-allowed bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-blue-400",
               ].join(" ")}
             >
               {processingAction === "trial" ? "Starting trial…" : trialLabel}
@@ -129,10 +129,10 @@ export function PlanCard({
               onClick={() => onActivate(plan.id)}
               disabled={disabled || processingAction === "trial"}
               className={[
-                "inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+                "inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
                 isCurrent
-                  ? "border-neutral-200 dark:border-neutral-200 bg-neutral-100/60 dark:bg-neutral-100/60 text-neutral-700 dark:text-neutral-700"
-                  : "border-neutral-200 dark:border-neutral-200 text-neutral-700 dark:text-neutral-700 hover:border-blue-500 hover:text-blue-600",
+                  ? "border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-blue-400 cursor-not-allowed"
+                  : "border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-100 hover:border-primary-500 hover:text-primary-600 dark:hover:text-blue-400",
               ].join(" ")}
             >
               {processingAction === "activate" ? "Activating…" : actionLabel}
@@ -155,7 +155,7 @@ function PlanBadge({
 }) {
   if (isCurrent && status === "active") {
     return (
-      <span className="rounded-full bg-emerald-50 dark:bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-700">
+      <span className="rounded-full bg-success-50 dark:bg-success-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-green-600 dark:text-green-400">
         Active
       </span>
     );
@@ -163,7 +163,7 @@ function PlanBadge({
 
   if (isCurrent && status === "trial" && isTrialActive) {
     return (
-      <span className="rounded-full bg-blue-50 dark:bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-700">
+      <span className="rounded-full bg-primary-50 dark:bg-primary-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
         Trial active
       </span>
     );
@@ -171,7 +171,7 @@ function PlanBadge({
 
   if (status === "expired" && isCurrent) {
     return (
-      <span className="rounded-full bg-rose-50 dark:bg-rose-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-rose-600 dark:text-rose-600">
+      <span className="rounded-full bg-danger-50 dark:bg-danger-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-red-600 dark:text-red-400">
         Trial expired
       </span>
     );

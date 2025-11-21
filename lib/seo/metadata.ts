@@ -17,17 +17,17 @@ export type CreateMetadataOptions = {
 };
 
 export const seoConfig = {
-  siteName: "Kontainar Hub",
-  siteUrl: "https://kontainarhub.com",
+  siteName: "TajirJomla Hub",
+  siteUrl: "https://tajirjomlahub.com",
   defaultDescription:
-    "Kontainar Hub is a mock B2B marketplace showcasing supplier-trader workflows, analytics, and subscription flows.",
+    "TajirJomla Hub is a mock B2B marketplace showcasing supplier-trader workflows, analytics, and subscription flows.",
   defaultImage: {
     url: "https://images.unsplash.com/photo-1529074963764-98f45c47344b?auto=format&fit=crop&w=1200&q=80",
     width: 1200,
     height: 630,
-    alt: "Kontainar Hub marketplace preview",
+    alt: "TajirJomla Hub marketplace preview",
   },
-  twitterHandle: "@kontainarhub",
+  twitterHandle: "@tajirjomlahub",
 };
 
 export function buildCanonicalUrl({ path }: CanonicalOptions = {}) {
