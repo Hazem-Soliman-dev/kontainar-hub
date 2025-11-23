@@ -9,6 +9,7 @@ import { AddToCartButton } from "../ui/add-to-cart-button";
 import { ProductPriceOrRequest } from "../ui/product-price-or-request";
 import { hasActivePlan } from "../../lib/utils/has-active-plan";
 import { useAuthStore } from "../../lib/store/auth-store";
+import { useLanguage } from "../providers/language-provider";
 import type { SubscriptionSnapshot } from "../../lib/mock/subscriptions";
 
 interface StoreProductsProps {
@@ -17,6 +18,7 @@ interface StoreProductsProps {
 }
 
 export function StoreProducts({ products, storeName }: StoreProductsProps) {
+  const { t } = useLanguage();
   const authSubscription = useAuthStore((state) => state.subscription);
   const [hasActivePlanState, setHasActivePlanState] = useState(false);
 
@@ -52,7 +54,7 @@ export function StoreProducts({ products, storeName }: StoreProductsProps) {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-900">
-        Products from {storeName}
+        {t("home.storePage.productsFrom").replace("{name}", storeName)}
       </h2>
       <div className="grid gap-4 md:grid-cols-2">
         {products.map((product) => (

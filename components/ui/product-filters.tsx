@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import type { BestSellerProduct } from "../../lib/mock/public";
+import { useLanguage } from "../providers/language-provider";
 
 interface ProductFiltersProps {
   products: BestSellerProduct[];
@@ -26,6 +27,7 @@ export function ProductFilters({
   filters,
   onFilterChange,
 }: ProductFiltersProps) {
+  const { t } = useLanguage();
   const categories = Array.from(
     new Set(products.map((p) => p.category))
   ).sort();
@@ -54,9 +56,9 @@ export function ProductFilters({
   };
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-white dark:bg-neutral-900 p-4">
+    <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 p-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-200 mx-1">Filters</h3>
+        <h3 className="text-md font-semibold text-neutral-900 dark:text-neutral-200 mx-1">{t("home.topProductsPage.filters")}</h3>
         {hasActiveFilters && (
           <button
             type="button"
@@ -64,7 +66,7 @@ export function ProductFilters({
             className="flex items-center gap-1 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 mx-2"
           >
             <X className="h-3 w-3" />
-            Clear all
+            {t("home.topProductsPage.clearFilters")}
           </button>
         )}
       </div>
@@ -72,16 +74,16 @@ export function ProductFilters({
       <div className="grid gap-4">
         <div className="flex flex-col gap-1">
           <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
-            Category
+            {t("home.topProductsPage.filterLabels.category")}
           </label>
           <select
             value={filters.category}
             onChange={(e) =>
               onFilterChange({ ...filters, category: e.target.value })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
           >
-            <option value="all">All Categories</option>
+            <option value="all">{t("home.topProductsPage.filterLabels.allCategories")}</option>
             {categories.map((category) => (
               <option key={category} value={category}>
                 {category}
@@ -92,19 +94,19 @@ export function ProductFilters({
 
         <div className="flex flex-col gap-1">
           <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
-            Momentum
+            {t("home.topProductsPage.filterLabels.momentum")}
           </label>
           <select
             value={filters.momentum}
             onChange={(e) =>
               onFilterChange({ ...filters, momentum: e.target.value })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
           >
-            <option value="all">All Momentum</option>
+            <option value="all">{t("home.topProductsPage.filterLabels.allMomentum")}</option>
             {momentums.map((momentum) => (
               <option key={momentum} value={momentum}>
-                {momentum.charAt(0).toUpperCase() + momentum.slice(1)}
+                {t(`home.topProductsPage.momentum.${momentum}` as any) || momentum.charAt(0).toUpperCase() + momentum.slice(1)}
               </option>
             ))}
           </select>
@@ -112,16 +114,16 @@ export function ProductFilters({
 
         <div className="flex flex-col gap-1">
           <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
-            Brand
+            {t("home.topProductsPage.filterLabels.brand")}
           </label>
           <select
             value={filters.brand}
             onChange={(e) =>
               onFilterChange({ ...filters, brand: e.target.value })
             }
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:outline-none"
           >
-            <option value="all">All Brands</option>
+            <option value="all">{t("home.topProductsPage.filterLabels.allBrands")}</option>
             {brands.map((brand) => (
               <option key={brand} value={brand}>
                 {brand}
@@ -132,7 +134,7 @@ export function ProductFilters({
 
         <div className="flex flex-col gap-1">
           <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
-            Min Price
+            {t("home.topProductsPage.filterLabels.minPrice")}
           </label>
           <input
             type="number"
@@ -140,16 +142,16 @@ export function ProductFilters({
             onChange={(e) =>
               onFilterChange({ ...filters, minPrice: e.target.value })
             }
-            placeholder="0"
+            placeholder={t("home.topProductsPage.filterLabels.minPricePlaceholder")}
             min="0"
             step="0.01"
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-700 dark:placeholder:text-neutral-700 focus:border-primary-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus:border-primary-500 focus:outline-none"
           />
         </div>
 
         <div className="flex flex-col gap-1">
           <label className="block text-sm font-medium text-neutral-900 dark:text-neutral-200">
-            Max Price
+            {t("home.topProductsPage.filterLabels.maxPrice")}
           </label>
           <input
             type="number"
@@ -157,10 +159,10 @@ export function ProductFilters({
             onChange={(e) =>
               onFilterChange({ ...filters, maxPrice: e.target.value })
             }
-            placeholder="No limit"
+            placeholder={t("home.topProductsPage.filterLabels.maxPricePlaceholder")}
             min="0"
             step="0.01"
-            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-700 dark:placeholder:text-neutral-700 focus:border-primary-500 focus:outline-none"
+            className="w-full rounded-lg border border-neutral-200 dark:border-neutral-200 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 focus:border-primary-500 focus:outline-none"
           />
         </div>
       </div>

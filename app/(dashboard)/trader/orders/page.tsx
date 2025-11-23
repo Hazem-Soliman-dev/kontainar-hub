@@ -5,8 +5,14 @@ import { ShoppingCart, Filter, DollarSign } from "lucide-react";
 
 import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
+import { useLanguage } from "../../../../components/providers/language-provider";
 
-type TraderOrderStatus = "pending" | "confirmed" | "in-transit" | "delivered" | "cancelled";
+type TraderOrderStatus =
+  | "pending"
+  | "confirmed"
+  | "in-transit"
+  | "delivered"
+  | "cancelled";
 
 interface TraderOrder {
   id: string;
@@ -79,10 +85,11 @@ const INITIAL_ORDERS: TraderOrder[] = [
 ];
 
 export default function TraderOrdersPage() {
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<TraderOrder[]>(INITIAL_ORDERS);
-  const [selectedStatus, setSelectedStatus] = useState<TraderOrderStatus | "all">(
-    "all"
-  );
+  const [selectedStatus, setSelectedStatus] = useState<
+    TraderOrderStatus | "all"
+  >("all");
   const [updatingOrders, setUpdatingOrders] = useState<string[]>([]);
 
   const stats = useMemo(() => {
@@ -112,17 +119,12 @@ export default function TraderOrdersPage() {
     return orders.filter((order) => order.status === selectedStatus);
   }, [orders, selectedStatus]);
 
-  const handleStatusChange = async (
-    id: string,
-    status: TraderOrderStatus
-  ) => {
+  const handleStatusChange = async (id: string, status: TraderOrderStatus) => {
     setUpdatingOrders((prev) => [...prev, id]);
     const snapshot = orders;
 
     setOrders((prev) =>
-      prev.map((order) =>
-        order.id === id ? { ...order, status } : order
-      )
+      prev.map((order) => (order.id === id ? { ...order, status } : order))
     );
 
     try {
@@ -144,16 +146,22 @@ export default function TraderOrdersPage() {
           <Breadcrumb />
           <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Orders</h1>
-              <p className="mt-1 text-neutral-900 dark:text-neutral-200">Track and manage sourcing orders</p>
+              <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">
+                {t("home.trader.orders.title")}
+              </h1>
+              <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+                {t("home.trader.orders.description")}
+              </p>
             </div>
-            <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/30 dark:to-neutral-900 px-6 py-4 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 neutral-900 px-6 py-4 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-2.5">
-                  <DollarSign className="h-5 w-5 text-neutral-900 dark:text-neutral-200" />
+                  <DollarSign className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-neutral-900 dark:text-neutral-200">Total Spend</p>
+                  <p className="text-xs font-medium text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.stats.totalSpend")}
+                  </p>
                   <p className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
                     {stats.value.toLocaleString("en-US", {
                       style: "currency",
@@ -167,77 +175,106 @@ export default function TraderOrdersPage() {
           </div>
         </header>
 
-        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex flex-wrap gap-4 text-sm text-neutral-900 dark:text-neutral-200">
-              <span className="font-semibold">Total: {stats.total}</span>
-              <span>Pending: {stats.pending}</span>
-              <span>Confirmed: {stats.confirmed}</span>
-              <span>In transit: {stats["in-transit"]}</span>
-              <span>Delivered: {stats.delivered}</span>
-              <span>Cancelled: {stats.cancelled}</span>
+              <span className="font-semibold">{t("home.trader.orders.stats.total")}: {stats.total}</span>
+              <span>{t("home.trader.orders.stats.pending")}: {stats.pending}</span>
+              <span>{t("home.trader.orders.stats.confirmed")}: {stats.confirmed}</span>
+              <span>{t("home.trader.orders.stats.inTransit")}: {stats["in-transit"]}</span>
+              <span>{t("home.trader.orders.stats.delivered")}: {stats.delivered}</span>
+              <span>{t("home.trader.orders.stats.cancelled")}: {stats.cancelled}</span>
             </div>
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-neutral-900 dark:text-neutral-200" />
               <select
                 value={selectedStatus}
                 onChange={(event) =>
-                  setSelectedStatus(event.target.value as TraderOrderStatus | "all")
+                  setSelectedStatus(
+                    event.target.value as TraderOrderStatus | "all"
+                  )
                 }
                 className="rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
               >
-                <option value="all">All statuses</option>
-                <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="in-transit">In transit</option>
-                <option value="delivered">Delivered</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="all">{t("home.trader.orders.filters.allStatuses")}</option>
+                <option value="pending">{t("home.trader.orders.status.pending")}</option>
+                <option value="confirmed">{t("home.trader.orders.status.confirmed")}</option>
+                <option value="in-transit">{t("home.trader.orders.status.inTransit")}</option>
+                <option value="delivered">{t("home.trader.orders.status.delivered")}</option>
+                <option value="cancelled">{t("home.trader.orders.status.cancelled")}</option>
               </select>
             </div>
           </div>
 
           <div className="mt-6 overflow-x-auto -mx-6 px-6">
-            <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm">
+            <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm text-center">
               <thead>
-                <tr className="text-left">
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Order</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Store</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Supplier</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Products</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Quantity</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Value</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">ETA</th>
-                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Status</th>
+                <tr className="text-center">
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.order")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.store")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.supplier")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.products")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.quantity")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.value")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.eta")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.orders.table.status")}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {filteredOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
-                    <td className="py-4 pr-6">
+                  <tr
+                    key={order.id}
+                    className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+                  >
+                    <td className="py-4">
                       <div>
                         <p className="font-semibold text-neutral-900 dark:text-neutral-200">
                           {order.id}
                         </p>
                         <p className="text-xs text-neutral-900 dark:text-neutral-200 mt-0.5">
-                          Placed {new Date(order.createdAt).toLocaleDateString()}
+                          {t("home.trader.orders.placed")} {new Date(order.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">#{order.storeId}</td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">{order.supplier}</td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">{order.products}</td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">{order.quantity}</td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200">
+                      #{order.storeId}
+                    </td>
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200">
+                      {order.supplier}
+                    </td>
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200">
+                      {order.products}
+                    </td>
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200">
+                      {order.quantity}
+                    </td>
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200">
                       {order.value.toLocaleString("en-US", {
                         style: "currency",
                         currency: "USD",
                       })}
                     </td>
-                    <td className="py-4 pr-6 text-xs text-neutral-900 dark:text-neutral-200">
+                    <td className="py-4 text-xs text-neutral-900 dark:text-neutral-200">
                       {new Date(order.eta).toLocaleDateString()}
                     </td>
                     <td className="py-4">
-                      <div className="flex flex-col gap-2">
+                      <div className="flex flex-col gap-2 text-center">
                         <select
                           value={order.status}
                           onChange={(event) =>
@@ -247,17 +284,17 @@ export default function TraderOrdersPage() {
                             )
                           }
                           disabled={updatingOrders.includes(order.id)}
-                          className="rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-xs uppercase tracking-wide text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                          className="rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-xs uppercase tracking-wide text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
                         >
-                          <option value="pending">Pending</option>
-                          <option value="confirmed">Confirmed</option>
-                          <option value="in-transit">In transit</option>
-                          <option value="delivered">Delivered</option>
-                          <option value="cancelled">Cancelled</option>
+                          <option value="pending">{t("home.trader.orders.status.pending")}</option>
+                          <option value="confirmed">{t("home.trader.orders.status.confirmed")}</option>
+                          <option value="in-transit">{t("home.trader.orders.status.inTransit")}</option>
+                          <option value="delivered">{t("home.trader.orders.status.delivered")}</option>
+                          <option value="cancelled">{t("home.trader.orders.status.cancelled")}</option>
                         </select>
                         {updatingOrders.includes(order.id) && (
-                          <span className="text-xs text-primary-700 dark:text-primary-400">
-                            Syncing with supplier…
+                          <span className="text-xs text-blue-700 dark:text-blue-400">
+                            {t("home.trader.orders.syncing")}
                           </span>
                         )}
                       </div>
@@ -270,7 +307,7 @@ export default function TraderOrdersPage() {
 
           {filteredOrders.length === 0 && (
             <p className="mt-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-8 text-center text-sm text-neutral-900 dark:text-neutral-200">
-              No orders in this status. Adjust the filter to view other orders.
+              {t("home.trader.orders.emptyState")}
             </p>
           )}
         </section>

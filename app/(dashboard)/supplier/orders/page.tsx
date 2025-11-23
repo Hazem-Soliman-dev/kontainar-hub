@@ -7,9 +7,11 @@ import { useRealtimeOrders } from "../../../../hooks/use-realtime-orders";
 import { ordersBus } from "../../../../lib/realtime/orders-bus";
 import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
+import { useLanguage } from "../../../../components/providers/language-provider";
 import type { OrderStatus } from "../../../../lib/mock/orders";
 
 export default function SupplierOrdersPage() {
+  const { t } = useLanguage();
   const { orders, isLoading, isError, updateOrderStatus } = useRealtimeOrders();
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all");
   const [updatingIds, setUpdatingIds] = useState<string[]>([]);
@@ -22,7 +24,10 @@ export default function SupplierOrdersPage() {
     const unsubSuccess = ordersBus.on("orderUpdated", (order) => {
       setFeedback({
         type: "success",
-        message: `Order ${order.id} synced successfully.`,
+        message: t("home.supplier.orders.messages.orderSynced").replace(
+          "{id}",
+          order.id
+        ),
       });
     });
 
@@ -31,7 +36,12 @@ export default function SupplierOrdersPage() {
       ({ message, orderId }) => {
         setFeedback({
           type: "error",
-          message: message ?? `Unable to update order ${orderId}.`,
+          message:
+            message ??
+            t("home.supplier.orders.messages.updateFailed").replace(
+              "{id}",
+              orderId
+            ),
         });
       }
     );
@@ -40,7 +50,7 @@ export default function SupplierOrdersPage() {
       unsubSuccess();
       unsubError();
     };
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!feedback) {
@@ -89,7 +99,7 @@ export default function SupplierOrdersPage() {
         message:
           error instanceof Error
             ? error.message
-            : "Unable to update order. Please retry.",
+            : t("home.supplier.orders.messages.retry"),
       });
     } finally {
       setUpdatingIds((prev) => prev.filter((id) => id !== orderId));
@@ -105,16 +115,22 @@ export default function SupplierOrdersPage() {
           <Breadcrumb />
           <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Orders</h1>
-              <p className="mt-1 text-neutral-900 dark:text-neutral-200">Manage and track your orders</p>
+              <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">
+                {t("home.supplier.orders.title")}
+              </h1>
+              <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+                {t("home.supplier.orders.description")}
+              </p>
             </div>
-            <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/30 dark:to-neutral-900 px-6 py-4 shadow-sm">
+            <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 px-6 py-4 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-2.5">
-                  <DollarSign className="h-5 w-5 text-neutral-900 dark:text-neutral-200" />
+                  <DollarSign className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-medium text-neutral-900 dark:text-neutral-200">30-Day Revenue</p>
+                  <p className="text-xs font-medium text-neutral-900 dark:text-neutral-400">
+                    {t("home.supplier.orders.revenue30d")}
+                  </p>
                   <p className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
                     {stats.revenue.toLocaleString("en-US", {
                       style: "currency",
@@ -128,7 +144,7 @@ export default function SupplierOrdersPage() {
           </div>
         </header>
 
-        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
           {feedback && (
             <div
               className={`mb-4 rounded-xl px-4 py-3 text-sm ${
@@ -142,16 +158,24 @@ export default function SupplierOrdersPage() {
           )}
           {isError && (
             <div className="mb-4 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/30 px-4 py-3 text-sm text-red-700 dark:text-red-400">
-              Unable to load orders. Refresh or try again shortly.
+              {t("home.supplier.orders.errors.loadFailed")}
             </div>
           )}
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex flex-wrap gap-4 text-sm text-neutral-900 dark:text-neutral-200">
-              <span className="font-semibold">Total: {stats.totalOrders}</span>
-              <span>Pending: {stats.pending}</span>
-              <span>Processing: {stats.processing}</span>
-              <span>Fulfilled: {stats.fulfilled}</span>
+              <span className="font-semibold">
+                {t("home.supplier.orders.stats.total")}: {stats.totalOrders}
+              </span>
+              <span>
+                {t("home.supplier.orders.stats.pending")}: {stats.pending}
+              </span>
+              <span>
+                {t("home.supplier.orders.stats.processing")}: {stats.processing}
+              </span>
+              <span>
+                {t("home.supplier.orders.stats.fulfilled")}: {stats.fulfilled}
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-neutral-900 dark:text-neutral-200" />
@@ -160,13 +184,23 @@ export default function SupplierOrdersPage() {
                 onChange={(event) =>
                   setStatusFilter(event.target.value as OrderStatus | "all")
                 }
-                className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
               >
-                <option value="all">All statuses</option>
-                <option value="pending">Pending</option>
-                <option value="processing">Processing</option>
-                <option value="fulfilled">Fulfilled</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="all">
+                  {t("home.supplier.orders.filters.allStatuses")}
+                </option>
+                <option value="pending">
+                  {t("home.supplier.orders.status.pending")}
+                </option>
+                <option value="processing">
+                  {t("home.supplier.orders.status.processing")}
+                </option>
+                <option value="fulfilled">
+                  {t("home.supplier.orders.status.fulfilled")}
+                </option>
+                <option value="cancelled">
+                  {t("home.supplier.orders.status.cancelled")}
+                </option>
               </select>
             </div>
           </div>
@@ -174,39 +208,53 @@ export default function SupplierOrdersPage() {
           <div className="mt-6 overflow-x-auto -mx-6 px-6">
             <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm">
               <thead>
-                <tr className="text-left">
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Order</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Buyer</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Product</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Quantity</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Total</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Ship Date</th>
-                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Status</th>
+                <tr className="text-center">
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.supplier.orders.table.order")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.supplier.orders.table.buyer")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.supplier.orders.table.product")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.supplier.orders.table.quantity")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.supplier.orders.table.total")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.supplier.orders.table.shipDate")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.supplier.orders.table.status")}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {isLoading
                   ? Array.from({ length: 6 }).map((_, index) => (
                       <tr key={`skeleton-${index}`} className="animate-pulse">
-                        <td className="py-4 pr-6">
+                        <td className="py-4">
                           <div className="h-4 w-24 rounded bg-neutral-200 dark:bg-neutral-800" />
                         </td>
-                        <td className="py-4 pr-6">
+                        <td className="py-4">
                           <div className="h-4 w-32 rounded bg-neutral-200 dark:bg-neutral-800" />
                         </td>
-                        <td className="py-4 pr-6">
+                        <td className="py-4">
                           <div className="h-4 w-36 rounded bg-neutral-200 dark:bg-neutral-800" />
                         </td>
-                        <td className="py-4 pr-6">
+                        <td className="py-4">
                           <div className="h-4 w-16 rounded bg-neutral-200 dark:bg-neutral-800" />
                         </td>
-                        <td className="py-4 pr-6">
+                        <td className="py-4">
                           <div className="h-4 w-20 rounded bg-neutral-200 dark:bg-neutral-800" />
                         </td>
-                        <td className="py-4 pr-6">
+                        <td className="py-4">
                           <div className="h-4 w-28 rounded bg-neutral-200 dark:bg-neutral-800" />
                         </td>
-                        <td className="py-4 pr-6">
+                        <td className="py-4">
                           <div className="h-8 w-32 rounded bg-neutral-200 dark:bg-neutral-800" />
                         </td>
                       </tr>
@@ -219,9 +267,15 @@ export default function SupplierOrdersPage() {
                         <td className="py-4 pr-6 font-semibold text-neutral-900 dark:text-neutral-200">
                           {order.id}
                         </td>
-                        <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">{order.buyer}</td>
-                        <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">{order.product}</td>
-                        <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">{order.quantity}</td>
+                        <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">
+                          {order.buyer}
+                        </td>
+                        <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">
+                          {order.product}
+                        </td>
+                        <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">
+                          {order.quantity}
+                        </td>
                         <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">
                           {order.total.toLocaleString("en-US", {
                             style: "currency",
@@ -229,7 +283,9 @@ export default function SupplierOrdersPage() {
                           })}
                         </td>
                         <td className="py-4 pr-6 text-xs text-neutral-900 dark:text-neutral-200">
-                          {new Date(order.expectedShipDate).toLocaleDateString()}
+                          {new Date(
+                            order.expectedShipDate
+                          ).toLocaleDateString()}
                         </td>
                         <td className="py-4">
                           <div className="flex flex-col gap-2">
@@ -241,26 +297,37 @@ export default function SupplierOrdersPage() {
                                   event.target.value as OrderStatus
                                 )
                               }
-                              className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-3 py-2 text-xs uppercase tracking-wide text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                              className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 px-3 py-2 text-xs uppercase tracking-wide text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
                               disabled={updatingIds.includes(order.id)}
                             >
-                              <option value="pending">Pending</option>
-                              <option value="processing">Processing</option>
-                              <option value="fulfilled">Fulfilled</option>
-                              <option value="cancelled">Cancelled</option>
+                              <option value="pending">
+                                {t("home.supplier.orders.status.pending")}
+                              </option>
+                              <option value="processing">
+                                {t("home.supplier.orders.status.processing")}
+                              </option>
+                              <option value="fulfilled">
+                                {t("home.supplier.orders.status.fulfilled")}
+                              </option>
+                              <option value="cancelled">
+                                {t("home.supplier.orders.status.cancelled")}
+                              </option>
                             </select>
                             <div className="text-xs text-neutral-900 dark:text-neutral-200">
-                              Updated{" "}
-                              {new Date(order.updatedAt).toLocaleString("en-US", {
-                                month: "short",
-                                day: "numeric",
-                                hour: "numeric",
-                                minute: "2-digit",
-                              })}
+                              {t("home.supplier.orders.updated")}{" "}
+                              {new Date(order.updatedAt).toLocaleString(
+                                "en-US",
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  hour: "numeric",
+                                  minute: "2-digit",
+                                }
+                              )}
                             </div>
                             {updatingIds.includes(order.id) && (
                               <span className="text-xs text-primary-500 dark:text-primary-400">
-                                Syncing changes…
+                                {t("home.supplier.orders.syncing")}
                               </span>
                             )}
                           </div>
@@ -272,8 +339,8 @@ export default function SupplierOrdersPage() {
           </div>
 
           {!isLoading && filteredOrders.length === 0 && (
-            <p className="mt-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 py-8 text-center text-sm text-neutral-900 dark:text-neutral-200">
-              No orders in this status. Adjust the filter to view other orders.
+            <p className="mt-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 px-4 py-8 text-center text-sm text-neutral-900 dark:text-neutral-200">
+              {t("home.supplier.orders.emptyState")}
             </p>
           )}
         </section>

@@ -4,9 +4,9 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "../providers/language-provider";
 import type { LucideIcon } from "lucide-react";
 import {
-  Search,
   Laptop,
   Shirt,
   Home as HomeIcon,
@@ -60,6 +60,8 @@ interface SearchAutocompleteProps {
   className?: string;
 }
 
+
+
 export function SearchAutocomplete({
   query,
   onQueryChange,
@@ -67,6 +69,7 @@ export function SearchAutocomplete({
   maxResults = 5,
   className = "",
 }: SearchAutocompleteProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [debouncedQuery, setDebouncedQuery] = useState(query);
@@ -347,7 +350,6 @@ export function SearchAutocomplete({
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 pointer-events-none" />
         <input
           ref={inputRef}
           type="text"
@@ -355,8 +357,8 @@ export function SearchAutocomplete({
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
-          placeholder="Search products, stores, or brands..."
-          className="w-full bg-transparent px-12 py-4 text-md text-slate-900 placeholder:text-slate-900/60 focus:outline-none"
+          placeholder={t("home.hero.placeholder")} 
+          className="w-full bg-transparent px-12 py-4 text-md text-slate-600 placeholder:text-slate-600 focus:outline-none dark:text-slate-300 dark:placeholder:text-slate-300"
         />
       </div>
 

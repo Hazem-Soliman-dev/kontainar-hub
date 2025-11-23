@@ -6,11 +6,13 @@ import { Search } from "lucide-react";
 import { SearchAutocomplete } from "../ui/search-autocomplete";
 import { useSearchStore } from "../../lib/store/search-store";
 import { quickFilters } from "../../lib/mock/public";
+import { useLanguage } from "../providers/language-provider";
 
 export function HeroSearch() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const { addSearch } = useSearchStore();
+  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,7 +48,7 @@ export function HeroSearch() {
 
       <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
         <p className="text-xs sm:text-sm font-medium text-neutral-900 dark:text-neutral-100">
-          Popular Search
+          {t("home.hero.quickFilters")}
         </p>
         {quickFilters.map((filter) => (
           <button

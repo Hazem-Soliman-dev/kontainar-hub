@@ -20,7 +20,10 @@ const INITIAL_STATE: FormState = {
   message: "",
 };
 
+import { useLanguage } from "../../../components/providers/language-provider";
+
 export function ContactClient() {
+  const { t } = useLanguage();
   const user = useAuthStore((state) => state.user);
   const [formState, setFormState] = useState<FormState>(INITIAL_STATE);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -65,7 +68,7 @@ export function ContactClient() {
       setSuccess(true);
       setFormState(INITIAL_STATE);
     } catch (err) {
-      setError("Failed to send message. Please try again later.");
+      setError(t("home.contactPage.form.error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -77,15 +80,15 @@ export function ContactClient() {
         <div className="h-16 w-16 rounded-full bg-success-100 dark:bg-success-900/30 flex items-center justify-center text-success-600 dark:text-success-400 mb-6">
           <CheckCircle className="h-8 w-8" />
         </div>
-        <h3 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">Message Sent!</h3>
+        <h3 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">{t("home.contactPage.form.success.title")}</h3>
         <p className="text-neutral-900 dark:text-neutral-200 max-w-md mx-auto mb-8">
-          Thank you for reaching out. We've received your message and will get back to you shortly.
+          {t("home.contactPage.form.success.message")}
         </p>
         <button
           onClick={() => setSuccess(false)}
           className="px-6 py-2.5 rounded-xl bg-neutral-900 dark:bg-neutral-100 text-neutral-100 dark:text-neutral-900 font-semibold hover:opacity-90 transition-opacity"
         >
-          Send Another Message
+          {t("home.contactPage.form.success.button")}
         </button>
       </div>
     );
@@ -95,55 +98,55 @@ export function ContactClient() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid sm:grid-cols-2 gap-6">
         <Input
-          label="Full Name"
+          label={t("home.contactPage.form.labels.name")}
           id="name"
           value={formState.name}
           onChange={handleChange("name")}
-          placeholder="John Doe"
+          placeholder={t("home.contactPage.form.placeholders.name")}
           required
         />
         <Input
-          label="Email Address"
+          label={t("home.contactPage.form.labels.email")}
           id="email"
           type="email"
           value={formState.email}
           onChange={handleChange("email")}
-          placeholder="john@example.com"
+          placeholder={t("home.contactPage.form.placeholders.email")}
           required
         />
       </div>
 
       <div className="grid sm:grid-cols-2 gap-6">
         <Input
-          label="Phone Number"
+          label={t("home.contactPage.form.labels.phone")}
           id="phone"
           type="tel"
           value={formState.phone}
           onChange={handleChange("phone")}
-          placeholder="+1 (555) 000-0000"
+          placeholder={t("home.contactPage.form.placeholders.phone")}
         />
         <Select
-          label="Subject"
+          label={t("home.contactPage.form.labels.subject")}
           id="subject"
           value={formState.subject}
           onChange={handleChange("subject")}
           options={[
-            { value: "", label: "Select a topic" },
-            { value: "general", label: "General Inquiry" },
-            { value: "support", label: "Technical Support" },
-            { value: "sales", label: "Sales & Partnerships" },
-            { value: "billing", label: "Billing Question" },
+            { value: "", label: t("home.contactPage.form.options.select") },
+            { value: "general", label: t("home.contactPage.form.options.general") },
+            { value: "support", label: t("home.contactPage.form.options.support") },
+            { value: "sales", label: t("home.contactPage.form.options.sales") },
+            { value: "billing", label: t("home.contactPage.form.options.billing") },
           ]}
           required
         />
       </div>
 
       <TextArea
-        label="Message"
+        label={t("home.contactPage.form.labels.message")}
         id="message"
         value={formState.message}
         onChange={handleChange("message")}
-        placeholder="How can we help you?"
+        placeholder={t("home.contactPage.form.placeholders.message")}
         rows={6}
         required
       />
@@ -163,12 +166,12 @@ export function ContactClient() {
         {isSubmitting ? (
           <>
             <Loader2 className="h-5 w-5 animate-spin" />
-            Sending...
+            {t("home.contactPage.form.sending")}
           </>
         ) : (
           <>
-            Send Message
-            <Send className="h-4 w-4" />
+            {t("home.contactPage.form.submit")}
+            <Send className="h-4 w-4 rtl:rotate-180" />
           </>
         )}
       </button>
@@ -245,7 +248,7 @@ function Select({
             </option>
           ))}
         </select>
-        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-neutral-900 dark:text-neutral-200">
+        <div className="pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 text-neutral-900 dark:text-neutral-200">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>

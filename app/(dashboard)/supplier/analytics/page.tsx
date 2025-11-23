@@ -6,6 +6,7 @@ import { BarChart3, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
 import { SalesChart } from "../../../../components/charts/sales-chart";
 import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
+import { useLanguage } from "../../../../components/providers/language-provider";
 
 interface SalesDataPoint {
   month: string;
@@ -51,6 +52,7 @@ const REGION_REVENUE: RegionRevenuePoint[] = [
 ];
 
 export default function SupplierAnalyticsPage() {
+  const { t } = useLanguage();
   const totals = useMemo(() => {
     const totalRevenue = SALES_TREND.reduce(
       (sum, point) => sum + point.revenue,
@@ -87,33 +89,33 @@ export default function SupplierAnalyticsPage() {
   const metrics = [
     {
       id: "metric-revenue",
-      label: "Total Revenue (6m)",
+      label: t("home.supplier.analytics.metrics.totalRevenue"),
       value: formatCurrency(totals.totalRevenue),
-      description: "Across all channels",
+      description: t("home.supplier.analytics.metrics.totalRevenueDesc"),
       icon: DollarSign,
       color: "from-emerald-500 to-emerald-600",
     },
     {
       id: "metric-orders",
-      label: "Orders Processed",
+      label: t("home.supplier.analytics.metrics.ordersProcessed"),
       value: totals.totalOrders.toLocaleString(),
-      description: "Confirmed and shipped",
+      description: t("home.supplier.analytics.metrics.ordersProcessedDesc"),
       icon: ShoppingCart,
       color: "from-blue-500 to-blue-600",
     },
     {
       id: "metric-avg",
-      label: "Average Order Value",
+      label: t("home.supplier.analytics.metrics.avgOrderValue"),
       value: formatCurrency(totals.avgOrderValue),
-      description: "6-month moving average",
+      description: t("home.supplier.analytics.metrics.avgOrderValueDesc"),
       icon: TrendingUp,
       color: "from-violet-500 to-violet-600",
     },
     {
       id: "metric-peak",
-      label: "Peak Month",
+      label: t("home.supplier.analytics.metrics.peakMonth"),
       value: totals.bestMonth,
-      description: "Highest blended revenue",
+      description: t("home.supplier.analytics.metrics.peakMonthDesc"),
       icon: BarChart3,
       color: "from-amber-500 to-amber-600",
     },
@@ -122,13 +124,17 @@ export default function SupplierAnalyticsPage() {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       <MobileDashboardNav role="supplier" />
-      
+
       <main className="flex min-h-screen flex-col gap-6 px-4 sm:px-6 lg:px-8 pt-20 lg:pt-8 pb-10">
         <header className="mx-auto w-full max-w-7xl">
           <Breadcrumb />
           <div className="mt-6">
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Analytics</h1>
-            <p className="mt-1 text-neutral-900 dark:text-neutral-200">Detailed performance metrics and insights</p>
+            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">
+              {t("home.supplier.analytics.title")}
+            </h1>
+            <p className="mt-1 text-neutral-900 dark:text-neutral-200">
+              {t("home.supplier.analytics.description")}
+            </p>
           </div>
         </header>
 
@@ -138,10 +144,12 @@ export default function SupplierAnalyticsPage() {
             return (
               <article
                 key={metric.id}
-                className="group relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-lg transition-all"
+                className="group relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm hover:shadow-lg transition-all text-center"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`rounded-xl bg-gradient-to-br ${metric.color} p-3`}>
+                <div className="flex items-center justify-center mb-4">
+                  <div
+                    className={`rounded-xl bg-gradient-to-br ${metric.color} p-3`}
+                  >
                     <Icon className="h-5 w-5 text-neutral-900 dark:text-neutral-200" />
                   </div>
                 </div>
@@ -161,8 +169,8 @@ export default function SupplierAnalyticsPage() {
 
         <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-2">
           <AnalyticsPanel
-            title="Revenue vs Orders"
-            subtitle="Track top-line revenue against shipment volume"
+            title={t("home.supplier.analytics.charts.revenueVsOrders")}
+            subtitle={t("home.supplier.analytics.charts.revenueVsOrdersDesc")}
           >
             <div className="h-72 w-full">
               <SalesChart
@@ -183,8 +191,10 @@ export default function SupplierAnalyticsPage() {
           </AnalyticsPanel>
 
           <AnalyticsPanel
-            title="Top Product Contribution"
-            subtitle="Blend of revenue across lead SKUs"
+            title={t("home.supplier.analytics.charts.topProductContribution")}
+            subtitle={t(
+              "home.supplier.analytics.charts.topProductContributionDesc"
+            )}
           >
             <div className="h-72 w-full">
               <SalesChart
@@ -207,13 +217,13 @@ export default function SupplierAnalyticsPage() {
           </AnalyticsPanel>
         </section>
 
-        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
           <header className="mb-6">
             <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
-              Revenue by Region
+              {t("home.supplier.analytics.revenueByRegion.title")}
             </h2>
             <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
-              Where demand is accelerating for your current catalogue
+              {t("home.supplier.analytics.revenueByRegion.description")}
             </p>
           </header>
 
@@ -221,16 +231,16 @@ export default function SupplierAnalyticsPage() {
             {REGION_REVENUE.map((region) => (
               <div
                 key={region.region}
-                className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 p-5"
+                className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 p-5 text-center"
               >
-                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-900 dark:text-neutral-200">
+                <p className="text-xs font-semibold uppercase tracking-widest text-neutral-900 dark:text-neutral-200 text-center">
                   {region.region}
                 </p>
-                <p className="mt-2 text-2xl font-bold text-neutral-900 dark:text-neutral-200">
+                <p className="mt-2 text-2xl font-bold text-neutral-900 dark:text-neutral-200 text-center">
                   {formatCurrency(region.revenue)}
                 </p>
-                <p className="mt-1 text-xs text-neutral-900 dark:text-neutral-200">
-                  View buyer activity →
+                <p className="mt-1 text-xs text-neutral-900 dark:text-neutral-200 text-center">
+                  {t("home.supplier.analytics.revenueByRegion.viewActivity")}
                 </p>
               </div>
             ))}
@@ -251,10 +261,14 @@ function AnalyticsPanel({
   children: React.ReactNode;
 }) {
   return (
-    <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+    <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
       <header className="mb-6">
-        <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">{title}</h2>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{subtitle}</p>
+        <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
+          {title}
+        </h2>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+          {subtitle}
+        </p>
       </header>
       <div>{children}</div>
     </article>

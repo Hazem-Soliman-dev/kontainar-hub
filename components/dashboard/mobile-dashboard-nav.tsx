@@ -3,8 +3,20 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, LayoutDashboard, Package, ShoppingCart, BarChart3, Store, Inbox, User, LogOut } from "lucide-react";
+import {
+  Menu,
+  X,
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  BarChart3,
+  Store,
+  Inbox,
+  User,
+  LogOut,
+} from "lucide-react";
 import { useAuthStore } from "../../lib/store/auth-store";
+import { useLanguage } from "../providers/language-provider";
 
 interface NavLink {
   href: string;
@@ -12,31 +24,30 @@ interface NavLink {
   icon: React.ElementType;
 }
 
-const SUPPLIER_LINKS: NavLink[] = [
-  { href: "/supplier/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/supplier/products", label: "Products", icon: Package },
-  { href: "/supplier/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/supplier/analytics", label: "Analytics", icon: BarChart3 },
-];
-
-const TRADER_LINKS: NavLink[] = [
-  { href: "/trader/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/trader/store", label: "Stores", icon: Store },
-  { href: "/trader/inventory", label: "Inventory", icon: Inbox },
-  { href: "/trader/orders", label: "Orders", icon: ShoppingCart },
-];
-
 interface MobileDashboardNavProps {
   role: "supplier" | "trader";
 }
 
 export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
 
-  const links = role === "supplier" ? SUPPLIER_LINKS : TRADER_LINKS;
+  const links: NavLink[] = role === "supplier" 
+    ? [
+        { href: "/supplier/dashboard", label: t("home.supplier.dashboard.title"), icon: LayoutDashboard },
+        { href: "/supplier/products", label: t("home.supplier.products.title"), icon: Package },
+        { href: "/supplier/orders", label: t("home.supplier.orders.title"), icon: ShoppingCart },
+        { href: "/supplier/analytics", label: t("home.supplier.analytics.title"), icon: BarChart3 },
+      ]
+    : [
+        { href: "/trader/dashboard", label: t("home.dashboard.nav.dashboard"), icon: LayoutDashboard },
+        { href: "/trader/store", label: t("home.dashboard.nav.stores"), icon: Store },
+        { href: "/trader/inventory", label: t("home.dashboard.nav.inventory"), icon: Inbox },
+        { href: "/trader/orders", label: t("home.dashboard.nav.orders"), icon: ShoppingCart },
+      ];
 
   const handleLogout = () => {
     logout();
@@ -48,8 +59,8 @@ export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="lg:hidden fixed top-4 right-4 z-50 rounded-xl bg-white dark:bg-neutral-900 p-3 shadow-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
-        aria-label="Toggle menu"
+        className="lg:hidden fixed top-4 right-4 z-50 rounded-xl bg-neutral-100 dark:bg-neutral-900 p-3 shadow-lg border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors"
+        aria-label={t("home.dashboard.mobileNav.toggleMenu")}
       >
         {isOpen ? (
           <X className="h-5 w-5 text-neutral-900 dark:text-white" />
@@ -68,7 +79,7 @@ export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
 
       {/* Slide-out Menu */}
       <nav
-        className={`lg:hidden fixed top-0 right-0 bottom-0 z-40 w-80 max-w-[85vw] bg-white dark:bg-neutral-900 shadow-2xl transform transition-transform duration-300 ease-in-out ${
+        className={`lg:hidden fixed top-0 right-0 bottom-0 z-40 w-80 max-w-[85vw] bg-neutral-100 dark:bg-neutral-900 shadow-2xl transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -81,10 +92,12 @@ export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
               </div>
               <div className="flex-1">
                 <p className="text-sm font-semibold text-neutral-900 dark:text-white">
-                  {user?.fullName || "User"}
+                  {user?.fullName || t("home.dashboard.mobileNav.user")}
                 </p>
                 <p className="text-xs text-neutral-600 dark:text-neutral-400 capitalize">
-                  {role} Account
+                  {role === "supplier" 
+                    ? t("home.dashboard.mobileNav.supplierAccount")
+                    : t("home.dashboard.mobileNav.traderAccount")}
                 </p>
               </div>
             </div>
@@ -103,8 +116,8 @@ export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
                     onClick={() => setIsOpen(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                       isActive
-                        ? "bg-primary-50 dark:bg-primary-950/50 text-primary-700 dark:text-primary-400 font-semibold"
-                        : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        ? "bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 font-semibold"
+                        : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800"
                     }`}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />
@@ -125,7 +138,7 @@ export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all"
               >
                 <User className="h-5 w-5 flex-shrink-0" />
-                <span>Account Settings</span>
+                <span>{t("home.dashboard.mobileNav.accountSettings")}</span>
               </Link>
             </div>
           </div>
@@ -137,7 +150,7 @@ export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
               className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
             >
               <LogOut className="h-5 w-5 flex-shrink-0" />
-              <span className="font-semibold">Sign Out</span>
+              <span className="font-semibold">{t("home.dashboard.mobileNav.signOut")}</span>
             </button>
           </div>
         </div>
@@ -155,7 +168,7 @@ export function MobileDashboardNav({ role }: MobileDashboardNavProps) {
                 href={link.href}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-primary-50 dark:bg-primary-950/50 text-primary-700 dark:text-primary-400"
+                    ? "bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400"
                     : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-800"
                 }`}
               >

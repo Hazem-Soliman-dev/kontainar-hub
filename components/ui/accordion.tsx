@@ -19,7 +19,7 @@ const AccordionItem = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "border border-neutral-200 dark:border-neutral-800 rounded-2xl bg-white dark:bg-neutral-900 overflow-hidden transition-all hover:border-blue-500/30",
+      "border border-neutral-200 dark:border-neutral-800 rounded-2xl bg-neutral-100 dark:bg-neutral-900 overflow-hidden transition-all hover:border-blue-500/30",
       className
     )}
     {...props}
@@ -34,7 +34,7 @@ const AccordionTrigger = React.forwardRef<
   <button
     ref={ref}
     className={cn(
-      "flex flex-1 items-center justify-between py-4 px-6 font-medium transition-all hover:text-blue-600 dark:hover:text-blue-400 [&[data-state=open]>svg]:rotate-180 w-full text-left",
+      "flex flex-1 items-center justify-between py-4 px-6 font-medium text-neutral-900 dark:text-neutral-200 transition-all hover:text-blue-600 dark:hover:text-blue-400 [&[data-state=open]>svg]:rotate-180 w-full text-left",
       className
     )}
     {...props}
@@ -57,7 +57,7 @@ const AccordionContent = React.forwardRef<
     )}
     {...props}
   >
-    <div className="pb-4 pt-0 px-6 text-neutral-600 dark:text-neutral-400 leading-relaxed">
+    <div className="pb-4 pt-0 px-6 text-neutral-900 dark:text-neutral-200 leading-relaxed">
       {children}
     </div>
   </div>
@@ -83,9 +83,9 @@ export function SimpleAccordion({ items }: SimpleAccordionProps) {
             {item.title}
           </AccordionTrigger>
           {openIndex === index && (
-             <AccordionContent data-state="open">
-                {item.content}
-             </AccordionContent>
+            <AccordionContent data-state="open">
+              {item.content}
+            </AccordionContent>
           )}
         </AccordionItem>
       ))}

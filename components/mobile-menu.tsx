@@ -20,13 +20,10 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "../lib/store/auth-store";
 import { ThemeToggle } from "./ui/theme-toggle";
+import { useLanguage } from "./providers/language-provider";
+import { LanguageToggle } from "./ui/language-toggle";
 
-const NAV_LINKS = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/stores", label: "Stores", icon: Store },
-  { href: "/top-products", label: "Top Products", icon: TrendingUp },
-  { href: "/plans", label: "Deals", icon: Tag },
-];
+// NAV_LINKS removed to use translations inside component
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -34,6 +31,7 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const { t } = useLanguage();
   const user = useAuthStore((state) => state.user);
   const dashboardPath = useAuthStore((state) => state.dashboardPath);
   const logout = useAuthStore((state) => state.logout);
@@ -87,8 +85,8 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 z-50 w-80 max-w-[85vw] h-screen transform bg-neutral-50 dark:bg-neutral-900 shadow-md transition-transform duration-300 ease-in-out md:hidden ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed start-0 top-0 z-50 w-80 max-w-[85vw] h-screen transform bg-neutral-50 dark:bg-neutral-900 shadow-md transition-transform duration-300 ease-in-out md:hidden ${
+          isOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full"
         }`}
       >
         <div className="flex h-screen flex-col">
@@ -100,7 +98,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               onClick={handleLinkClick}
             >
               <span className="text-lg font-bold text-neutral-900 dark:text-neutral-300">
-                TajirJomla Hub
+                {t("common.brandName")}
               </span>
             </Link>
             <button
@@ -132,7 +130,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     </div>
                   </div>
                   <p className="mt-2 inline-flex items-center rounded-full bg-primary-100 dark:bg-primary-900/30 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-300">
-                    {user.role} access
+                    {user.role} {t("common.access")}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -142,7 +140,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-primary-500"
                   >
                     <Heart className="h-4 w-4" />
-                    <span className="hidden sm:inline">Favorites</span>
+                    <span className="hidden sm:inline">{t("common.favorites")}</span>
                   </Link>
                   <Link
                     href="/cart"
@@ -150,7 +148,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:border-primary-500"
                   >
                     <ShoppingCart className="h-4 w-4" />
-                    <span className="hidden sm:inline">Cart</span>
+                    <span className="hidden sm:inline">{t("common.cart")}</span>
                   </Link>
                 </div>
               </div>
@@ -163,10 +161,10 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     </div>
                     <div>
                       <p className="font-semibold text-neutral-900 dark:text-neutral-300">
-                        Guest User
+                        {t("common.guest")}
                       </p>
                       <p className="text-xs text-neutral-600 dark:text-neutral-400">
-                        Sign in to access all features
+                        {t("common.guestDesc")}
                       </p>
                     </div>
                   </div>
@@ -175,17 +173,17 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/login"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-semibold text-neutral-200 transition hover:bg-primary-500"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-neutral-200 transition hover:bg-blue-500"
                   >
                     <LogIn className="h-4 w-4" />
-                    Sign In
+                    {t("common.signIn")}
                   </Link>
                   <Link
                     href="/register"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-blue-900 px-4 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800"
                   >
-                    Register
+                    {t("common.register")}
                   </Link>
                 </div>
               </div>
@@ -196,32 +194,59 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           <nav className="flex-1 overflow-y-auto px-6 py-4 bg-neutral-50 dark:bg-neutral-800 h-full">
             <div className="mb-3">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 px-2">
-                Pages
+                {/*Pages*/}
+                {t("common.pages")}
               </h3>
             </div>
+
             <ul className="space-y-1">
-              {NAV_LINKS.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      onClick={handleLinkClick}
-                      className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span>{link.label}</span>
-                    </Link>
-                  </li>
-                );
-              })}
+              <li>
+                <Link
+                  href="/"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
+                >
+                  <Home className="h-5 w-5" />
+                  <span>{t("nav.home")}</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/stores"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
+                >
+                  <Store className="h-5 w-5" />
+                  <span>{t("nav.stores")}</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/top-products"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
+                >
+                  <TrendingUp className="h-5 w-5" />
+                  <span>{t("nav.topProducts")}</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/plans"
+                  onClick={handleLinkClick}
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
+                >
+                  <Tag className="h-5 w-5" />
+                  <span>{t("nav.deals")}</span>
+                </Link>
+              </li>
             </ul>
 
             {user && (
               <div className="mt-6 space-y-1 border-t border-neutral-200 dark:border-neutral-800 pt-4">
                 <div className="mb-3 mt-2">
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 px-2">
-                    Account
+                    {t("common.account")}
                   </h3>
                 </div>
                 <Link
@@ -235,7 +260,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
                 >
                   <LayoutDashboard className="h-5 w-5" />
-                  <span>Dashboard</span>
+                  <span>{t("common.dashboard")}</span>
                 </Link>
                 <Link
                   href="/account"
@@ -243,7 +268,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
                 >
                   <User className="h-5 w-5" />
-                  <span>Account</span>
+                  <span>{t("common.account")}</span>
                 </Link>
                 <Link
                   href="/settings"
@@ -251,7 +276,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   className="flex items-center gap-3 rounded-lg px-3 py-3 text-base font-medium text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800 hover:text-primary-600 dark:hover:text-primary-400 hover:shadow-sm"
                 >
                   <SettingsIcon className="h-5 w-5" />
-                  <span>Settings</span>
+                  <span>{t("common.settings")}</span>
                 </Link>
               </div>
             )}
@@ -261,9 +286,15 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           <div className="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800 px-6 py-4">
             <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-50 dark:bg-neutral-800 px-3 py-2 border border-neutral-200 dark:border-neutral-700">
               <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                Theme
+                {t("common.theme")}
               </span>
               <ThemeToggle />
+            </div>
+            <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-50 dark:bg-neutral-800 px-3 py-2 border border-neutral-200 dark:border-neutral-700">
+              <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+                {t("common.language")}
+              </span>
+              <LanguageToggle />
             </div>
             {user && (
               <button
@@ -272,7 +303,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 dark:border-red-900/30 bg-red-50 dark:bg-red-900/20 px-4 py-3 text-sm font-semibold text-red-600 dark:text-red-400 transition hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-800"
               >
                 <LogOut className="h-4 w-4" />
-                Log Out
+                {t("common.logout")}
               </button>
             )}
           </div>

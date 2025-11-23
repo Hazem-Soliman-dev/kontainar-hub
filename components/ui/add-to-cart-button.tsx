@@ -21,7 +21,8 @@ export function AddToCartButton({
   const addToCart = useCartStore((state) => state.addToCart);
   const items = useCartStore((state) => state.items);
 
-  const isDisabled = !isAuthenticated || !user;
+  // Only traders can add to cart
+  const isDisabled = !isAuthenticated || !user || user.role !== "trader";
   const inCart = items.some((item) => item.id === product.id);
 
   const handleAddToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,15 +49,15 @@ export function AddToCartButton({
       disabled={isDisabled}
       className={`flex items-center justify-center rounded-full transition-colors ${
         isDisabled
-          ? "bg-neutral-400 dark:bg-neutral-500 text-neutral-900 dark:text-neutral-200 cursor-not-allowed opacity-60"
+          ? "text-neutral-400 dark:text-neutral-600 cursor-not-allowed opacity-60"
           : inCart
-            ? "bg-green-500 dark:bg-green-600 text-neutral-900 dark:text-neutral-200 hover:bg-green-600"
-            : "bg-primary-500 dark:bg-primary-600 text-neutral-900 dark:text-neutral-200 hover:bg-primary-600"
+            ? "text-green-500 dark:text-green-300 hover:text-green-600"
+            : "text-green-500 dark:text-green-300 hover:text-green-600"
       } ${sizeClasses[size]} ${className}`}
       aria-label={inCart ? "Item in cart - Add more" : "Add to cart"}
-      title={isDisabled ? "Please login to add to cart" : inCart ? "Item in cart - Click to add more" : "Add to cart"}
+      title={isDisabled ? "Only traders can add to cart" : inCart ? "Item in cart - Click to add more" : "Add to cart"}
     >
-      <ShoppingCart className="h-4 w-4" />
+      <ShoppingCart className="h-5 w-5" />
     </button>
   );
 }

@@ -71,6 +71,26 @@ export const mockDb = {
     );
   },
 
+  getUserById(id: string): UserRecord | undefined {
+    return users.get(id);
+  },
+
+  updateUserRole(userId: string, role: UserRole): PublicUser | null {
+    const user = users.get(userId);
+    if (!user) {
+      return null;
+    }
+
+    const updatedUser: UserRecord = {
+      ...user,
+      role,
+      updatedAt: new Date(),
+    };
+
+    users.set(userId, updatedUser);
+    return toPublicUser(updatedUser);
+  },
+
   listUsers(): PublicUser[] {
     return Array.from(users.values()).map(toPublicUser);
   },

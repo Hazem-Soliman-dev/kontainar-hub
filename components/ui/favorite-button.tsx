@@ -21,8 +21,6 @@ export function FavoriteButton({
   className = "",
   size = 20,
 }: FavoriteButtonProps) {
-  const user = useAuthStore((state) => state.user);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   // Subscribe to state arrays directly so component re-renders on changes
   const productIds = useFavoritesStore((state) => state.productIds);
   const storeIds = useFavoritesStore((state) => state.storeIds);
@@ -40,7 +38,6 @@ export function FavoriteButton({
     return null;
   }
 
-  const isDisabled = !isAuthenticated || !user;
   const isFavorite = product
     ? productIds.includes(id)
     : store
@@ -50,10 +47,6 @@ export function FavoriteButton({
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-
-    if (isDisabled) {
-      return;
-    }
 
     if (product) {
       if (isFavorite) {
@@ -74,15 +67,12 @@ export function FavoriteButton({
     <button
       type="button"
       onClick={handleToggle}
-      disabled={isDisabled}
       className={`flex items-center justify-center rounded-full transition-colors ${
-        isDisabled
-          ? "bg-gray-400 text-white cursor-not-allowed opacity-60"
-          : isFavorite
-            ? "bg-rose-500 text-white hover:bg-rose-600"
-            : "bg-slate-800/60 text-slate-400 hover:bg-slate-700/60 hover:text-rose-400"
+        isFavorite
+          ? "bg-rose-500 text-white hover:bg-rose-600"
+          : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-rose-500 dark:hover:text-rose-400"
       } ${className}`}
-      aria-label={isDisabled ? "Please login to add to favorites" : isFavorite ? "Remove from favorites" : "Add to favorites"}
+      aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
     >
       <Heart
         size={size}

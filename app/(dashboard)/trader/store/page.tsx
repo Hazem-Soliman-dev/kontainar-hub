@@ -5,6 +5,7 @@ import { Store, Plus, Filter } from "lucide-react";
 
 import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
+import { useLanguage } from "../../../../components/providers/language-provider";
 
 interface TraderStore {
   id: string;
@@ -57,6 +58,7 @@ const defaultFormValues: StoreFormValues = {
 };
 
 export default function TraderStorePage() {
+  const { t } = useLanguage();
   const [stores, setStores] = useState<TraderStore[]>(INITIAL_STORES);
   const [formValues, setFormValues] = useState(defaultFormValues);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -122,26 +124,30 @@ export default function TraderStorePage() {
         <header className="mx-auto w-full max-w-7xl">
           <Breadcrumb />
           <div className="mt-6">
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Stores</h1>
-            <p className="mt-1 text-neutral-900 dark:text-neutral-200">Create and manage your sub-stores</p>
+            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">
+              {t("home.trader.store.title")}
+            </h1>
+            <p className="mt-1 text-neutral-900 dark:text-neutral-200">
+              {t("home.trader.store.description")}
+            </p>
           </div>
         </header>
 
         <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1.2fr_1.8fr]">
-          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <Store className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+              <Store className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
-                Create New Sub-Store
+                {t("home.trader.store.createTitle")}
               </h2>
             </div>
             <p className="text-sm text-neutral-900 dark:text-neutral-200 mb-4">
-              Segment buyers by channel, geography, or assortment strategy.
+              {t("home.trader.store.createDescription")}
             </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <label className="space-y-1 flex flex-col">
                 <span className="text-sm font-medium text-neutral-900 dark:text-neutral-200">
-                  Store Name
+                  {t("home.trader.store.form.labels.storeName")}
                 </span>
                 <input
                   type="text"
@@ -149,30 +155,30 @@ export default function TraderStorePage() {
                   value={formValues.name}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
-                  placeholder="e.g. Northwind Retail EU"
+                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
+                  placeholder={t("home.trader.store.form.placeholders.storeName")}
                 />
               </label>
 
               <label className="space-y-1 flex flex-col">
                 <span className="text-sm font-medium text-neutral-900 dark:text-neutral-200">
-                  Channel
+                  {t("home.trader.store.form.labels.channel")}
                 </span>
                 <select
                   name="channel"
                   value={formValues.channel}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
                 >
-                  <option value="Marketplace">Marketplace</option>
-                  <option value="Wholesale">Wholesale</option>
-                  <option value="Direct Retail">Direct Retail</option>
+                  <option value="Marketplace">{t("home.trader.store.form.channels.marketplace")}</option>
+                  <option value="Wholesale">{t("home.trader.store.form.channels.wholesale")}</option>
+                  <option value="Direct Retail">{t("home.trader.store.form.channels.directRetail")}</option>
                 </select>
               </label>
 
               <label className="space-y-1 flex flex-col">
                 <span className="text-sm font-medium text-neutral-900 dark:text-neutral-200">
-                  Region
+                  {t("home.trader.store.form.labels.region")}
                 </span>
                 <input
                   type="text"
@@ -180,43 +186,43 @@ export default function TraderStorePage() {
                   value={formValues.region}
                   onChange={handleChange}
                   required
-                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
-                  placeholder="e.g. Europe, APAC"
+                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
+                  placeholder={t("home.trader.store.form.placeholders.region")}
                 />
               </label>
 
               <label className="space-y-1 flex flex-col">
                 <span className="text-sm font-medium text-neutral-900 dark:text-neutral-200">
-                  Focus
+                  {t("home.trader.store.form.labels.focus")}
                 </span>
                 <textarea
                   name="focus"
                   value={formValues.focus}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
-                  placeholder="What products or buyer needs does this store address?"
+                  className="w-full rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-4 py-2.5 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
+                  placeholder={t("home.trader.store.form.placeholders.focus")}
                 />
               </label>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full rounded-xl bg-primary-500 dark:bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white dark:text-white shadow-lg hover:shadow-xl transition-all hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
+                className="w-full rounded-xl bg-blue-600 dark:bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white dark:text-white shadow-lg hover:shadow-xl transition-all hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
               >
-                {isSubmitting ? "Creating..." : "Create Store"}
+                {isSubmitting ? t("home.trader.store.form.buttons.creating") : t("home.trader.store.form.buttons.createStore")}
               </button>
             </form>
           </article>
 
-          <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+          <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
-                  Existing Stores
+                  {t("home.trader.store.existingStores")}
                 </h2>
                 <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
-                  {filteredStores.length} store(s) • {stores.length} total
+                  {t("home.trader.store.itemsCount").replace("{shown}", filteredStores.length.toString()).replace("{total}", stores.length.toString())}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -224,14 +230,16 @@ export default function TraderStorePage() {
                 <select
                   value={filter}
                   onChange={(event) =>
-                    setFilter(event.target.value as TraderStore["channel"] | "all")
+                    setFilter(
+                      event.target.value as TraderStore["channel"] | "all"
+                    )
                   }
-                  className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                  className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
                 >
-                  <option value="all">All channels</option>
-                  <option value="Marketplace">Marketplace</option>
-                  <option value="Wholesale">Wholesale</option>
-                  <option value="Direct Retail">Direct Retail</option>
+                  <option value="all">{t("home.trader.store.filters.allChannels")}</option>
+                  <option value="Marketplace">{t("home.trader.store.form.channels.marketplace")}</option>
+                  <option value="Wholesale">{t("home.trader.store.form.channels.wholesale")}</option>
+                  <option value="Direct Retail">{t("home.trader.store.form.channels.directRetail")}</option>
                 </select>
               </div>
             </div>
@@ -248,29 +256,29 @@ export default function TraderStorePage() {
                         <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-200">
                           {store.name}
                         </h3>
-                        <span className="rounded-full bg-info-100 dark:bg-info-950/50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-info-700 dark:text-info-400">
+                        <span className="rounded-full bg-blue-100 dark:bg-blue-950/50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-400">
                           {store.channel}
                         </span>
                         <span className="text-sm text-neutral-900 dark:text-neutral-200">
-                          Created {new Date(store.createdAt).toLocaleDateString()}
+                          {t("home.trader.store.created")} {new Date(store.createdAt).toLocaleDateString()}
                         </span>
                       </div>
                       <p className="text-sm text-neutral-900 dark:text-neutral-200">
                         {store.focus}
                       </p>
                       <p className="text-sm text-neutral-900 dark:text-neutral-200">
-                        🌍 Operating region: {store.region}
+                        {t("home.trader.store.operatingRegion")} {store.region}
                       </p>
                       <p className="text-xs text-neutral-900 dark:text-neutral-200">
-                        Connect suppliers to this store from the inventory console.
+                        {t("home.trader.store.connectSuppliers")}
                       </p>
                     </div>
                     <div className="flex lg:flex-col gap-2">
                       <button
                         onClick={() => handleDelete(store.id)}
-                        className="flex-1 lg:flex-none rounded-xl border-2 border-danger-200 dark:border-danger-900/50 px-4 py-2 text-sm font-semibold text-danger-700 dark:text-danger-400 hover:bg-danger-50 dark:hover:bg-danger-950/30 transition-all"
+                        className="flex-1 lg:flex-none rounded-xl border-2 border-red-200 dark:border-red-900/50 px-4 py-2 text-sm font-semibold text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
                       >
-                        Delete
+                        {t("home.trader.store.buttons.delete")}
                       </button>
                     </div>
                   </div>
@@ -279,7 +287,7 @@ export default function TraderStorePage() {
 
               {filteredStores.length === 0 && (
                 <p className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-8 text-center text-sm text-neutral-900 dark:text-neutral-200">
-                  No stores match this filter. Adjust the channel or create a new store.
+                  {t("home.trader.store.emptyState")}
                 </p>
               )}
             </div>

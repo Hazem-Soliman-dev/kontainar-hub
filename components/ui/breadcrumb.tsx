@@ -3,37 +3,41 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronRight, Home } from "lucide-react";
+import { useLanguage } from "../providers/language-provider";
 
-// Map path segments to readable labels
+// Map path segments to translation keys
 const pathLabelMap: Record<string, string> = {
-  supplier: "Supplier",
-  trader: "Trader",
-  products: "Products",
-  orders: "Orders",
-  analytics: "Analytics",
-  dashboard: "Dashboard",
-  inventory: "Inventory",
-  store: "Store",
-  contact: "Contact",
-  plans: "Plans",
-  search: "Search",
-  stores: "Stores",
-  cart: "Cart",
-  account: "Account",
-  favorites: "Favorites",
-  settings: "Settings",
-  login: "Login",
-  register: "Register",
-  about: "About",
-  services: "Services",
-  "customer-support": "Customer Support",
-  "shipping-info": "Shipping Info",
-  faq: "FAQs",
-  "privacy-policy": "Privacy Policy",
-  "terms-of-service": "Terms of Service",
-  "cookie-policy": "Cookie Policy",
-  "seller-agreement": "Seller Agreement",
-  "returns-refunds": "Returns & Refunds",
+  supplier: "home.breadcrumbs.supplier",
+  trader: "home.breadcrumbs.trader",
+  products: "home.breadcrumbs.products",
+  orders: "home.breadcrumbs.orders",
+  analytics: "home.breadcrumbs.analytics",
+  dashboard: "home.breadcrumbs.dashboard",
+  inventory: "home.breadcrumbs.inventory",
+  store: "home.breadcrumbs.store",
+  contact: "home.breadcrumbs.contact",
+  plans: "home.breadcrumbs.plans",
+  search: "home.breadcrumbs.search",
+  stores: "home.breadcrumbs.stores",
+  cart: "home.breadcrumbs.cart",
+  account: "home.breadcrumbs.account",
+  favorites: "home.breadcrumbs.favorites",
+  settings: "home.breadcrumbs.settings",
+  login: "home.breadcrumbs.login",
+  register: "home.breadcrumbs.register",
+  about: "home.breadcrumbs.about",
+  services: "home.breadcrumbs.services",
+  "customer-support": "home.breadcrumbs.customerSupport",
+  "shipping-info": "home.breadcrumbs.shippingInfo",
+  faq: "home.breadcrumbs.faq",
+  "privacy-policy": "home.breadcrumbs.privacyPolicy",
+  "terms-of-service": "home.breadcrumbs.termsOfService",
+  "cookie-policy": "home.breadcrumbs.cookiePolicy",
+  "seller-agreement": "home.breadcrumbs.sellerAgreement",
+  "returns-refunds": "home.breadcrumbs.returnsRefunds",
+  "top-products": "home.breadcrumbs.topProducts",
+  careers: "home.breadcrumbs.careers",
+  press: "home.breadcrumbs.press",
 };
 
 // Valid routes that exist in the application
@@ -60,6 +64,8 @@ const validRoutes = new Set([
   "/cookie-policy",
   "/seller-agreement",
   "/returns-refunds",
+  "/careers",
+  "/press",
   "/supplier/dashboard",
   "/supplier/products",
   "/supplier/orders",
@@ -81,12 +87,12 @@ const segmentRouteMap: Record<string, string> = {
   products: "/top-products", // /products doesn't exist, map to /best-sellers
 };
 
-function formatSegment(segment: string): string {
-  // Check if we have a mapped label
+function formatSegment(segment: string, t: (key: string) => string): string {
+  // Check if we have a mapped translation key
   if (pathLabelMap[segment]) {
-    return pathLabelMap[segment];
+    return t(pathLabelMap[segment]);
   }
-  // Convert kebab-case to Title Case
+  // Convert kebab-case to Title Case (fallback for unknown segments)
   return segment
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -151,6 +157,7 @@ interface BreadcrumbProps {
 
 export function Breadcrumb({ currentPageName }: BreadcrumbProps) {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   // Don't show breadcrumbs on home page
   if (pathname === "/") {
@@ -171,12 +178,12 @@ export function Breadcrumb({ currentPageName }: BreadcrumbProps) {
     href: string | null;
     isLast: boolean;
     isClickable: boolean;
-  }> = [{ label: "Home", href: "/", isLast: false, isClickable: true }];
+  }> = [{ label: t("home.breadcrumbs.home"), href: "/", isLast: false, isClickable: true }];
 
   // Add role segment (supplier/trader)
   if (isDashboardRoute && roleSegment) {
     items.push({
-      label: formatSegment(roleSegment),
+      label: formatSegment(roleSegment, t),
       href: null, // Role segments are not clickable
       isLast: false,
       isClickable: false,
@@ -188,7 +195,7 @@ export function Breadcrumb({ currentPageName }: BreadcrumbProps) {
       segments.length === 2 && segments[1] === "dashboard";
 
     items.push({
-      label: "Dashboard",
+      label: t("home.breadcrumbs.dashboard"),
       href: dashboardHref,
       isLast: segments.length === 2 && segments[1] === "dashboard",
       isClickable: true,
@@ -205,7 +212,7 @@ export function Breadcrumb({ currentPageName }: BreadcrumbProps) {
         const href = getSegmentRoute(segment, segments, i);
         const isLast = i === segments.length - 1;
         const label =
-          isLast && currentPageName ? currentPageName : formatSegment(segment);
+          isLast && currentPageName ? currentPageName : formatSegment(segment, t);
         items.push({
           label,
           href,
@@ -221,7 +228,7 @@ export function Breadcrumb({ currentPageName }: BreadcrumbProps) {
         const href = getSegmentRoute(segment, segments, index);
         const isLast = index === segments.length - 1;
         const label =
-          isLast && currentPageName ? currentPageName : formatSegment(segment);
+          isLast && currentPageName ? currentPageName : formatSegment(segment, t);
         return { label, href, isLast, isClickable: href !== null };
       })
     );

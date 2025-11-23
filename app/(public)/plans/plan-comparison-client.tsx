@@ -12,6 +12,8 @@ import type {
   SubscriptionPlanId,
   SubscriptionSnapshot,
 } from "../../../lib/mock/subscriptions";
+import { useLanguage } from "../../../components/providers/language-provider";
+import { MotionWrapper } from "../../../components/ui/motion-wrapper";
 
 interface PlanComparisonClientProps {
   plans: SubscriptionPlan[];
@@ -31,6 +33,7 @@ export function PlanComparisonClient({
   requestedProductId,
   requestedProductName,
 }: PlanComparisonClientProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const updateSubscription = useAuthStore((state) => state.updateSubscription);
   const [subscription, setSubscription] = useState(initialSubscription);
@@ -139,9 +142,9 @@ export function PlanComparisonClient({
   };
 
   return (
-    <div className="min-h-screen bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-b-3xl">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-b-3xl">
       {/* Hero Section */}
-      <div className="relative bg-neutral-900 py-10 sm:py-15 overflow-hidden ">
+      <div className="relative bg-neutral-50 dark:bg-neutral-900 py-10 sm:py-15 overflow-hidden ">
 
       </div>
 
@@ -178,22 +181,22 @@ export function PlanComparisonClient({
           )}
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 items-start">
-            {groupedPlans.map(({ plan, recommended }) => {
+            {groupedPlans.map(({ plan, recommended }, index) => {
               const isProcessingPlan =
                 processing && processing.planId === plan.id
                   ? processing.action
                   : null;
 
               return (
-                <div key={plan.id} className={`relative ${recommended ? 'lg:-mt-8' : ''}`}>
-                  {recommended && (
-                     <div className="absolute -top-10 left-0 right-0 flex justify-center">
-                        <span className="bg-gradient-to-r from-primary-500 to-secondary-500 text-neutral-900 dark:text-neutral-100 text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                           MOST POPULAR
-                        </span>
-                     </div>
-                  )}
-                  <div className={`h-full ${recommended ? 'ring-2 ring-primary-500 shadow-sm shadow-primary-500/20' : ''} rounded-3xl bg-neutral-100 dark:bg-neutral-900 overflow-hidden transition-transform hover:-translate-y-1 duration-300`}>
+                <MotionWrapper key={plan.id} delay={index * 0.1} variant="fade-up">
+                  <div className={`relative ${recommended ? 'lg:-mt-8' : ''}`}>
+                    {recommended && (
+                       <div className="absolute -top-10 left-0 right-0 flex justify-center z-10">
+                          <span className="bg-gradient-to-r from-primary-500 to-secondary-500 text-neutral-900 dark:text-neutral-100 text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                             {t("home.plansPage.mostPopular")}
+                          </span>
+                       </div>
+                    )}
                     <PlanCard
                       plan={plan}
                       status={
@@ -222,39 +225,39 @@ export function PlanComparisonClient({
                       recommended={recommended}
                     />
                   </div>
-                </div>
+                </MotionWrapper>
               );
             })}
           </div>
 
           {/* Feature Comparison */}
-          <div className="mt-24">
+          <MotionWrapper variant="fade-up" delay={0.4} className="mt-24">
             <h2 className="text-3xl font-bold text-center text-neutral-600 dark:text-neutral-400 mb-12">
-              Compare Features
+              {t("home.plansPage.compareFeatures")}
             </h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full text-start border-collapse">
                 <thead>
                   <tr>
-                    <th className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-tl-2xl text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">Feature</th>
-                    <th className="p-4 bg-neutral-50 dark:bg-neutral-900 text-center text-sm font-bold text-neutral-600 dark:text-neutral-400">Free</th>
-                    <th className="p-4 bg-neutral-50 dark:bg-neutral-900 text-center text-sm font-bold text-primary-600 dark:text-primary-400">Supplier</th>
-                    <th className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-tr-2xl text-center text-sm font-bold text-neutral-600 dark:text-neutral-400">Trader</th>
+                    <th className="p-4 bg-neutral-100 dark:bg-neutral-900 rounded-ss-2xl text-start text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">{t("home.plansPage.table.feature")}</th>
+                    <th className="p-4 bg-neutral-100 dark:bg-neutral-900 text-center text-sm font-bold text-neutral-600 dark:text-neutral-400">{t("home.plansPage.table.free")}</th>
+                    <th className="p-4 bg-neutral-100 dark:bg-neutral-900 text-center text-sm font-bold text-primary-600 dark:text-primary-400">{t("home.plansPage.table.supplier")}</th>
+                    <th className="p-4 bg-neutral-100 dark:bg-neutral-900 rounded-se-2xl text-center text-sm font-bold text-neutral-600 dark:text-neutral-400">{t("home.plansPage.table.trader")}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                  <FeatureRow name="Marketplace Access" free={true} supplier={true} trader={true} />
-                  <FeatureRow name="Product Search" free={true} supplier={true} trader={true} />
-                  <FeatureRow name="View Pricing" free={false} supplier={true} trader={true} />
-                  <FeatureRow name="Inventory Management" free={false} supplier={true} trader={false} />
-                  <FeatureRow name="RFQ Responses" free={false} supplier={true} trader={false} />
-                  <FeatureRow name="Bulk Ordering" free={false} supplier={false} trader={true} />
-                  <FeatureRow name="Priority Support" free={false} supplier={true} trader={true} />
-                  <FeatureRow name="API Access" free={false} supplier="Limited" trader="Full" />
+                  <FeatureRow name={t("home.plansPage.table.features.marketplaceAccess")} free={true} supplier={true} trader={true} />
+                  <FeatureRow name={t("home.plansPage.table.features.productSearch")} free={true} supplier={true} trader={true} />
+                  <FeatureRow name={t("home.plansPage.table.features.viewPricing")} free={false} supplier={true} trader={true} />
+                  <FeatureRow name={t("home.plansPage.table.features.inventoryManagement")} free={false} supplier={true} trader={false} />
+                  <FeatureRow name={t("home.plansPage.table.features.rfqResponses")} free={false} supplier={true} trader={false} />
+                  <FeatureRow name={t("home.plansPage.table.features.bulkOrdering")} free={false} supplier={false} trader={true} />
+                  <FeatureRow name={t("home.plansPage.table.features.prioritySupport")} free={false} supplier={true} trader={true} />
+                  <FeatureRow name={t("home.plansPage.table.features.apiAccess")} free={false} supplier={t("home.plansPage.table.status.limited")} trader={t("home.plansPage.table.status.full")} />
                 </tbody>
               </table>
             </div>
-          </div>
+          </MotionWrapper>
         </div>
       </main>
     </div>

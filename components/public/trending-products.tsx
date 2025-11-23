@@ -4,6 +4,7 @@ import useSWR from "swr";
 
 import type { ProductRecord } from "../../lib/mock/products";
 import { FavoriteButton } from "../ui/favorite-button";
+import { MotionWrapper } from "../ui/motion-wrapper";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -33,42 +34,48 @@ export default function TrendingProducts() {
       </header>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {data.map((product) => (
-          <article
+        {data.map((product, index) => (
+          <MotionWrapper
             key={product.id}
-            className="relative flex flex-col gap-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm transition hover:-translate-y-0.5"
+            delay={index * 0.05}
+            variant="fade-up"
+            className="h-full"
           >
-            <div className="absolute right-4 top-4 z-10">
-              <FavoriteButton product={product} size={18} className="h-8 w-8" />
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h3 className="text-base font-semibold text-neutral-900 dark:text-white">
-                  {product.name}
-                </h3>
-                <p className="text-xs uppercase tracking-wide text-primary-600 dark:text-primary-400">
-                  {product.category}
-                </p>
+            <article
+              className="relative flex flex-col gap-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 shadow-sm transition hover:-translate-y-0.5 lg:hover:scale-[1.02] duration-500 h-full"
+            >
+              <div className="absolute right-4 top-4 z-10">
+                <FavoriteButton product={product} size={18} className="h-8 w-8" />
               </div>
-              <span className={availabilityBadgeClass(product.availability)}>
-                {labelForAvailability(product.availability)}
-              </span>
-            </div>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">{product.description}</p>
-            <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-500 dark:text-neutral-500">
-              <span>
-                Supplier:{" "}
-                <span className="font-semibold text-neutral-700 dark:text-neutral-300">{product.supplier}</span>
-              </span>
-              <span>
-                Updated{" "}
-                {new Date(product.updatedAt).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
-            </div>
-          </article>
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-base font-semibold text-neutral-900 dark:text-white">
+                    {product.name}
+                  </h3>
+                  <p className="text-xs uppercase tracking-wide text-primary-600 dark:text-primary-400">
+                    {product.category}
+                  </p>
+                </div>
+                <span className={availabilityBadgeClass(product.availability)}>
+                  {labelForAvailability(product.availability)}
+                </span>
+              </div>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">{product.description}</p>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-500 dark:text-neutral-500 mt-auto">
+                <span>
+                  Supplier:{" "}
+                  <span className="font-semibold text-neutral-700 dark:text-neutral-300">{product.supplier}</span>
+                </span>
+                <span>
+                  Updated{" "}
+                  {new Date(product.updatedAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </div>
+            </article>
+          </MotionWrapper>
         ))}
       </div>
     </section>

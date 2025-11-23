@@ -7,6 +7,8 @@ import { Edit2, Save, X } from "lucide-react";
 import { TrialBanner } from "../../components/subscription/trial-banner";
 import { Breadcrumb } from "../../components/ui/breadcrumb";
 import { useAuthStore, type AuthUser } from "../../lib/store/auth-store";
+import { useLanguage } from "../../components/providers/language-provider";
+import { MotionWrapper } from "../../components/ui/motion-wrapper";
 import type {
   SubscriptionPlanId,
   SubscriptionSnapshot,
@@ -15,6 +17,7 @@ import type {
 type SubscriptionActionType = "startTrial" | "activate" | "cancel";
 
 export function AccountClient() {
+  const { t } = useLanguage();
   const user = useAuthStore((state) => state.user);
   const subscription = useAuthStore((state) => state.subscription);
   const dashboardPath = useAuthStore((state) => state.dashboardPath);
@@ -59,7 +62,7 @@ export function AccountClient() {
 
         if (!response.ok) {
           throw new Error(
-            data?.message ?? "Unable to load subscription details."
+            data?.message ?? t("home.accountPage.errors.loadSubscriptionFailed")
           );
         }
 
@@ -71,7 +74,7 @@ export function AccountClient() {
           setError(
             err instanceof Error
               ? err.message
-              : "Something went wrong while loading your subscription."
+              : t("home.accountPage.errors.loadSubscriptionFailed")
           );
         }
       } finally {
@@ -100,8 +103,12 @@ export function AccountClient() {
     Boolean(currentSubscription?.status === "trial") &&
     Boolean(currentSubscription?.isTrialActive);
   const isActivePlan = currentSubscription?.status === "active";
-  const planName =
-    currentSubscription?.plan.name ?? (user ? "Free Preview" : "Guest plan");
+  const planName = currentSubscription?.plan.name
+    ? t(`home.plansPage.plans.${currentSubscription.plan.id}.name`) ||
+      currentSubscription.plan.name
+    : user
+    ? t("home.plansPage.plans.free.name")
+    : t("home.accountPage.guestPlan");
 
   const canStartTrial =
     Boolean(user) &&
@@ -122,24 +129,24 @@ export function AccountClient() {
 
   const planStatusText = useMemo(() => {
     if (!currentSubscription) {
-      return "Free preview";
+      return t("home.accountPage.subscription.status.freePreview");
     }
 
     switch (currentSubscription.status) {
       case "trial":
         return currentSubscription.isTrialActive
-          ? "Trial active"
-          : "Trial ended";
+          ? t("home.accountPage.subscription.status.trialActive")
+          : t("home.accountPage.subscription.status.trialEnded");
       case "active":
-        return "Active subscription";
+        return t("home.accountPage.subscription.status.active");
       case "expired":
-        return "Trial expired";
+        return t("home.accountPage.subscription.status.expired");
       case "canceled":
-        return "Canceled";
+        return t("home.accountPage.subscription.status.canceled");
       default:
-        return "Free preview";
+        return t("home.accountPage.subscription.status.freePreview");
     }
-  }, [currentSubscription]);
+  }, [currentSubscription, t]);
 
   const formattedJoinedDate = useMemo(() => {
     if (!user) {
@@ -159,7 +166,7 @@ export function AccountClient() {
 
   const handleSubscriptionAction = async (action: SubscriptionActionType) => {
     if (!user) {
-      setError("You need to sign in to manage your subscription.");
+      setError(t("home.accountPage.errors.signInRequired"));
       return;
     }
 
@@ -187,7 +194,7 @@ export function AccountClient() {
 
       if (!response.ok) {
         throw new Error(
-          data?.message ?? "Unable to update your subscription right now."
+          data?.message ?? t("home.accountPage.errors.updateSubscriptionFailed")
         );
       }
 
@@ -195,16 +202,16 @@ export function AccountClient() {
 
       setMessage(
         action === "activate"
-          ? "Subscription activated. Enjoy full workspace access!"
+          ? t("home.accountPage.messages.activated")
           : action === "cancel"
-          ? "Subscription canceled. You're back on the free preview."
-          : "Trial restarted for another day."
+          ? t("home.accountPage.messages.canceled")
+          : t("home.accountPage.messages.trialRestarted")
       );
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : "Something went wrong while updating your subscription."
+          : t("home.accountPage.errors.updateSubscriptionFailed")
       );
     } finally {
       setProcessing(null);
@@ -225,7 +232,7 @@ export function AccountClient() {
       trialSecondsRemaining: 0,
     });
 
-    setMessage("Your trial ended. Activate your plan to keep full access.");
+    setMessage(t("home.accountPage.messages.trialEnded"));
   };
 
   // Initialize profile form data when user changes
@@ -277,13 +284,13 @@ export function AccountClient() {
       // });
       // if (!response.ok) throw new Error("Failed to update profile");
 
-      setMessage("Profile updated successfully!");
+      setMessage(t("home.accountPage.messages.profileUpdated"));
       setIsEditingProfile(false);
     } catch (err) {
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to update profile. Please try again."
+          : t("home.accountPage.errors.updateProfileFailed")
       );
       // Revert to original user data on error
       if (user) {
@@ -338,11 +345,10 @@ export function AccountClient() {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
-                Sign in to view your account
+                {t("home.accountPage.signInRequired.title")}
               </h2>
               <p className="text-neutral-600 dark:text-neutral-400">
-                Access your profile, manage subscriptions, and view your account
-                details
+                {t("home.accountPage.signInRequired.description")}
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -350,20 +356,20 @@ export function AccountClient() {
                 href="/login"
                 className="rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all hover:scale-105"
               >
-                Sign in
+                {t("home.accountPage.signInRequired.signIn")}
               </Link>
               <Link
                 href="/register"
                 className="rounded-xl border-2 border-primary-200 dark:border-primary-900/50 px-6 py-3 text-sm font-semibold text-primary-700 dark:text-primary-400 transition-all hover:bg-primary-50 dark:hover:bg-primary-950/30"
               >
-                Create Account
+                {t("home.accountPage.signInRequired.createAccount")}
               </Link>
             </div>
             <Link
               href="/plans"
               className="inline-block text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
-              View Plans →
+              {t("home.accountPage.signInRequired.viewPlans")}
             </Link>
           </div>
         </main>
@@ -374,19 +380,22 @@ export function AccountClient() {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
       {/* Hero Banner */}
-      <div className="relative bg-gradient-to-br from-neutral-900 via-neutral-900 to-neutral-800 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-800 py-12 sm:py-16 overflow-hidden">
+      <div className="relative bg-neutral-50 dark:bg-neutral-900 py-12 sm:py-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-900/20 via-transparent to-secondary-900/20" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <MotionWrapper variant="fade-up" className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-100 mb-2">
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-200 mb-2">
                 {user.fullName}
               </h1>
-              <p className="text-neutral-300">
-                {user.role === "supplier" ? "Supplier" : "Trader"} Account
+              <p className="text-neutral-600 dark:text-neutral-400">
+                {user.role === "supplier"
+                  ? t("home.accountPage.role.supplier")
+                  : t("home.accountPage.role.trader")}{" "}
+                {t("home.accountPage.account")}
                 {formattedJoinedDate && (
-                  <span className="ml-3 text-neutral-400">
-                    Member since {formattedJoinedDate}
+                  <span className="ml-3 text-neutral-500 dark:text-neutral-500">
+                    {t("home.accountPage.memberSince")} {formattedJoinedDate}
                   </span>
                 )}
               </p>
@@ -394,19 +403,19 @@ export function AccountClient() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href={resolvedDashboard}
-                className="inline-flex items-center justify-center rounded-xl bg-text-neutral-100 dark:bg-text-neutral-100 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-100 shadow-lg hover:shadow-xl transition-all hover:scale-105"
+                className="inline-flex items-center justify-center rounded-xl bg-neutral-100 dark:bg-neutral-800 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-100 shadow-lg hover:shadow-xl transition-all hover:scale-105"
               >
-                Open Dashboard
+                {t("home.accountPage.buttons.openDashboard")}
               </Link>
               <Link
                 href="/plans"
-                className="inline-flex items-center justify-center rounded-xl border-2 border-white/30 dark:border-white/30 px-5 py-2.5 text-sm font-semibold text-text-neutral-100 dark:text-text-neutral-100 transition-all hover:bg-white/10 dark:hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-xl border-2 border-neutral-300 dark:border-neutral-700 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-200 transition-all hover:bg-neutral-100 dark:hover:bg-neutral-800"
               >
-                View Plans
+                {t("home.accountPage.buttons.viewPlans")}
               </Link>
             </div>
           </div>
-        </div>
+        </MotionWrapper>
       </div>
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 -mt-8 relative z-10 pb-24">
@@ -436,14 +445,14 @@ export function AccountClient() {
         ) : null}
 
         <section className="grid gap-6 lg:grid-cols-2">
-          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-text-neutral-100 dark:bg-neutral-900 p-6 sm:p-8 shadow-sm">
+          <MotionWrapper variant="slide-right" delay={0.1} className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 sm:p-8 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
-                  Profile Information
+                  {t("home.accountPage.profile.title")}
                 </h2>
                 <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                  Personal details and business information
+                  {t("home.accountPage.profile.description")}
                 </p>
               </div>
               {!isEditingProfile && (
@@ -453,7 +462,7 @@ export function AccountClient() {
                   className="inline-flex items-center gap-2 rounded-xl border-2 border-primary-200 dark:border-blue-400/50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-neutral-700 dark:text-neutral-100 transition-all hover:bg-primary-50 dark:hover:bg-blue-950/30"
                 >
                   <Edit2 className="h-3 w-3" />
-                  Edit
+                  {t("home.accountPage.profile.edit")}
                 </button>
               )}
             </div>
@@ -462,37 +471,41 @@ export function AccountClient() {
               <form onSubmit={handleProfileSubmit} className="space-y-4">
                 <div className="space-y-3">
                   <ProfileInput
-                    label="Full name"
+                    label={t("home.accountPage.profile.fields.fullName")}
                     value={profileFormData.fullName}
                     onChange={handleProfileChange("fullName")}
                     required
                   />
                   <ProfileInput
-                    label="Email"
+                    label={t("home.accountPage.profile.fields.email")}
                     type="email"
                     value={profileFormData.email}
                     onChange={handleProfileChange("email")}
                     required
                   />
                   <ProfileInput
-                    label="Phone"
+                    label={t("home.accountPage.profile.fields.phone")}
                     value={profileFormData.phone}
                     onChange={handleProfileChange("phone")}
                     required
                   />
                   <ProfileRow
-                    label="Role"
-                    value={user.role === "supplier" ? "Supplier" : "Trader"}
+                    label={t("home.accountPage.profile.fields.role")}
+                    value={
+                      user.role === "supplier"
+                        ? t("home.accountPage.role.supplier")
+                        : t("home.accountPage.role.trader")
+                    }
                     readOnly
                   />
                   <ProfileInput
-                    label="Business"
+                    label={t("home.accountPage.profile.fields.business")}
                     value={profileFormData.businessName}
                     onChange={handleProfileChange("businessName")}
                     required
                   />
                   <ProfileInput
-                    label="Business type"
+                    label={t("home.accountPage.profile.fields.businessType")}
                     value={profileFormData.businessType}
                     onChange={handleProfileChange("businessType")}
                     required
@@ -505,7 +518,9 @@ export function AccountClient() {
                     className="inline-flex items-center gap-2 rounded-xl bg-primary-600 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-100 transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60 hover:scale-105"
                   >
                     <Save className="h-4 w-4" />
-                    {isUpdatingProfile ? "Updating..." : "Save Changes"}
+                    {isUpdatingProfile
+                      ? t("home.accountPage.profile.updating")
+                      : t("home.accountPage.profile.saveChanges")}
                   </button>
                   <button
                     type="button"
@@ -514,28 +529,47 @@ export function AccountClient() {
                     className="inline-flex items-center gap-2 rounded-xl border-2 border-neutral-200 dark:border-neutral-800 px-5 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-100 transition-all hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <X className="h-4 w-4" />
-                    Cancel
+                    {t("home.accountPage.profile.cancel")}
                   </button>
                 </div>
               </form>
             ) : (
               <>
                 <dl className="space-y-3 text-sm">
-                  <ProfileRow label="Full name" value={user.fullName} />
-                  <ProfileRow label="Email" value={user.email} />
-                  <ProfileRow label="Phone" value={user.phone} />
                   <ProfileRow
-                    label="Role"
-                    value={user.role === "supplier" ? "Supplier" : "Trader"}
+                    label={t("home.accountPage.profile.fields.fullName")}
+                    value={user.fullName}
                   />
-                  <ProfileRow label="Business" value={user.businessName} />
-                  <ProfileRow label="Business type" value={user.businessType} />
+                  <ProfileRow
+                    label={t("home.accountPage.profile.fields.email")}
+                    value={user.email}
+                  />
+                  <ProfileRow
+                    label={t("home.accountPage.profile.fields.phone")}
+                    value={user.phone}
+                  />
+                  <ProfileRow
+                    label={t("home.accountPage.profile.fields.role")}
+                    value={
+                      user.role === "supplier"
+                        ? t("home.accountPage.role.supplier")
+                        : t("home.accountPage.role.trader")
+                    }
+                  />
+                  <ProfileRow
+                    label={t("home.accountPage.profile.fields.business")}
+                    value={user.businessName}
+                  />
+                  <ProfileRow
+                    label={t("home.accountPage.profile.fields.businessType")}
+                    value={user.businessType}
+                  />
                 </dl>
               </>
             )}
-          </article>
+          </MotionWrapper>
 
-          <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-gradient-to-br from-text-neutral-100 to-neutral-50 dark:from-neutral-900 dark:to-neutral-900/50 p-6 sm:p-8 shadow-sm">
+          <MotionWrapper variant="slide-left" delay={0.2} className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-gradient-to-br from-neutral-100 to-neutral-50 dark:from-neutral-900 dark:to-neutral-900/50 p-6 sm:p-8 shadow-sm">
             <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-6">
               <div>
                 <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
@@ -546,7 +580,10 @@ export function AccountClient() {
                 </p>
               </div>
               <span className="inline-flex items-center rounded-full bg-primary-100 dark:bg-primary-950/50 px-4 py-1.5 text-xs font-semibold uppercase text-primary-700 dark:text-neutral-100">
-                {user.role} workspace
+                {user.role === "supplier"
+                  ? t("home.accountPage.role.supplier")
+                  : t("home.accountPage.role.trader")}{" "}
+                {t("home.accountPage.workspace")}
               </span>
             </header>
 
@@ -554,14 +591,18 @@ export function AccountClient() {
               {currentSubscription ? (
                 <>
                   <div className="flex justify-between py-2 border-b border-neutral-200 dark:border-neutral-800">
-                    <span>Access level</span>
+                    <span>
+                      {t("home.accountPage.subscription.accessLevel")}
+                    </span>
                     <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                       {currentSubscription.plan.bestFor}
                     </span>
                   </div>
                   {currentSubscription.trialEndsAt ? (
                     <div className="flex justify-between py-2 border-b border-neutral-200 dark:border-neutral-800">
-                      <span>Trial ends</span>
+                      <span>
+                        {t("home.accountPage.subscription.trialEnds")}
+                      </span>
                       <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                         {new Date(
                           currentSubscription.trialEndsAt
@@ -571,7 +612,9 @@ export function AccountClient() {
                   ) : null}
                   {currentSubscription.activatedAt ? (
                     <div className="flex justify-between py-2">
-                      <span>Activated</span>
+                      <span>
+                        {t("home.accountPage.subscription.activated")}
+                      </span>
                       <span className="font-semibold text-neutral-900 dark:text-neutral-100">
                         {new Date(
                           currentSubscription.activatedAt
@@ -581,7 +624,7 @@ export function AccountClient() {
                   ) : null}
                 </>
               ) : (
-                <p>Subscription details will appear here shortly.</p>
+                <p>{t("home.accountPage.subscription.loading")}</p>
               )}
             </div>
 
@@ -594,8 +637,8 @@ export function AccountClient() {
                   className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {processing === "activate"
-                    ? "Activating..."
-                    : "Activate Full Access"}
+                    ? t("home.accountPage.subscription.buttons.activating")
+                    : t("home.accountPage.subscription.buttons.activate")}
                 </button>
               ) : null}
 
@@ -606,7 +649,9 @@ export function AccountClient() {
                   disabled={processing === "cancel" || isLoading}
                   className="inline-flex items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-800 px-6 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-100 transition-all hover:bg-neutral-50 dark:hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {processing === "cancel" ? "Canceling..." : "Cancel Plan"}
+                  {processing === "cancel"
+                    ? t("home.accountPage.subscription.buttons.canceling")
+                    : t("home.accountPage.subscription.buttons.cancel")}
                 </button>
               ) : null}
 
@@ -618,65 +663,116 @@ export function AccountClient() {
                   className="inline-flex items-center justify-center rounded-xl border-2 border-primary-200 dark:border-blue-400/50 px-6 py-3 text-sm font-semibold text-primary-700 dark:text-neutral-100 transition-all hover:bg-primary-50 dark:hover:bg-blue-950/30 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {processing === "startTrial"
-                    ? "Starting trial..."
-                    : "Restart 1-day Trial"}
+                    ? t("home.accountPage.subscription.buttons.startingTrial")
+                    : t("home.accountPage.subscription.buttons.restartTrial")}
                 </button>
               ) : null}
             </div>
 
             <section className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-800/30 p-4 sm:p-6">
               <h3 className="text-sm font-bold uppercase tracking-wide text-neutral-900 dark:text-neutral-100 mb-4">
-                What's Included
+                {t("home.accountPage.subscription.whatsIncluded")}
               </h3>
               <ul className="space-y-2.5 text-sm text-neutral-600 dark:text-neutral-400">
-                {(currentSubscription?.plan.features ?? defaultFeatures(user))
+                {(
+                  currentSubscription?.plan.features ?? defaultFeatures(user, t)
+                )
                   .slice(0, 6)
-                  .map((feature) => (
-                    <li key={feature} className="flex items-start gap-3">
-                      <span className="mt-1 flex-shrink-0 h-5 w-5 rounded-full bg-primary-100 dark:bg-primary-950/50 flex items-center justify-center">
-                        <svg
-                          className="h-3 w-3 text-primary-600 dark:text-primary-400"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </span>
-                      <span>{feature}</span>
-                    </li>
-                  ))}
+                  .map((feature, index) => {
+                    // Translate plan features if they exist
+                    const featureMap: Record<string, Record<string, string>> = {
+                      free: {
+                        "Access to public landing pages":
+                          "home.plansPage.features.free.feature1",
+                        "Featured categories preview":
+                          "home.plansPage.features.free.feature2",
+                        "Featured stores carousel":
+                          "home.plansPage.features.free.feature3",
+                        "Best sellers teaser data":
+                          "home.plansPage.features.free.feature4",
+                      },
+                      supplier: {
+                        "Supplier dashboard & analytics":
+                          "home.plansPage.features.supplier.feature1",
+                        "Product catalog management (CRUD)":
+                          "home.plansPage.features.supplier.feature2",
+                        "Order pipeline with status updates":
+                          "home.plansPage.features.supplier.feature3",
+                        "Real-time order notifications":
+                          "home.plansPage.features.supplier.feature4",
+                        "Access to trader inquiries":
+                          "home.plansPage.features.supplier.feature5",
+                      },
+                      trader: {
+                        "Trader dashboard & analytics":
+                          "home.plansPage.features.trader.feature1",
+                        "Multi-store management":
+                          "home.plansPage.features.trader.feature2",
+                        "Inventory sync across suppliers":
+                          "home.plansPage.features.trader.feature3",
+                        "Order tracking & team collaboration":
+                          "home.plansPage.features.trader.feature4",
+                        "Supplier performance insights":
+                          "home.plansPage.features.trader.feature5",
+                      },
+                    };
+
+                    const planId =
+                      currentSubscription?.planId ||
+                      (user?.role === "supplier" ? "supplier" : "trader");
+                    const translatedFeature = featureMap[planId]?.[feature]
+                      ? t(featureMap[planId][feature] as any)
+                      : feature;
+
+                    return (
+                      <li
+                        key={`${feature}-${index}`}
+                        className="flex items-start gap-3"
+                      >
+                        <span className="mt-1 flex-shrink-0 h-5 w-5 rounded-full bg-primary-100 dark:bg-primary-950/50 flex items-center justify-center">
+                          <svg
+                            className="h-3 w-3 text-primary-600 dark:text-primary-400"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        <span>{translatedFeature}</span>
+                      </li>
+                    );
+                  })}
               </ul>
             </section>
-          </article>
+          </MotionWrapper>
         </section>
 
-        <section className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/50 px-6 py-8 mt-8">
+        <MotionWrapper variant="fade-up" delay={0.3} className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/50 px-6 py-8 mt-8">
           <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100 mb-3">
-            Need Help?
+            {t("home.accountPage.help.title")}
           </h2>
           <p className="text-neutral-600 dark:text-neutral-400">
-            Reach out to our team if you need to adjust your plan, add more
-            teammates, or connect supplier analytics to your CRM stack.
+            {t("home.accountPage.help.description")}
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="mailto:support@tajirjomlahub.com"
               className="inline-flex items-center justify-center rounded-xl border-2 border-neutral-200 dark:border-neutral-800 px-5 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-100 transition-all hover:bg-neutral-100 dark:hover:bg-neutral-800"
             >
-              Contact Support
+              {t("home.accountPage.help.contactSupport")}
             </Link>
             <Link
               href="/plans"
               className="inline-flex items-center justify-center rounded-xl border-2 border-primary-200 dark:border-blue-400/50 px-5 py-2.5 text-sm font-semibold text-primary-700 dark:text-neutral-100 transition-all hover:bg-primary-50 dark:hover:bg-blue-950/30"
             >
-              Compare Plans
+              {t("home.accountPage.help.comparePlans")}
             </Link>
           </div>
-        </section>
+        </MotionWrapper>
       </main>
     </div>
   );
@@ -732,7 +828,7 @@ function ProfileInput({
   );
 }
 
-function defaultFeatures(user: AuthUser | null): string[] {
+function defaultFeatures(user: AuthUser | null, t: (key: string) => string): string[] {
   if (!user) {
     return [
       "Marketplace browsing preview",

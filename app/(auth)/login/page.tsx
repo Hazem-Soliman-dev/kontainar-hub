@@ -9,6 +9,8 @@ import { useAuthStore } from "../../../lib/store/auth-store";
 import { Breadcrumb } from "../../../components/ui/breadcrumb";
 import type { AuthSuccessBody } from "../../../lib/auth-response";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "../../../components/providers/language-provider";
+import { MotionWrapper } from "../../../components/ui/motion-wrapper";
 
 type FormState = {
   identifier: string;
@@ -46,6 +48,7 @@ const initialState: FormState = {
 function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useLanguage();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [formState, setFormState] = useState<FormState>(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -109,12 +112,12 @@ function LoginPageContent() {
       </div>
 
       <div className="flex-1 flex items-center justify-center px-4 py-8 z-10">
-        <div className="w-full max-w-md">
+        <MotionWrapper variant="scale-up" delay={0.1} className="w-full max-w-md">
           <div className="rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900/80 backdrop-blur-xl p-8 shadow-strong">
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <Input
-                label="Email or Phone"
+                label={t("auth.login.emailOrPhone")}
                 value={formState.identifier}
                 onChange={handleChange("identifier")}
                 placeholder="john.doe@example.com"
@@ -122,7 +125,7 @@ function LoginPageContent() {
                 icon={Mail}
               />
               <Input
-                label="Password"
+                label={t("auth.login.password")}
                 type="password"
                 value={formState.password}
                 onChange={handleChange("password")}
@@ -145,11 +148,11 @@ function LoginPageContent() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Signing in...
+                    {t("auth.login.signingIn")}
                   </>
                 ) : (
                   <>
-                    Sign In
+                    {t("auth.login.signIn")}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </>
                 )}
@@ -158,17 +161,17 @@ function LoginPageContent() {
 
             <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-center">
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                Don't have an account?{" "}
+                {t("auth.login.dontHaveAccount")}{" "}
                 <Link
                   href="/register"
                   className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-500 transition-colors"
                 >
-                  Create account
+                  {t("auth.login.createAccount")}
                 </Link>
               </p>
             </div>
           </div>
-        </div>
+        </MotionWrapper>
       </div>
     </div>
   );

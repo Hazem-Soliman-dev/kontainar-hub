@@ -13,7 +13,7 @@ export function ProductHero({ product, isBestSeller }: ProductHeroProps) {
 
   return (
     <div className="relative">
-      <div className="relative overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900">
+      <div className="relative overflow-hidden rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900">
         <Image
           src={imageUrl}
           alt={product.name}

@@ -5,6 +5,7 @@ import { Footer } from "../components/footer";
 import { JsonLd } from "../components/seo/json-ld";
 import { ThemeScript } from "../components/theme-script";
 import { HydrationProvider } from "../components/providers/hydration-provider";
+import { LanguageProvider } from "../components/providers/language-provider";
 import { createMetadata } from "../lib/seo/metadata";
 import {
   buildOrganizationLd,
@@ -60,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
         <ThemeScript />
         <JsonLd data={organizationStructuredData} id="global-structured-data" />
@@ -69,9 +70,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}
       >
         <HydrationProvider />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <LanguageProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

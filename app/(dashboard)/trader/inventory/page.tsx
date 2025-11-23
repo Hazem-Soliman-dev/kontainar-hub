@@ -1,10 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Package, Filter, AlertCircle, CheckCircle, AlertTriangle } from "lucide-react";
+import {
+  Package,
+  Filter,
+  AlertCircle,
+  CheckCircle,
+  AlertTriangle,
+} from "lucide-react";
 
 import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
+import { useLanguage } from "../../../../components/providers/language-provider";
 
 type InventoryStatus = "healthy" | "low" | "critical";
 
@@ -73,7 +80,9 @@ const INITIAL_INVENTORY: InventoryItem[] = [
 ];
 
 export default function TraderInventoryPage() {
-  const [inventory, setInventory] = useState<InventoryItem[]>(INITIAL_INVENTORY);
+  const { t } = useLanguage();
+  const [inventory, setInventory] =
+    useState<InventoryItem[]>(INITIAL_INVENTORY);
   const [supplierFilter, setSupplierFilter] = useState<string>("all");
   const [storeFilter, setStoreFilter] = useState<string>("all");
   const [notifications, setNotifications] = useState<string[]>([]);
@@ -92,15 +101,15 @@ export default function TraderInventoryPage() {
             nextStock <= item.reorderPoint * 0.6
               ? "critical"
               : nextStock <= item.reorderPoint
-                ? "low"
-                : "healthy";
+              ? "low"
+              : "healthy";
 
           if (delta !== 0) {
             setNotifications((prevNotes) => {
               const message =
                 delta > 0
-                  ? `${item.product} replenished by ${delta} units`
-                  : `${item.product} sold ${Math.abs(delta)} units`;
+                  ? t("home.trader.inventory.notifications.replenished").replace("{product}", item.product).replace("{delta}", delta.toString())
+                  : t("home.trader.inventory.notifications.sold").replace("{product}", item.product).replace("{delta}", Math.abs(delta).toString());
               return [message, ...prevNotes].slice(0, 4);
             });
           }
@@ -133,11 +142,16 @@ export default function TraderInventoryPage() {
   }, [inventory, supplierFilter, storeFilter]);
 
   const totals = useMemo(() => {
-    const totalStock = filteredInventory.reduce((sum, item) => sum + item.stock, 0);
+    const totalStock = filteredInventory.reduce(
+      (sum, item) => sum + item.stock,
+      0
+    );
     const critical = filteredInventory.filter(
       (item) => item.status === "critical"
     ).length;
-    const low = filteredInventory.filter((item) => item.status === "low").length;
+    const low = filteredInventory.filter(
+      (item) => item.status === "low"
+    ).length;
     const healthy = filteredInventory.filter(
       (item) => item.status === "healthy"
     ).length;
@@ -153,28 +167,28 @@ export default function TraderInventoryPage() {
   const metrics = [
     {
       id: "total",
-      label: "Total Units",
+      label: t("home.trader.inventory.metrics.totalUnits"),
       value: totals.totalStock.toLocaleString(),
       icon: Package,
       color: "from-blue-500 to-blue-600",
     },
     {
       id: "healthy",
-      label: "Healthy SKUs",
+      label: t("home.trader.inventory.metrics.healthySKUs"),
       value: totals.healthy.toString(),
       icon: CheckCircle,
       color: "from-emerald-500 to-emerald-600",
     },
     {
       id: "low",
-      label: "Low Stock SKUs",
+      label: t("home.trader.inventory.metrics.lowStockSKUs"),
       value: totals.low.toString(),
       icon: AlertTriangle,
       color: "from-amber-500 to-amber-600",
     },
     {
       id: "critical",
-      label: "Critical SKUs",
+      label: t("home.trader.inventory.metrics.criticalSKUs"),
       value: totals.critical.toString(),
       icon: AlertCircle,
       color: "from-red-500 to-red-600",
@@ -205,8 +219,8 @@ export default function TraderInventoryPage() {
                 item.stock + amount <= item.reorderPoint * 0.6
                   ? "critical"
                   : item.stock + amount <= item.reorderPoint
-                    ? "low"
-                    : "healthy",
+                  ? "low"
+                  : "healthy",
             }
           : item
       )
@@ -221,19 +235,25 @@ export default function TraderInventoryPage() {
         <header className="mx-auto w-full max-w-7xl">
           <Breadcrumb />
           <div className="mt-6">
-            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Inventory</h1>
-            <p className="mt-1 text-neutral-900 dark:text-neutral-200">Monitor and manage your stock levels</p>
+            <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">
+              {t("home.trader.inventory.title")}
+            </h1>
+            <p className="mt-1 text-neutral-900 dark:text-neutral-200">
+              {t("home.trader.inventory.description")}
+            </p>
           </div>
 
           {notifications.length > 0 && (
-            <aside className="mt-6 rounded-2xl border border-emerald-200 dark:border-emerald-900/50 bg-emerald-50 dark:bg-emerald-950/30 px-4 sm:px-6 py-4">
+            <aside className="mt-6 rounded-2xl border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950/30 px-4 sm:px-6 py-4">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-200">Live updates:</span>
+                <span className="font-semibold text-sm text-blue-700 dark:text-blue-400">
+                  {t("home.trader.inventory.notifications.liveUpdates")}
+                </span>
                 <div className="flex flex-wrap gap-2">
                   {notifications.map((note, index) => (
                     <span
                       key={`${note}-${index}`}
-                      className="rounded-full bg-success-100 dark:bg-success-900/50 px-3 py-1 text-xs font-medium text-success-700 dark:text-success-300"
+                      className="rounded-full bg-blue-100 dark:bg-blue-900/50 px-3 py-1 text-xs font-medium text-blue-700 dark:text-blue-400"
                     >
                       {note}
                     </span>
@@ -250,10 +270,12 @@ export default function TraderInventoryPage() {
             return (
               <article
                 key={metric.id}
-                className="group relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-lg transition-all"
+                className="group relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm hover:shadow-lg transition-all text-center"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`rounded-xl bg-gradient-to-br ${metric.color} p-3`}>
+                <div className="flex items-center justify-center mb-4">
+                  <div
+                    className={`rounded-xl bg-gradient-to-br ${metric.color} p-3`}
+                  >
                     <Icon className="h-5 w-5 text-neutral-900 dark:text-neutral-200" />
                   </div>
                 </div>
@@ -268,7 +290,7 @@ export default function TraderInventoryPage() {
           })}
         </section>
 
-        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+        <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div className="flex flex-wrap gap-4 text-sm text-neutral-900 dark:text-neutral-200">
               <div className="flex items-center gap-2">
@@ -276,9 +298,9 @@ export default function TraderInventoryPage() {
                 <select
                   value={supplierFilter}
                   onChange={(event) => setSupplierFilter(event.target.value)}
-                  className="rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                  className="rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
                 >
-                  <option value="all">All suppliers</option>
+                  <option value="all">{t("home.trader.inventory.filters.allSuppliers")}</option>
                   {suppliers.map((supplier) => (
                     <option key={supplier} value={supplier}>
                       {supplier}
@@ -291,9 +313,9 @@ export default function TraderInventoryPage() {
                 <select
                   value={storeFilter}
                   onChange={(event) => setStoreFilter(event.target.value)}
-                  className="rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-900"
+                  className="rounded-xl border border-neutral-400 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-3 py-2 text-sm text-neutral-900 dark:text-neutral-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900"
                 >
-                  <option value="all">All stores</option>
+                  <option value="all">{t("home.trader.inventory.filters.allStores")}</option>
                   {stores.map((store) => (
                     <option key={store} value={store}>
                       {store}
@@ -303,47 +325,70 @@ export default function TraderInventoryPage() {
               </div>
             </div>
             <p className="text-xs text-neutral-900 dark:text-neutral-200">
-              💡 Real-time updates reflect supplier confirmations
+              {t("home.trader.inventory.realTimeNote")}
             </p>
           </div>
 
           <div className="overflow-x-auto -mx-6 px-6">
-            <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm">
+            <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm text-center">
               <thead>
-                <tr className="text-left">
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Product</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Supplier</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Store</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">SKU</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Stock</th>
-                  <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Reorder Point</th>
-                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Actions</th>
+                <tr className="text-center">
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.inventory.table.product")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.inventory.table.supplier")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.inventory.table.store")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.inventory.table.sku")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.inventory.table.stock")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.inventory.table.reorderPoint")}
+                  </th>
+                  <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                    {t("home.trader.inventory.table.actions")}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                 {filteredInventory.map((item) => (
-                  <tr key={item.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
-                    <td className="py-4 pr-6">
+                  <tr
+                    key={item.id}
+                    className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors text-center"
+                  >
+                    <td className="py-4">
                       <div>
                         <p className="font-semibold text-neutral-900 dark:text-neutral-200">
                           {item.product}
                         </p>
                         <p className="text-xs text-neutral-900 dark:text-neutral-200 mt-0.5">
                           {item.status === "critical"
-                            ? "⚠️ Action required: escalate supplier restock"
+                            ? t("home.trader.inventory.statusMessages.critical")
                             : item.status === "low"
-                              ? "⏰ Monitor demand closely"
-                              : "✅ Inventory is within safe range"}
+                            ? t("home.trader.inventory.statusMessages.low")
+                            : t("home.trader.inventory.statusMessages.healthy")}
                         </p>
                       </div>
                     </td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">{item.supplier}</td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200">#{item.storeId}</td>
-                    <td className="py-4 pr-6 text-neutral-900 dark:text-neutral-200 text-xs">{item.sku}</td>
-                    <td className="py-4 pr-6">
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200">
+                      {item.supplier}
+                    </td>
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200">
+                      #{item.storeId}
+                    </td>
+                    <td className="py-4 text-neutral-900 dark:text-neutral-200 text-xs">
+                      {item.sku}
+                    </td>
+                    <td className="py-4">
                       <StatusBadge status={item.status} stock={item.stock} />
                     </td>
-                    <td className="py-4 pr-6">
+                    <td className="py-4">
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handleAdjustReorder(item.id, -10)}
@@ -362,19 +407,19 @@ export default function TraderInventoryPage() {
                         </button>
                       </div>
                     </td>
-                    <td className="py-4">
-                      <div className="flex flex-col gap-2">
+                    <td className="py-4 text-center">
+                      <div className="flex flex-col gap-2 text-center">
                         <button
                           onClick={() => handleManualRestock(item.id, 25)}
-                          className="rounded-xl border-2 border-primary-400 dark:border-primary-900/50 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950/30 transition-all"
+                          className="rounded-xl border-2 border-blue-400 dark:border-blue-900/50 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-all"
                         >
-                          Restock +25
+                          {t("home.trader.inventory.buttons.restock")}
                         </button>
                         <button
                           onClick={() => handleManualRestock(item.id, -20)}
                           className="rounded-xl border-2 border-amber-400 dark:border-amber-900/50 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 transition-all"
                         >
-                          Allocate -20
+                          {t("home.trader.inventory.buttons.allocate")}
                         </button>
                       </div>
                     </td>
@@ -386,7 +431,7 @@ export default function TraderInventoryPage() {
 
           {filteredInventory.length === 0 && (
             <p className="mt-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/50 px-4 py-8 text-center text-sm text-neutral-900 dark:text-neutral-200">
-              No inventory items match this view. Adjust supplier or store filters.
+              {t("home.trader.inventory.emptyState")}
             </p>
           )}
         </section>
@@ -395,19 +440,29 @@ export default function TraderInventoryPage() {
   );
 }
 
-function StatusBadge({ status, stock }: { status: InventoryStatus; stock: number }) {
+function StatusBadge({
+  status,
+  stock,
+}: {
+  status: InventoryStatus;
+  stock: number;
+}) {
+  const { t } = useLanguage();
   const config: Record<InventoryStatus, { label: string; classes: string }> = {
     healthy: {
-      label: "Healthy",
-      classes: "bg-success-100 dark:bg-success-950/50 text-success-700 dark:text-success-400 border-success-200 dark:border-success-900/50",
+      label: t("home.trader.inventory.status.healthy"),
+      classes:
+        "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/50",
     },
     low: {
-      label: "Low",
-      classes: "bg-warning-100 dark:bg-warning-950/50 text-warning-700 dark:text-warning-400 border-warning-200 dark:border-warning-900/50",
+      label: t("home.trader.inventory.status.low"),
+      classes:
+        "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/50",
     },
     critical: {
-      label: "Critical",
-      classes: "bg-danger-100 dark:bg-danger-950/50 text-danger-700 dark:text-danger-400 border-danger-200 dark:border-danger-900/50",
+      label: t("home.trader.inventory.status.critical"),
+      classes:
+        "bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900/50",
     },
   };
 
@@ -418,8 +473,8 @@ function StatusBadge({ status, stock }: { status: InventoryStatus; stock: number
       >
         {config[status].label}
       </span>
-      <span className="text-sm font-bold text-neutral-900 dark:text-neutral-200">
-        {stock} units
+      <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
+        {t("home.trader.inventory.units").replace("{count}", stock.toString())}
       </span>
     </div>
   );

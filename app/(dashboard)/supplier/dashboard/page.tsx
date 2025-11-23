@@ -2,12 +2,20 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { TrendingUp, Package, ShoppingBag, DollarSign, ArrowRight } from "lucide-react";
+import {
+  TrendingUp,
+  Package,
+  ShoppingBag,
+  DollarSign,
+  ArrowRight,
+} from "lucide-react";
 
 import { SalesChart } from "../../../../components/charts/sales-chart";
 import { DashboardGate } from "../../../../components/dashboard/dashboard-gate";
 import { MobileDashboardNav } from "../../../../components/dashboard/mobile-dashboard-nav";
 import { Breadcrumb } from "../../../../components/ui/breadcrumb";
+import { useLanguage } from "../../../../components/providers/language-provider";
+import { MotionWrapper } from "../../../../components/ui/motion-wrapper";
 
 type DashboardOrderStatus = "pending" | "processing" | "fulfilled";
 
@@ -60,6 +68,7 @@ const SALES_TREND = [
 ];
 
 export default function SupplierDashboardPage() {
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<DashboardOrder[]>(INITIAL_ORDERS);
   const [notifications, setNotifications] = useState<string[]>([]);
 
@@ -79,8 +88,16 @@ export default function SupplierDashboardPage() {
 
         const message =
           nextStatus === "fulfilled"
-            ? `Order ${order.id} fulfilled`
-            : `Order ${order.id} updated to ${nextStatus}`;
+            ? t("home.supplier.dashboard.notifications.orderFulfilled").replace(
+                "{id}",
+                order.id
+              )
+            : t("home.supplier.dashboard.notifications.orderUpdated")
+                .replace("{id}", order.id)
+                .replace(
+                  "{status}",
+                  t(`home.supplier.dashboard.status.${nextStatus}`)
+                );
 
         setNotifications((prevNotifications) => {
           const next = [message, ...prevNotifications];
@@ -109,42 +126,42 @@ export default function SupplierDashboardPage() {
     return [
       {
         id: "metric-products",
-        label: "Total Products",
+        label: t("home.supplier.dashboard.metrics.totalProducts"),
         value: totalProducts,
-        description: "Across all active categories",
+        description: t("home.supplier.dashboard.metrics.totalProductsDesc"),
         icon: Package,
         color: "from-blue-500 to-blue-600",
       },
       {
         id: "metric-pending",
-        label: "Pending Orders",
+        label: t("home.supplier.dashboard.metrics.pendingOrders"),
         value: pendingOrders,
-        description: "Awaiting confirmation",
+        description: t("home.supplier.dashboard.metrics.pendingOrdersDesc"),
         icon: ShoppingBag,
         color: "from-amber-500 to-amber-600",
       },
       {
         id: "metric-processing",
-        label: "In Processing",
+        label: t("home.supplier.dashboard.metrics.inProcessing"),
         value: processingOrders,
-        description: "Being prepared or shipped",
+        description: t("home.supplier.dashboard.metrics.inProcessingDesc"),
         icon: TrendingUp,
         color: "from-violet-500 to-violet-600",
       },
       {
         id: "metric-revenue",
-        label: "Revenue (30d)",
+        label: t("home.supplier.dashboard.metrics.revenue30d"),
         value: Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
           maximumFractionDigits: 0,
         }).format(revenue),
-        description: "From fulfilled orders",
+        description: t("home.supplier.dashboard.metrics.revenue30dDesc"),
         icon: DollarSign,
         color: "from-emerald-500 to-emerald-600",
       },
     ];
-  }, [orders]);
+  }, [orders, t]);
 
   const recentOrders = useMemo(
     () =>
@@ -165,11 +182,15 @@ export default function SupplierDashboardPage() {
         <main className="flex min-h-screen flex-col gap-6 px-4 sm:px-6 lg:px-8 pt-20 lg:pt-8 pb-10">
           <header className="mx-auto w-full max-w-7xl">
             <Breadcrumb />
-            
-            <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+
+            <MotionWrapper variant="fade-up" className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">Supplier Dashboard</h1>
-                <p className="mt-1 text-neutral-900 dark:text-neutral-200">Manage your products and orders</p>
+                <h1 className="text-3xl font-bold text-neutral-900 dark:text-neutral-200">
+                  {t("home.supplier.dashboard.title")}
+                </h1>
+                <p className="mt-1 text-neutral-600 dark:text-neutral-400">
+                  {t("home.supplier.dashboard.description")}
+                </p>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link
@@ -177,46 +198,52 @@ export default function SupplierDashboardPage() {
                   className="inline-flex items-center gap-2 rounded-xl bg-primary-500 dark:bg-primary-600 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-200 shadow-lg hover:shadow-xl transition-all hover:scale-105"
                 >
                   <Package className="h-4 w-4" />
-                  Add Product
+                  {t("home.supplier.dashboard.buttons.addProduct")}
                 </Link>
                 <Link
                   href="/supplier/orders"
                   className="inline-flex items-center gap-2 rounded-xl border-2 border-primary-200 dark:border-primary-900/50 px-5 py-2.5 text-sm font-semibold text-neutral-900 dark:text-neutral-200 transition-all hover:bg-primary-500 dark:hover:bg-primary-600/30"
                 >
-                  Review Orders
+                  {t("home.supplier.dashboard.buttons.reviewOrders")}
                 </Link>
               </div>
-            </div>
+            </MotionWrapper>
 
             {notifications.length > 0 && (
-              <aside className="mt-6 rounded-2xl border border-primary-200 dark:border-primary-900/50 bg-primary-50 dark:bg-primary-950/30 px-4 sm:px-6 py-4">
+              <MotionWrapper variant="fade-up" delay={0.1} className="mt-6 rounded-2xl border border-blue-200 dark:border-blue-900/50 bg-blue-50 dark:bg-blue-950/30 px-4 sm:px-6 py-4">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                  <span className="font-semibold text-sm text-primary-900 dark:text-primary-300">Live order updates:</span>
+                  <span className="font-semibold text-sm text-blue-700 dark:text-blue-400">
+                    {t("home.supplier.dashboard.notifications.liveUpdates")}
+                  </span>
                   <div className="flex flex-wrap gap-2">
                     {notifications.map((note, index) => (
                       <span
                         key={`${note}-${index}`}
-                        className="rounded-full bg-primary-100 dark:bg-primary-900/50 px-3 py-1 text-xs font-medium text-primary-700 dark:text-primary-300"
+                        className="rounded-full bg-blue-100 dark:bg-blue-900/50 px-3 py-1 text-xs font-medium text-blue-700 dark:text-blue-400"
                       >
                         {note}
                       </span>
                     ))}
                   </div>
                 </div>
-              </aside>
+              </MotionWrapper>
             )}
           </header>
 
           <section className="mx-auto grid w-full max-w-7xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {metrics.map((metric) => {
+            {metrics.map((metric, index) => {
               const Icon = metric.icon;
               return (
-                <article
+                <MotionWrapper
                   key={metric.id}
-                  className="group relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1"
+                  variant="scale-up"
+                  delay={0.1 + index * 0.05}
+                  className="group relative overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 text-center"
                 >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`rounded-xl bg-gradient-to-br ${metric.color} p-3`}>
+                  <div className="flex items-center justify-center mb-4">
+                    <div
+                      className={`rounded-xl bg-gradient-to-br ${metric.color} p-3`}
+                    >
                       <Icon className="h-5 w-5 text-neutral-900 dark:text-neutral-200" />
                     </div>
                   </div>
@@ -226,30 +253,30 @@ export default function SupplierDashboardPage() {
                   <p className="mt-2 text-3xl font-bold text-neutral-900 dark:text-neutral-200">
                     {metric.value}
                   </p>
-                  <p className="mt-1 text-xs text-neutral-900 dark:text-neutral-200">
+                  <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
                     {metric.description}
                   </p>
-                </article>
+                </MotionWrapper>
               );
             })}
           </section>
 
           <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[2fr_1fr]">
-            <article className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+            <MotionWrapper variant="slide-right" delay={0.2} className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
               <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
                 <div>
                   <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
-                    Sales Trend
+                    {t("home.supplier.dashboard.sections.salesTrend")}
                   </h2>
-                  <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
-                    Revenue and shipment volume (last 6 months)
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+                    {t("home.supplier.dashboard.sections.salesTrendDesc")}
                   </p>
                 </div>
                 <Link
                   href="/supplier/analytics"
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-primary-500 dark:text-primary-400 hover:underline"
+                  className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline"
                 >
-                  View Analytics
+                  {t("home.supplier.dashboard.buttons.viewAnalytics")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </header>
@@ -265,15 +292,15 @@ export default function SupplierDashboardPage() {
                   currency
                 />
               </div>
-            </article>
+            </MotionWrapper>
 
-            <article className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+            <MotionWrapper variant="slide-left" delay={0.3} className="flex flex-col gap-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
               <header>
                 <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
-                  Product Health
+                  {t("home.supplier.dashboard.sections.productHealth")}
                 </h2>
-                <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
-                  Quick view of catalog readiness
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+                  {t("home.supplier.dashboard.sections.productHealthDesc")}
                 </p>
               </header>
               <ul className="space-y-3">
@@ -286,66 +313,86 @@ export default function SupplierDashboardPage() {
                       <span className="text-sm font-semibold text-neutral-900 dark:text-neutral-200 block">
                         {product.name}
                       </span>
-                      <span className="text-xs text-neutral-900 dark:text-neutral-200">
-                        Status: <span className="capitalize">{product.status}</span>
+                      <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                        {t("home.supplier.dashboard.table.status")}:{" "}
+                        <span className="capitalize">
+                          {t(
+                            `home.supplier.dashboard.status.${product.status}`
+                          )}
+                        </span>
                       </span>
                     </div>
                     <Link
                       href="/supplier/products"
-                      className="text-xs font-semibold uppercase tracking-wide text-primary-500 dark:text-primary-400 hover:underline"
+                      className="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400 hover:underline"
                     >
-                      Manage
+                      {t("home.supplier.dashboard.buttons.manage")}
                     </Link>
                   </li>
                 ))}
               </ul>
-            </article>
+            </MotionWrapper>
           </section>
 
-          <section className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm">
+          <MotionWrapper variant="fade-up" delay={0.4} className="mx-auto w-full max-w-7xl rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 p-6 shadow-sm">
             <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
               <div>
                 <h2 className="text-xl font-bold text-neutral-900 dark:text-neutral-200">
-                  Recent Orders
+                  {t("home.supplier.dashboard.sections.recentOrders")}
                 </h2>
-                <p className="text-sm text-neutral-900 dark:text-neutral-200 mt-1">
-                  Monitor progress and next fulfillment steps
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+                  {t("home.supplier.dashboard.sections.recentOrdersDesc")}
                 </p>
               </div>
               <Link
                 href="/supplier/orders"
-                className="inline-flex items-center gap-1 text-sm font-semibold text-primary-500 dark:text-primary-400 hover:underline"
+                className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline"
               >
-                View All Orders
+                {t("home.supplier.dashboard.buttons.viewAllOrders")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </header>
 
             <div className="overflow-x-auto -mx-6 px-6">
-              <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm">
+              <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-800 text-sm text-center">
                 <thead>
-                  <tr className="text-left">
-                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Order</th>
-                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Customer</th>
-                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Total</th>
-                    <th className="py-3 pr-6 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Status</th>
-                    <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">Placed</th>
+                  <tr className="text-center">
+                    <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                      {t("home.supplier.dashboard.table.order")}
+                    </th>
+                    <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                      {t("home.supplier.dashboard.table.customer")}
+                    </th>
+                    <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                      {t("home.supplier.dashboard.table.total")}
+                    </th>
+                    <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                      {t("home.supplier.dashboard.table.status")}
+                    </th>
+                    <th className="py-3 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
+                      {t("home.supplier.dashboard.table.placed")}
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
                   {recentOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
-                      <td className="py-3 pr-6 font-semibold text-neutral-900 dark:text-neutral-200">
+                    <tr
+                      key={order.id}
+                      className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+                    >
+                      <td className="py-3 font-semibold text-neutral-900 dark:text-neutral-200">
                         {order.id}
                       </td>
-                      <td className="py-3 pr-6 text-neutral-900 dark:text-neutral-200">{order.customer}</td>
-                      <td className="py-3 pr-6 text-neutral-900 dark:text-neutral-200">
+                      <td className="py-3 text-neutral-900 dark:text-neutral-200">
+                        {order.customer}
+                      </td>
+                      <td className="py-3 text-neutral-900 dark:text-neutral-200">
                         {order.total.toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
                         })}
                       </td>
-                      <td className="py-3 pr-6">
+                      <td className="py-3">
                         <StatusBadge status={order.status} />
                       </td>
                       <td className="py-3 text-neutral-900 dark:text-neutral-200 text-xs">
@@ -356,7 +403,7 @@ export default function SupplierDashboardPage() {
                 </tbody>
               </table>
             </div>
-          </section>
+          </MotionWrapper>
         </main>
       </div>
     </DashboardGate>
@@ -364,16 +411,20 @@ export default function SupplierDashboardPage() {
 }
 
 function StatusBadge({ status }: { status: DashboardOrderStatus }) {
+  const { t } = useLanguage();
   const config: Record<DashboardOrderStatus, string> = {
-    pending: "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/50",
-    processing: "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/50",
-    fulfilled: "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/50",
+    pending:
+      "bg-amber-100 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-900/50",
+    processing:
+      "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/50",
+    fulfilled:
+      "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-900/50",
   };
 
   const label: Record<DashboardOrderStatus, string> = {
-    pending: "Pending",
-    processing: "Processing",
-    fulfilled: "Fulfilled",
+    pending: t("home.supplier.dashboard.status.pending"),
+    processing: t("home.supplier.dashboard.status.processing"),
+    fulfilled: t("home.supplier.dashboard.status.fulfilled"),
   };
 
   return (

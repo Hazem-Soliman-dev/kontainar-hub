@@ -1,21 +1,26 @@
+"use client";
+
+import { useLanguage } from "../providers/language-provider";
+
 interface MarketSignalsProps {
   signals: string[];
   momentum?: "surging" | "steady" | "emerging";
 }
 
 const momentumStyles: Record<"surging" | "steady" | "emerging", string> = {
-  surging: "bg-emerald-500/10 text-emerald-900 dark:text-emerald-900 border-emerald-500/40",
-  steady: "bg-blue-500/10 text-blue-900 dark:text-blue-900 border-blue-500/40",
-  emerging: "bg-amber-500/10 text-amber-900 dark:text-amber-900 border-amber-500/40",
-};
-
-const momentumLabels: Record<"surging" | "steady" | "emerging", string> = {
-  surging: "Surging momentum",
-  steady: "Steady demand",
-  emerging: "Emerging trend",
+  surging: "bg-emerald-500 text-emerald-900 dark:text-emerald-900 border-emerald-500",
+  steady: "bg-blue-500 text-blue-900 dark:text-blue-900 border-blue-500",
+  emerging: "bg-amber-500 text-amber-900 dark:text-amber-900 border-amber-500",
 };
 
 export function MarketSignals({ signals, momentum }: MarketSignalsProps) {
+  const { t } = useLanguage();
+  
+  const momentumLabels: Record<"surging" | "steady" | "emerging", string> = {
+    surging: t("home.topProductsPage.momentum.surging"),
+    steady: t("home.topProductsPage.momentum.steady"),
+    emerging: t("home.topProductsPage.momentum.emerging"),
+  };
   return (
     <div className="space-y-4">
       {momentum && (

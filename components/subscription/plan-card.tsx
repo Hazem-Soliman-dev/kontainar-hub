@@ -1,4 +1,7 @@
+"use client";
+
 import { Fragment } from "react";
+import { useLanguage } from "../providers/language-provider";
 
 import type {
   SubscriptionPlan,
@@ -35,26 +38,40 @@ export function PlanCard({
   recommended = false,
   processingAction = null,
 }: PlanCardProps) {
+  const { t } = useLanguage();
   const isFreePlan = plan.id === "free";
+
+  // Translate plan name
+  const planName = t(`home.plansPage.plans.${plan.id}.name`) || plan.name;
+
+  // Translate plan description
+  const planDescription =
+    t(`home.plansPage.plans.${plan.id}.description`) || plan.description;
+
   const formattedPrice =
     plan.pricePerMonth === 0
-      ? "Free"
-      : `$${plan.pricePerMonth.toLocaleString("en-US")}/mo`;
+      ? t("home.plansPage.card.free")
+      : `$${plan.pricePerMonth.toLocaleString("en-US")}${t(
+          "home.plansPage.card.perMonth"
+        )}`;
 
   const trialLabel =
     plan.trialDays && plan.trialDays > 0
-      ? `Start ${plan.trialDays}-day trial`
-      : "Start trial";
+      ? t("home.plansPage.card.startTrialDays").replace(
+          "{days}",
+          plan.trialDays.toString()
+        )
+      : t("home.plansPage.card.startTrial");
 
   const canStartTrial =
     !isFreePlan && plan.trialDays && plan.trialDays > 0 && !isTrialActive;
 
   const actionLabel =
     status === "active" && isCurrent
-      ? "Current plan"
+      ? t("home.plansPage.card.currentPlan")
       : isTrialActive
-      ? "Activate after trial"
-      : "Activate plan";
+      ? t("home.plansPage.card.activateAfterTrial")
+      : t("home.plansPage.card.activatePlan");
 
   return (
     <article
@@ -68,34 +85,87 @@ export function PlanCard({
     >
       <header className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{plan.name}</h3>
+          <h3 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+            {planName}
+          </h3>
           <PlanBadge
             status={status}
             isCurrent={isCurrent}
             isTrialActive={isTrialActive}
           />
         </div>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">{plan.description}</p>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
+          {planDescription}
+        </p>
         <span className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
           {formattedPrice}
         </span>
       </header>
 
       <ul className="flex flex-1 flex-col gap-3 text-sm text-neutral-700 dark:text-neutral-100">
-        {plan.features.map((feature) => (
-          <li key={feature} className="flex items-center gap-2">
-            <span aria-hidden className="mt-1 text-primary-600 dark:text-primary-400">
-              •
-            </span>
-            <span>{feature}</span>
-          </li>
-        ))}
+        {plan.features.map((feature, index) => {
+          // Map feature strings to translation keys
+          const featureMap: Record<string, Record<string, string>> = {
+            free: {
+              "Access to public landing pages":
+                "home.plansPage.features.free.feature1",
+              "Featured categories preview":
+                "home.plansPage.features.free.feature2",
+              "Featured stores carousel":
+                "home.plansPage.features.free.feature3",
+              "Best sellers teaser data":
+                "home.plansPage.features.free.feature4",
+            },
+            supplier: {
+              "Supplier dashboard & analytics":
+                "home.plansPage.features.supplier.feature1",
+              "Product catalog management (CRUD)":
+                "home.plansPage.features.supplier.feature2",
+              "Order pipeline with status updates":
+                "home.plansPage.features.supplier.feature3",
+              "Real-time order notifications":
+                "home.plansPage.features.supplier.feature4",
+              "Access to trader inquiries":
+                "home.plansPage.features.supplier.feature5",
+            },
+            trader: {
+              "Trader dashboard & analytics":
+                "home.plansPage.features.trader.feature1",
+              "Multi-store management":
+                "home.plansPage.features.trader.feature2",
+              "Inventory sync across suppliers":
+                "home.plansPage.features.trader.feature3",
+              "Order tracking & team collaboration":
+                "home.plansPage.features.trader.feature4",
+              "Supplier performance insights":
+                "home.plansPage.features.trader.feature5",
+            },
+          };
+
+          const featureKey =
+            featureMap[plan.id]?.[feature] ||
+            `home.plansPage.features.${plan.id}.feature${index + 1}`;
+          const translatedFeature = t(featureKey as any) || feature;
+
+          return (
+            <li key={feature} className="flex items-center gap-2">
+              <span
+                aria-hidden
+                className="mt-1 text-primary-600 dark:text-primary-400"
+              >
+                •
+              </span>
+              <span>{translatedFeature}</span>
+            </li>
+          );
+        })}
       </ul>
 
       <div className="flex flex-col gap-3 text-sm text-neutral-700 dark:text-blue-400">
         {isTrialActive && trialEndsAt && (
           <div className="rounded-lg border border-primary-200 dark:border-blue-400/50 bg-primary-50 dark:bg-blue-900/20 px-3 py-2 text-xs text-primary-700 dark:text-blue-400">
-            Trial active • Ends {formatRelativeTime(trialEndsAt)}{" "}
+            {t("home.plansPage.card.trialActive")} •{" "}
+            {t("home.plansPage.card.ends")} {formatRelativeTime(trialEndsAt)}{" "}
             {typeof trialSecondsRemaining === "number" &&
               trialSecondsRemaining > 0 && (
                 <span>({formatCountdown(trialSecondsRemaining)})</span>
@@ -105,7 +175,7 @@ export function PlanCard({
 
         {isFreePlan ? (
           <span className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-800 px-4 py-2 text-center font-semibold text-neutral-700 dark:text-neutral-100">
-            Included for all accounts
+            {t("home.plansPage.card.included")}
           </span>
         ) : (
           <Fragment>
@@ -122,7 +192,9 @@ export function PlanCard({
                   : "cursor-not-allowed bg-neutral-100 dark:bg-neutral-800 text-neutral-400 dark:text-blue-400",
               ].join(" ")}
             >
-              {processingAction === "trial" ? "Starting trial…" : trialLabel}
+              {processingAction === "trial"
+                ? t("home.plansPage.card.startingTrial")
+                : trialLabel}
             </button>
             <button
               type="button"
@@ -135,7 +207,9 @@ export function PlanCard({
                   : "border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-100 hover:border-primary-500 hover:text-primary-600 dark:hover:text-blue-400",
               ].join(" ")}
             >
-              {processingAction === "activate" ? "Activating…" : actionLabel}
+              {processingAction === "activate"
+                ? t("home.plansPage.card.activating")
+                : actionLabel}
             </button>
           </Fragment>
         )}
@@ -153,10 +227,11 @@ function PlanBadge({
   isCurrent: boolean;
   isTrialActive: boolean;
 }) {
+  const { t } = useLanguage();
   if (isCurrent && status === "active") {
     return (
       <span className="rounded-full bg-success-50 dark:bg-success-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-green-600 dark:text-green-400">
-        Active
+        {t("home.plansPage.card.badges.active")}
       </span>
     );
   }
@@ -164,7 +239,7 @@ function PlanBadge({
   if (isCurrent && status === "trial" && isTrialActive) {
     return (
       <span className="rounded-full bg-primary-50 dark:bg-primary-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
-        Trial active
+        {t("home.plansPage.card.badges.trialActive")}
       </span>
     );
   }
@@ -172,7 +247,7 @@ function PlanBadge({
   if (status === "expired" && isCurrent) {
     return (
       <span className="rounded-full bg-danger-50 dark:bg-danger-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-red-600 dark:text-red-400">
-        Trial expired
+        {t("home.plansPage.card.badges.trialExpired")}
       </span>
     );
   }

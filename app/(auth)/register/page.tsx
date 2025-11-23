@@ -9,6 +9,8 @@ import { useAuthStore } from "../../../lib/store/auth-store";
 import { Breadcrumb } from "../../../components/ui/breadcrumb";
 import type { AuthSuccessBody } from "../../../lib/auth-response";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "../../../components/providers/language-provider";
+import { MotionWrapper } from "../../../components/ui/motion-wrapper";
 
 type FormState = {
   firstName: string;
@@ -60,6 +62,7 @@ const initialState: FormState = {
 function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { t } = useLanguage();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [formState, setFormState] = useState<FormState>(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,13 +127,13 @@ function RegisterPageContent() {
       </div>
 
       <div className="flex-1 flex items-center justify-center px-4 py-8 z-10">
-        <div className="w-full max-w-xl">
+        <MotionWrapper variant="scale-up" delay={0.1} className="w-full max-w-xl">
           <div className="rounded-3xl border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900/80 backdrop-blur-xl p-8 shadow-strong">
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="First Name"
+                  label={t("auth.register.firstName")}
                   value={formState.firstName}
                   onChange={handleChange("firstName")}
                   placeholder="John"
@@ -138,7 +141,7 @@ function RegisterPageContent() {
                   icon={User}
                 />
                 <Input
-                  label="Last Name"
+                  label={t("auth.register.lastName")}
                   value={formState.lastName}
                   onChange={handleChange("lastName")}
                   placeholder="Doe"
@@ -149,7 +152,7 @@ function RegisterPageContent() {
               
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="Email"
+                  label={t("common.email")}
                   type="email"
                   value={formState.email}
                   onChange={handleChange("email")}
@@ -158,7 +161,7 @@ function RegisterPageContent() {
                   icon={Mail}
                 />
                 <Input
-                  label="Phone"
+                  label={t("auth.register.phone")}
                   value={formState.phone}
                   onChange={handleChange("phone")}
                   placeholder="+1234567890"
@@ -169,7 +172,7 @@ function RegisterPageContent() {
 
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="Password"
+                  label={t("common.password")}
                   type="password"
                   value={formState.password}
                   onChange={handleChange("password")}
@@ -178,7 +181,7 @@ function RegisterPageContent() {
                   icon={Lock}
                 />
                 <Input
-                  label="Confirm Password"
+                  label={t("auth.register.confirmPassword")}
                   type="password"
                   value={formState.confirmPassword}
                   onChange={handleChange("confirmPassword")}
@@ -189,25 +192,25 @@ function RegisterPageContent() {
               </div>
 
               <Select
-                label="I want to"
+                label={t("auth.register.iWantTo")}
                 value={formState.role}
                 onChange={handleChange("role")}
                 options={[
-                  { value: "supplier", label: "Sell Products (Supplier)" },
-                  { value: "trader", label: "Buy Products (Trader)" },
+                  { value: "supplier", label: t("auth.register.sellProducts") },
+                  { value: "trader", label: t("auth.register.buyProducts") },
                 ]}
               />
 
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="Business Name"
+                  label={t("auth.register.businessName")}
                   value={formState.businessName}
                   onChange={handleChange("businessName")}
                   required
                   icon={Building2}
                 />
                 <Input
-                  label="Business Type"
+                  label={t("auth.register.businessType")}
                   value={formState.businessType}
                   onChange={handleChange("businessType")}
                   required
@@ -229,11 +232,11 @@ function RegisterPageContent() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Creating account...
+                    {t("auth.register.creatingAccount")}
                   </>
                 ) : (
                   <>
-                    Register
+                    {t("auth.register.register")}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </>
                 )}
@@ -242,17 +245,17 @@ function RegisterPageContent() {
 
             <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-center">
               <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                Already have an account?{" "}
+                {t("auth.register.alreadyHaveAccount")}{" "}
                 <Link
                   href="/login"
                   className="font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-500 transition-colors"
                 >
-                  Sign in
+                  {t("auth.register.signIn")}
                 </Link>
               </p>
             </div>
           </div>
-        </div>
+        </MotionWrapper>
       </div>
     </div>
   );

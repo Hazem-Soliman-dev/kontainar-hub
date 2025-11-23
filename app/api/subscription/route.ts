@@ -10,6 +10,7 @@ import {
   startTrial,
   type SubscriptionPlanId,
 } from "../../../lib/mock/subscriptions";
+import { mockDb, type UserRole } from "../../../lib/mock/db";
 
 const DEMO_USER_ID = "demo-user";
 
@@ -63,8 +64,12 @@ export async function POST(request: Request) {
 
     if (requestData.action === "startTrial") {
       subscription = startTrial(userId, requestData.planId);
+      // Update user role to match plan when starting trial
+      await updateUserRoleForPlan(userId, requestData.planId);
     } else if (requestData.action === "activate") {
       subscription = activateSubscription(userId, requestData.planId);
+      // Update user role to match plan when activating
+      await updateUserRoleForPlan(userId, requestData.planId);
     } else if (requestData.action === "cancel") {
       subscription = cancelSubscription(userId);
     }
@@ -147,4 +152,23 @@ function isValidPlanId(candidate: string): candidate is SubscriptionPlanId {
   return (
     candidate === "free" || candidate === "supplier" || candidate === "trader"
   );
+}
+
+/**
+ * Updates user role to match their subscription plan
+ * Maps planId directly to role: trader plan → trader role, supplier plan → supplier role
+ */
+async function updateUserRoleForPlan(
+  userId: string,
+  planId: SubscriptionPlanId
+): Promise<void> {
+  // Free plan doesn't change role
+  if (planId === "free") {
+    return;
+  }
+
+  // Plan ID maps directly to role
+  const newRole: UserRole = planId as UserRole;
+  
+  mockDb.updateUserRole(userId, newRole);
 }

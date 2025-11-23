@@ -28,6 +28,7 @@ export function ProductPriceOrRequest({
   size = "md",
 }: ProductPriceOrRequestProps) {
   const authSubscription = useAuthStore((state) => state.subscription);
+  const user = useAuthStore((state) => state.user);
   const [hasActivePlanState, setHasActivePlanState] = useState(initialHasActivePlan);
 
   // Update state when auth store subscription changes (after hydration)
@@ -60,7 +61,11 @@ export function ProductPriceOrRequest({
     };
   }, [authSubscription]);
 
-  if (hasActivePlanState) {
+  // Only traders with active plans can see prices
+  // This includes BOTH active paid traders AND active free trial traders
+  const isTraderWithActivePlan = user?.role === "trader" && hasActivePlanState;
+
+  if (isTraderWithActivePlan) {
     return (
       <div className={`flex items-end gap-2 ${className}`}>
         <span className="text-md font-semibold text-neutral-900 dark:text-neutral-200">
