@@ -105,13 +105,13 @@ function HeroSection() {
 
         {/* Floating Elements (Decorative) */}
         <div className="hidden lg:block absolute top-1/2 -translate-y-1/2 start-10 animate-float-slow">
-          <div className="p-4 rounded-2xl bg-neutral-900 dark:bg-neutral-100 border-neutral-200 dark:border-neutral-800 shadow-glow">
-            <Laptop className="h-8 w-8 text-primary-400" />
+          <div className="p-4 rounded-2xl bg-neutral-900 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-800 shadow-glow">
+            <Laptop className="h-8 w-8 text-blue-400" />
           </div>
         </div>
         <div className="hidden lg:block absolute top-1/3 end-10 animate-float-slower">
-          <div className="p-4 rounded-2xl bg-neutral-900 dark:bg-neutral-100 border-neutral-200 dark:border-neutral-800 shadow-glow">
-            <Shirt className="h-8 w-8 text-secondary-400" />
+          <div className="p-4 rounded-2xl bg-neutral-900 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-800 shadow-glow">
+            <Shirt className="h-8 w-8 text-blue-400" />
           </div>
         </div>
       </div>

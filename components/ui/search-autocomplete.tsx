@@ -358,7 +358,7 @@ export function SearchAutocomplete({
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           placeholder={t("home.hero.placeholder")} 
-          className="w-full bg-transparent px-12 py-4 text-md text-slate-600 placeholder:text-slate-600 focus:outline-none dark:text-slate-300 dark:placeholder:text-slate-300"
+          className="w-full bg-transparent px-12 py-4 text-md text-neutral-600 placeholder:text-neutral-600 focus:outline-none dark:text-neutral-400 dark:placeholder:text-neutral-400 font-medium"
         />
       </div>
 

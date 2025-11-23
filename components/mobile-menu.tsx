@@ -91,7 +91,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       >
         <div className="flex h-screen flex-col">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-6 py-4">
             <Link
               href="/"
               className="flex items-center gap-2"
@@ -173,7 +173,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/login"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-neutral-200 transition hover:bg-blue-500"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 dark:bg-blue-500 px-4 py-2.5 text-sm font-semibold text-neutral-100 dark:text-neutral-900 transition hover:bg-blue-500 dark:hover:bg-blue-500"
                   >
                     <LogIn className="h-4 w-4" />
                     {t("common.signIn")}
@@ -181,7 +181,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   <Link
                     href="/register"
                     onClick={handleLinkClick}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-blue-900 px-4 py-2.5 text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-blue-600 dark:hover:bg-blue-500 px-4 py-2.5 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-50"
                   >
                     {t("common.register")}
                   </Link>
@@ -191,7 +191,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1 overflow-y-auto px-6 py-4 bg-neutral-50 dark:bg-neutral-800 h-full">
+          <nav className="flex-1 overflow-y-auto px-6 py-4 bg-neutral-50 dark:bg-neutral-900 h-full">
             <div className="mb-3">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 px-2">
                 {/*Pages*/}
@@ -283,14 +283,14 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </nav>
 
           {/* Footer */}
-          <div className="border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800 px-6 py-4">
-            <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-50 dark:bg-neutral-800 px-3 py-2 border border-neutral-200 dark:border-neutral-700">
+          <div className="border-t border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900 px-6 py-4">
+            <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-50 dark:bg-neutral-900 px-3 py-2 border border-neutral-200 dark:border-neutral-700">
               <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {t("common.theme")}
               </span>
               <ThemeToggle />
             </div>
-            <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-50 dark:bg-neutral-800 px-3 py-2 border border-neutral-200 dark:border-neutral-700">
+            <div className="flex items-center justify-between mb-4 rounded-lg bg-neutral-50 dark:bg-neutral-900 px-3 py-2 border border-neutral-200 dark:border-neutral-700">
               <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 {t("common.language")}
               </span>
